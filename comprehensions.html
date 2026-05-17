@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Comprehensions — Atelier · LC French HL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/atelier.css">
+<style>
+  /* COMPREHENSIONS — page-specific styles */
+
+  .text-card .qt-dot { width: 14px; height: 14px; font-size: 9px; position: static; }
+
+  /* FEATURED TEXT BANNER */
+  .featured-text {
+    background: var(--ink); color: var(--bg);
+    border-radius: 28px; padding: 36px 42px; margin-bottom: 50px;
+    display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .featured-text::after {
+    content: ''; position: absolute; right: -80px; top: -80px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(244,215,122,0.18), transparent 65%);
+    pointer-events: none;
+  }
+  .featured-text .tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700;
+    color: var(--butter); margin-bottom: 12px;
+  }
+  .featured-text .tag::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--butter); }
+  .featured-text h3 {
+    font-family: 'Fraunces', serif; font-weight: 400; font-size: 32px;
+    line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 10px;
+  }
+  .featured-text h3 em { font-style: italic; color: var(--butter); }
+  .featured-text .desc { color: rgba(255,255,255,0.65); font-size: 15px; max-width: 600px; }
+  .featured-text .meta-row {
+    display: flex; gap: 18px; margin-top: 16px;
+    color: rgba(255,255,255,0.5); font-size: 13px; flex-wrap: wrap;
+  }
+  .featured-text .meta-row span { display: inline-flex; align-items: center; gap: 6px; }
+  .featured-text .meta-row span::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.4); }
+  .featured-text .meta-row span:first-child::before { display: none; }
+  .featured-text .open-btn {
+    background: var(--butter); color: var(--ink); text-decoration: none;
+    padding: 16px 28px; border-radius: 100px; font-size: 14px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;
+    white-space: nowrap; position: relative; z-index: 1;
+  }
+  .featured-text .open-btn:hover { background: var(--bg); transform: translateY(-2px); }
+
+  /* FILTER BAR */
+  .filters {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 24px; padding: 24px 26px; margin-bottom: 28px;
+  }
+  .filter-row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .filter-row + .filter-row { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+
+  .search-wrap { flex: 1; min-width: 240px; position: relative; }
+  .search-wrap input {
+    width: 100%; background: var(--bg); border: 1px solid var(--line);
+    border-radius: 100px; padding: 12px 16px 12px 42px;
+    font-family: inherit; font-size: 14px; color: var(--ink); outline: none; transition: all 0.15s;
+  }
+  .search-wrap input::placeholder { color: var(--ink-soft); }
+  .search-wrap input:focus { border-color: var(--sage); background: white; }
+  .search-wrap::before {
+    content: ''; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b5d54' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") no-repeat center;
+  }
+  .filter-group { display: flex; align-items: center; gap: 10px; }
+  .filter-label { font-size: 13px; color: var(--ink-soft); font-weight: 500; white-space: nowrap; }
+  .chip-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    background: var(--bg); border: 1px solid var(--line); color: var(--ink);
+    padding: 7px 14px; border-radius: 100px;
+    font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+  }
+  .chip:hover { background: var(--bg-2); }
+  .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip.qt-sage.active  { background: var(--sage);   border-color: var(--sage); }
+  .chip.qt-butter.active { background: var(--butter); color: var(--ink); border-color: var(--butter); }
+  .chip.qt-rose.active  { background: var(--rose);   border-color: var(--rose); }
+  .chip.qt-sky.active   { background: var(--sky);    color: var(--ink); border-color: var(--sky); }
+  .chip.qt-lilac.active { background: var(--lilac);  border-color: var(--lilac); }
+  .sort-wrap { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .sort-wrap select {
+    background: var(--bg); border: 1px solid var(--line); border-radius: 100px;
+    padding: 9px 14px; font-family: inherit; font-size: 13px; color: var(--ink); cursor: pointer; outline: none;
+  }
+  .reset-btn {
+    background: transparent; color: var(--ink-soft); border: none;
+    font-family: inherit; font-size: 13px; cursor: pointer;
+    text-decoration: underline; text-underline-offset: 3px; padding: 8px 4px;
+  }
+  .reset-btn:hover { color: var(--rose); }
+
+  /* QT LEGEND */
+  .qt-legend {
+    background: var(--bg-2); border-radius: 18px; padding: 18px 24px;
+    margin-bottom: 28px; display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  }
+  .qt-legend .label { font-family: 'Fraunces', serif; font-style: italic; font-size: 16px; color: var(--sage); margin-right: 4px; }
+  .legend-item { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink); }
+  .legend-item .swatch { width: 10px; height: 10px; border-radius: 50%; }
+  .legend-item.s1 .swatch { background: var(--sage); }
+  .legend-item.s2 .swatch { background: var(--butter); }
+  .legend-item.s3 .swatch { background: var(--rose); }
+  .legend-item.s4 .swatch { background: var(--sky); }
+  .legend-item.s5 .swatch { background: var(--lilac); }
+
+  /* RESULTS HEADER */
+  .results-head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 18px; }
+  .results-head h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 32px; letter-spacing: -0.02em; }
+  .results-head h2 em { font-style: italic; color: var(--sage); font-weight: 300; }
+  .results-head .count { color: var(--ink-soft); font-size: 14px; }
+  .results-head .count strong { color: var(--ink); font-weight: 600; }
+
+  /* RESULTS GRID */
+  .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 48px; }
+
+  .text-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 26px;
+    text-decoration: none; color: var(--ink); display: flex; flex-direction: column;
+    transition: all 0.22s cubic-bezier(.2,.7,.2,1); min-height: 270px; position: relative; overflow: hidden;
+  }
+  .text-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -20px rgba(0,0,0,0.15); border-color: transparent; }
+  .text-card .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .text-card .year-badge { font-family: 'Geist Mono', monospace; font-size: 12px; background: var(--bg-2); color: var(--ink); padding: 4px 10px; border-radius: 100px; font-weight: 500; }
+  .text-card .type-badge { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); font-weight: 600; }
+  .text-card h3 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 20px; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 6px; }
+  .text-card h3 em { font-style: italic; }
+  .text-card .theme { color: var(--sage); font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; margin-bottom: 12px; }
+  .text-card .preview { font-size: 13px; color: var(--ink-soft); line-height: 1.5; margin-bottom: auto; padding-bottom: 14px; }
+  .text-card .qt-row {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    padding-top: 14px; margin-top: auto; border-top: 1px solid var(--line); align-items: center;
+  }
+  .text-card .qt-row .more { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-soft); font-weight: 500; }
+  .text-card:hover .qt-row .more { color: var(--sage); }
+  .text-card .qt-row .more .arr {
+    width: 24px; height: 24px; border-radius: 50%; background: var(--bg-2);
+    display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.2s;
+  }
+  .text-card:hover .qt-row .more .arr { background: var(--sage); color: white; transform: rotate(-45deg); }
+  .text-card.done .top-row::after {
+    content: '✓ done'; font-size: 11px; font-weight: 600; color: var(--sage);
+    background: var(--sage-tint); padding: 4px 10px; border-radius: 100px;
+  }
+  .text-card[data-stub="true"] .top-row::after {
+    content: 'Content coming'; font-size: 11px; font-weight: 600; color: var(--ink-soft);
+    background: var(--butter-soft); padding: 4px 10px; border-radius: 100px;
+  }
+
+  /* VOCAB DEMO */
+  .vocab-demo { background: var(--card); border: 1px solid var(--line); border-radius: 28px; padding: 36px 40px; margin-bottom: 32px; }
+  .vocab-demo .head-row { display: flex; justify-content: space-between; align-items: end; margin-bottom: 6px; }
+  .vocab-demo h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 30px; letter-spacing: -0.02em; }
+  .vocab-demo h2 em { font-style: italic; color: var(--sage); font-weight: 300; }
+  .vocab-demo .helper { font-size: 13px; color: var(--ink-soft); font-style: italic; font-family: 'Fraunces', serif; }
+  .vocab-demo .lead { color: var(--ink-soft); font-size: 15px; margin-bottom: 22px; }
+  .vocab-demo .text-body {
+    background: var(--bg); border-radius: 18px; padding: 28px 32px;
+    font-family: 'Fraunces', serif; font-size: 18px; line-height: 1.75;
+    color: var(--ink); border-left: 3px solid var(--sage);
+  }
+
+  /* PAGINATION */
+  .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 40px; }
+  .pagination button {
+    background: var(--card); border: 1px solid var(--line); color: var(--ink);
+    width: 38px; height: 38px; border-radius: 50%;
+    font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+  }
+  .pagination button:hover { background: var(--bg-2); }
+  .pagination button.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .pagination .dots { color: var(--ink-soft); padding: 0 4px; }
+
+  /* EMPTY STATE */
+  .empty {
+    background: var(--card); border: 1px dashed var(--line); border-radius: 22px;
+    padding: 60px 40px; text-align: center; margin-bottom: 32px;
+  }
+  .empty h3 { font-family: 'Fraunces', serif; font-style: italic; font-size: 22px; margin-bottom: 8px; color: var(--ink-soft); }
+  .empty p { color: var(--ink-soft); font-size: 14px; }
+
+  @media (max-width: 1000px) { .results { grid-template-columns: 1fr 1fr; } .featured-text { grid-template-columns: 1fr; } }
+  @media (max-width: 700px) { .results { grid-template-columns: 1fr; } .filter-row { gap: 12px; } .sort-wrap { margin-left: 0; width: 100%; } }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <nav class="top">
+      <div class="logo">
+        <div class="logo-mark">a</div>
+        <span>atelier<em>.fr</em></span>
+      </div>
+      <div class="nav-pill">
+        <a href="/index.html">Home</a>
+        <a href="/comprehensions.html" class="active">Comprehensions</a>
+        <a href="/composing.html">Composing</a>
+        <a href="/aural.html">Aural</a>
+        <a href="/verbs.html">Verbs</a>
+        <a href="/vocab.html">Vocab</a>
+        <a href="/tips.html">Tips</a>
+      </div>
+      <div class="nav-cta">
+        <div class="streak">7-day streak</div>
+        <div class="avatar">m</div>
+      </div>
+    </nav>
+
+    <div class="crumb">
+      <a href="/index.html">Home</a>
+      <span class="sep">/</span>
+      <span class="here">Comprehensions · Compréhension écrite</span>
+    </div>
+
+    <!-- PAGE HEAD -->
+    <header class="page-head">
+      <div>
+        <div class="greeting">Bonjour — pick a text to attempt</div>
+        <h1>The <span class="italic">comprehension</span> library.</h1>
+        <p class="lead">Every higher-paper text since 2010 — journalistic, literary and informative — with the questions tagged by type so you can drill the kind you're weakest at.</p>
+      </div>
+      <div class="meta-cards">
+        <div class="meta-card featured">
+          <div class="lbl">Total texts</div>
+          <div class="val">32 <em>texts</em></div>
+          <div class="sub">16 past papers, 2010–2025</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Your progress</div>
+          <div class="val">1 / 32</div>
+          <div class="sub">3% attempted</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Last attempted</div>
+          <div class="val" style="font-style:italic;font-family:'Fraunces',serif;font-size:22px;">2025 · Q1</div>
+          <div class="sub">Le scoutisme</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Weakest type</div>
+          <div class="val" style="font-size:22px;">infer / explain</div>
+          <div class="sub">drill these next</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- FEATURED TEXT -->
+    <div class="featured-text">
+      <div>
+        <div class="tag">Recommended for you</div>
+        <h3>Le scoutisme, toujours aussi <em>tendance</em></h3>
+        <div class="desc">A journalistic text from 2025 on the boom in French scouting — membership, civic values, and why it became fashionable again after Covid. Rich vocab for society and youth essays.</div>
+        <div class="meta-row">
+          <span>2025 · Q1</span>
+          <span>Journalistic</span>
+          <span>~ 480 words</span>
+          <span>40 mins</span>
+          <span>Theme: Society · Youth</span>
+        </div>
+      </div>
+      <a href="/texts/2025-q1.html" class="open-btn">Start reading →</a>
+    </div>
+
+    <!-- Q3 LANGUE BANNER -->
+    <a href="/grammar.html" style="display:flex; align-items:center; justify-content:space-between; gap:24px; background:linear-gradient(135deg, var(--butter-soft), var(--bg)); border:1px solid var(--butter); border-radius:22px; padding:22px 28px; margin-bottom:32px; text-decoration:none; color:var(--ink); transition:all 0.22s cubic-bezier(.2,.7,.2,1);"
+       onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 16px 36px -18px rgba(0,0,0,0.18)';"
+       onmouseout="this.style.transform=''; this.style.boxShadow='';">
+      <div style="display:flex; gap:18px; align-items:center;">
+        <div style="width:48px; height:48px; border-radius:14px; background:var(--butter); color:#8a6a0c; display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-style:italic; font-size:22px; font-weight:500; flex-shrink:0;">Q3</div>
+        <div>
+          <div style="font-family:'Fraunces',serif; font-size:20px; font-weight:500; letter-spacing:-0.01em;">The <em style="font-style:italic; color:#8a6a0c;">Langue</em> guide</div>
+          <div style="font-size:13px; color:var(--ink-soft); margin-top:3px;">Every Q3 grammar category since 2010 — tenses, pronouns, reflexives, agreements. The cheapest 30 marks on the paper.</div>
+        </div>
+      </div>
+      <div style="font-family:'Geist Mono',monospace; font-size:13px; color:#8a6a0c; font-weight:700; white-space:nowrap; display:flex; align-items:center; gap:8px;">
+        Open guide <span style="font-size:18px;">→</span>
+      </div>
+    </a>
+
+    <!-- HOVER-FOR-VOCAB DEMO -->
+    <div class="vocab-demo">
+      <div class="head-row">
+        <h2>Sample text — <em>hover-for-vocab</em></h2>
+        <div class="helper">↓ hover any underlined word</div>
+      </div>
+      <p class="lead">Every text in the library has hover-for-vocab built in. Hover over any underlined word to see its meaning without leaving the page — no dictionary, no broken flow.</p>
+      <div class="text-body">
+        <p>Selon une <span class="vw" data-en="recent" data-pos="adj.">récente</span> <span class="vw" data-en="study" data-pos="n.f.">étude</span>, plus de soixante-dix pour cent des jeunes Français passent au moins trois heures par jour sur les <span class="vw" data-en="social networks" data-pos="n.m.pl.">réseaux sociaux</span>. Ce <span class="vw" data-en="phenomenon" data-pos="n.m.">phénomène</span>, qui <span class="vw" data-en="worries" data-pos="v. (inquiéter)">inquiète</span> de nombreux parents et professeurs, est désormais au cœur d'un <span class="vw" data-en="lively / heated" data-pos="adj.">vif</span> débat public.</p>
+        <p style="margin-top:16px;">Le gouvernement a récemment <span class="vw" data-en="passed (a law)" data-pos="v. (adopter)">adopté</span> une loi qui <span class="vw" data-en="forbids / bans" data-pos="v. (interdire)">interdit</span> aux moins de quinze ans de créer un <span class="vw" data-en="account" data-pos="n.m.">compte</span> sans l'accord de leurs parents. Pourtant, beaucoup de jeunes <span class="vw" data-en="get around / bypass" data-pos="v. (contourner)">contournent</span> facilement cette mesure.</p>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters">
+      <div class="filter-row">
+        <div class="search-wrap">
+          <input type="text" id="search-input" placeholder="Search by keyword, theme, or year…">
+        </div>
+        <div class="sort-wrap">
+          <span class="filter-label">Sort by</span>
+          <select id="sort-select">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-group" id="year-group">
+          <span class="filter-label">Year</span>
+          <div class="chip-group">
+            <button class="chip active" data-year="all">All</button>
+            <button class="chip" data-year="2025">2025</button>
+            <button class="chip" data-year="2024">2024</button>
+            <button class="chip" data-year="2023">2023</button>
+            <button class="chip" data-year="2022">2022</button>
+            <button class="chip" data-year="2021">2021</button>
+            <button class="chip" data-year="2020">2020</button>
+            <button class="chip" data-year="2019">2019</button>
+            <button class="chip" data-year="2018">2018</button>
+            <button class="chip" data-year="older">2010–2017</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-group" id="type-group">
+          <span class="filter-label">Text type</span>
+          <div class="chip-group">
+            <button class="chip active" data-type="all">All</button>
+            <button class="chip" data-type="Journalistic">Journalistic</button>
+            <button class="chip" data-type="Literary">Literary</button>
+            <button class="chip" data-type="Informative">Informative</button>
+          </div>
+        </div>
+        <div class="filter-group" id="theme-group">
+          <span class="filter-label">Theme</span>
+          <div class="chip-group">
+            <button class="chip active" data-theme="all">All</button>
+            <button class="chip" data-theme="environment">Environment</button>
+            <button class="chip" data-theme="technology">Technology</button>
+            <button class="chip" data-theme="family">Family</button>
+            <button class="chip" data-theme="work">Work</button>
+            <button class="chip" data-theme="society">Society</button>
+            <button class="chip" data-theme="health">Health</button>
+            <button class="chip" data-theme="travel">Travel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-group" id="qt-group">
+          <span class="filter-label">Question type</span>
+          <div class="chip-group">
+            <button class="chip qt-sage" data-qt="locate">Locate-and-quote</button>
+            <button class="chip qt-butter" data-qt="tf">True/false + justify</button>
+            <button class="chip qt-rose" data-qt="vocab">Vocabulary</button>
+            <button class="chip qt-sky" data-qt="infer">Infer / explain</button>
+            <button class="chip qt-lilac" data-qt="opinion">Personal opinion</button>
+          </div>
+        </div>
+        <button class="reset-btn" id="reset-btn">Reset all filters</button>
+      </div>
+    </div>
+
+    <!-- QT LEGEND -->
+    <div class="qt-legend">
+      <span class="label">Question types</span>
+      <span class="legend-item s1"><span class="swatch"></span>Locate-and-quote</span>
+      <span class="legend-item s2"><span class="swatch"></span>True/false + justify</span>
+      <span class="legend-item s3"><span class="swatch"></span>Vocabulary</span>
+      <span class="legend-item s4"><span class="swatch"></span>Infer / explain</span>
+      <span class="legend-item s5"><span class="swatch"></span>Personal opinion</span>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-head">
+      <h2>All <em>texts</em></h2>
+      <div class="count">Showing <strong id="count-shown">32</strong> of <strong id="count-total">32</strong></div>
+    </div>
+
+    <div class="results" id="results-grid">
+      <!-- Cards injected by JS below -->
+    </div>
+
+    <div class="empty" id="empty-state" style="display:none;">
+      <h3>Aucun résultat trouvé</h3>
+      <p>Try adjusting your filters or clearing the search.</p>
+    </div>
+
+    <footer>
+      <div>Atelier · <em>built for Leaving Cert HL French</em></div>
+      <div>Bonne chance pour les examens 🍀</div>
+    </footer>
+
+  </div>
+
+<script>
+(function() {
+
+  /* ── DATA ─────────────────────────────────────────────── */
+  var TEXTS = [
+    { year: 2025, q: 1, type: 'Journalistic', title: 'Le scoutisme, toujours aussi <em>tendance</em>', theme: 'Society · Youth', themes: ['society'], preview: 'Examines the boom in French scouting since Covid, with civic values, waiting lists and why mayors credit it.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: false },
+    { year: 2025, q: 2, type: 'Literary',     title: 'La famille <em>Tricot</em>', theme: 'Family · Tradition', themes: ['family'], preview: 'A narrative extract about a family gathering and the rituals that bind a Breton family together across generations.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: false },
+    { year: 2024, q: 1, type: 'Journalistic', title: 'Billie en a marre des <em>clichés</em>', theme: 'Society · Youth', themes: ['society'], preview: 'A Seine-Saint-Denis teenager rejects the negative stereotypes about her banlieue and the way media glorify them.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: false },
+    { year: 2024, q: 2, type: 'Literary',     title: '<em>Dimitri</em>', theme: 'Family · Coming of Age', themes: ['family'], preview: 'A mother, Sophia, reflects on her son Dimitri\'s journey from childhood into the world of work and adult choices.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: false },
+    { year: 2023, q: 1, type: 'Journalistic', title: 'C\'est bon les congés <em>à la maison !</em>', theme: 'Lifestyle · Travel', themes: ['travel'], preview: 'A piece on the rise of the staycation in France — costs, benefits and a fresh look at the home neighbourhood.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: false },
+    { year: 2023, q: 2, type: 'Literary',     title: 'Nina et les <em>lettres volées</em>', theme: 'Narrative · Youth', themes: ['society'], preview: 'A nostalgic narrative about Nina, a young French girl in the 1960s, and the letters she secretly takes from the post.', qts: ['locate','locate','vocab','infer','opinion'], done: false, stub: false },
+    { year: 2022, q: 1, type: 'Journalistic', title: 'Linda découvre <em>sa vocation</em>', theme: 'Work · Vocation', themes: ['work'], preview: 'How a summer job in an emergency youth shelter set Linda on the path to her career working with vulnerable children.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: false },
+    { year: 2022, q: 2, type: 'Literary',     title: 'Soizic quitte <em>Paris</em>', theme: 'Coming of age', themes: ['society'], preview: 'A young woman, broke and overwhelmed, makes a desperate decision to leave Paris and her hotel room behind.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: false },
+    { year: 2021, q: 1, type: 'Informative',  title: 'L\'<em>alimentation</em> bio en France', theme: 'Health · Environment', themes: ['health','environment'], preview: 'A factual piece on the rise of organic food in French supermarkets, with shopper interviews.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: true },
+    { year: 2021, q: 2, type: 'Literary',     title: 'Le <em>retour</em> de Théo', theme: 'Family', themes: ['family'], preview: 'A teenager returns home after a year abroad. Emotional reunion, lots of dialogue. Good for spotting tone shifts.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+    { year: 2020, q: 1, type: 'Journalistic', title: 'Le <em>vélo</em> dans les villes françaises', theme: 'Environment · Transport', themes: ['environment'], preview: 'How Paris, Lyon and Bordeaux are reshaping streets for cyclists. Statistics-heavy, useful for environment essays.', qts: ['locate','tf','vocab','infer','opinion'], done: true, stub: true },
+    { year: 2020, q: 2, type: 'Literary',     title: 'La <em>vieille dame</em> et le chat', theme: 'Old age · Loneliness', themes: ['society'], preview: 'Quiet character study of an elderly Parisian woman and her tabby. Light on action, heavy on description.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+    { year: 2019, q: 1, type: 'Journalistic', title: 'Les <em>sans-abri</em> en France', theme: 'Society · Poverty', themes: ['society'], preview: 'A journalistic investigation into homelessness in French cities — causes, solutions, and testimonies from those affected.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: true },
+    { year: 2019, q: 2, type: 'Literary',     title: 'La maison de <em>ma grand-mère</em>', theme: 'Family · Memory', themes: ['family'], preview: 'A first-person account of returning to a grandmother\'s house after her death. Melancholic, descriptive, memory-driven.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+    { year: 2018, q: 1, type: 'Journalistic', title: 'La <em>francophonie</em> dans le monde', theme: 'Language · Culture', themes: ['society'], preview: 'How the French language is evolving globally — new speakers, African influence, and the role of technology in its spread.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: true },
+    { year: 2018, q: 2, type: 'Literary',     title: 'La nouvelle <em>vie</em> de Chloé', theme: 'Youth · School', themes: ['family'], preview: 'A teenager adapts to a new school after her family relocates. Themes of belonging, friendship and identity.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+    { year: 2017, q: 1, type: 'Journalistic', title: 'Les jeunes et le <em>bénévolat</em>', theme: 'Society · Youth', themes: ['society'], preview: 'On the growth of volunteering among young French people — motivations, organisations, and social impact.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: true },
+    { year: 2017, q: 2, type: 'Literary',     title: 'Le <em>dernier été</em>', theme: 'Youth · Friendship', themes: ['society'], preview: 'A group of friends spend their final summer together before university scatters them. Bittersweet, dialogue-rich.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+    { year: 2016, q: 1, type: 'Journalistic', title: 'L\'immigration et <em>l\'intégration</em>', theme: 'Society · Culture', themes: ['society'], preview: 'How French cities are managing immigration and what integration looks like in practice — schools, employment, housing.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: true },
+    { year: 2016, q: 2, type: 'Literary',     title: 'Les <em>vacances</em> de Margot', theme: 'Family · Summer', themes: ['family','travel'], preview: 'A teenage girl\'s summer at her aunt\'s farmhouse in the Dordogne. Slow-paced, sensory, perfect for descriptive vocab.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+    { year: 2015, q: 1, type: 'Informative',  title: 'Le <em>tourisme</em> en France', theme: 'Travel · Economy', themes: ['travel'], preview: 'France as the world\'s most-visited country — who comes, where they go, what they spend, and what it means for local life.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: true },
+    { year: 2015, q: 2, type: 'Literary',     title: 'Deux <em>sœurs</em>', theme: 'Family · Friendship', themes: ['family'], preview: 'Two sisters, very different in character, are forced to spend a weekend together. Tension, humour, and reconciliation.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+    { year: 2014, q: 1, type: 'Journalistic', title: 'Les femmes et le <em>monde du travail</em>', theme: 'Work · Society', themes: ['work','society'], preview: 'Gender equality in French workplaces — the glass ceiling, parental leave policies, and portraits of women in leadership.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: true },
+    { year: 2014, q: 2, type: 'Literary',     title: 'Le <em>déménagement</em>', theme: 'Family · Change', themes: ['family'], preview: 'A family uproots from the city to the countryside. The narrator — a teenager — wrestles with leaving everything behind.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+    { year: 2013, q: 1, type: 'Journalistic', title: 'La vie dans les <em>banlieues</em>', theme: 'Society · Urban', themes: ['society'], preview: 'Life in the French suburbs — community projects, youth unemployment, and grassroots efforts to change the banlieue narrative.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: true },
+    { year: 2013, q: 2, type: 'Literary',     title: 'L\'été de <em>ses seize ans</em>', theme: 'Youth · Summer', themes: ['society'], preview: 'A coming-of-age summer in Provence. A teenager discovers independence, first love, and her grandmother\'s past.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+    { year: 2012, q: 1, type: 'Journalistic', title: 'La crise et <em>les jeunes</em>', theme: 'Economy · Youth', themes: ['work','society'], preview: 'The impact of the economic crisis on young French people — youth unemployment, precarious work, and the brain drain.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: true },
+    { year: 2012, q: 2, type: 'Literary',     title: 'La lettre de <em>grand-mère</em>', theme: 'Family · Memory', themes: ['family'], preview: 'A grandmother\'s unsent letter is discovered after her death. Themes of regret, family secrets, and the passage of time.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+    { year: 2011, q: 1, type: 'Journalistic', title: 'La santé et les <em>jeunes Français</em>', theme: 'Health · Youth', themes: ['health'], preview: 'Youth health in France — diet, exercise, alcohol and tobacco consumption among teenagers. Survey-based, factual register.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: true },
+    { year: 2011, q: 2, type: 'Literary',     title: 'Le premier jour <em>de lycée</em>', theme: 'School · Youth', themes: ['society'], preview: 'First day at secondary school from the perspective of a nervous fifteen-year-old. Relatable and dialogue-rich.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+    { year: 2010, q: 1, type: 'Journalistic', title: 'Les vacances <em>des Français</em>', theme: 'Travel · Leisure', themes: ['travel'], preview: 'How the French take their holidays — where, when, for how long, and how the staycation is changing travel culture.', qts: ['locate','tf','vocab','infer','opinion'], done: false, stub: true },
+    { year: 2010, q: 2, type: 'Literary',     title: 'La <em>réconciliation</em>', theme: 'Family · Relationships', themes: ['family'], preview: 'A father and son, estranged for years, are brought together at a family funeral. Quiet, powerful, emotionally layered.', qts: ['locate','vocab','infer','infer','opinion'], done: false, stub: true },
+  ];
+
+  var QT_LABELS = { locate: 'L', tf: 'T', vocab: 'V', infer: 'I', opinion: 'O' };
+  var QT_CLASSES = { locate: 'locate', tf: 'tf', vocab: 'vocab', infer: 'infer', opinion: 'opinion' };
+  var QT_TIPS = { locate: 'Locate-and-quote', tf: 'True/false + justify', vocab: 'Vocabulary', infer: 'Infer/explain', opinion: 'Personal opinion' };
+
+  /* ── STATE ─────────────────────────────────────────────── */
+  var state = { search: '', year: 'all', type: 'all', theme: 'all', qts: [], sort: 'newest' };
+
+  /* ── RENDER ─────────────────────────────────────────────── */
+  function slug(t) { return String(t.year) + '-q' + t.q; }
+  function href(t) { return '/texts/' + slug(t) + '.html'; }
+
+  function cardHTML(t) {
+    var qtDots = t.qts.map(function(q) {
+      return '<span class="qt-dot ' + QT_CLASSES[q] + ' sm" data-tooltip="' + QT_TIPS[q] + '">' + QT_LABELS[q] + '</span>';
+    }).join('');
+    var doneAttr = t.done ? ' done' : '';
+    var stubAttr = t.stub ? ' data-stub="true"' : '';
+    return '<a href="' + href(t) + '" class="text-card' + doneAttr + '"' + stubAttr
+      + ' data-year="' + t.year + '" data-type="' + t.type + '" data-themes="' + t.themes.join(',') + '" data-qts="' + t.qts.join(',') + '">'
+      + '<div class="top-row">'
+      + '<span class="year-badge">' + t.year + ' · Q' + t.q + '</span>'
+      + '<span class="type-badge">' + t.type + '</span>'
+      + '</div>'
+      + '<h3>' + t.title + '</h3>'
+      + '<div class="theme">Theme · ' + t.theme + '</div>'
+      + '<div class="preview">' + t.preview + '</div>'
+      + '<div class="qt-row">' + qtDots + '<span class="more">Open <span class="arr">→</span></span></div>'
+      + '</a>';
+  }
+
+  function filtered() {
+    var q = state.search.toLowerCase().trim();
+    var arr = TEXTS.filter(function(t) {
+      if (state.year !== 'all') {
+        if (state.year === 'older') { if (t.year > 2017) return false; }
+        else { if (String(t.year) !== state.year) return false; }
+      }
+      if (state.type !== 'all' && t.type !== state.type) return false;
+      if (state.theme !== 'all' && t.themes.indexOf(state.theme) === -1) return false;
+      if (state.qts.length > 0) {
+        var hasAll = state.qts.every(function(qt) { return t.qts.indexOf(qt) !== -1; });
+        if (!hasAll) return false;
+      }
+      if (q) {
+        var hay = (t.year + ' q' + t.q + ' ' + t.type + ' ' + t.theme + ' ' + t.preview + ' ' + t.title).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+    if (state.sort === 'oldest') arr = arr.slice().reverse();
+    return arr;
+  }
+
+  function render() {
+    var arr = filtered();
+    var grid = document.getElementById('results-grid');
+    var empty = document.getElementById('empty-state');
+    document.getElementById('count-shown').textContent = arr.length;
+    document.getElementById('count-total').textContent = TEXTS.length;
+    if (arr.length === 0) {
+      grid.innerHTML = '';
+      empty.style.display = '';
+    } else {
+      empty.style.display = 'none';
+      grid.innerHTML = arr.map(cardHTML).join('');
+    }
+  }
+
+  /* ── INIT ──────────────────────────────────────────────── */
+  render();
+
+  /* SEARCH */
+  document.getElementById('search-input').addEventListener('input', function() {
+    state.search = this.value;
+    render();
+  });
+
+  /* SORT */
+  document.getElementById('sort-select').addEventListener('change', function() {
+    state.sort = this.value;
+    render();
+  });
+
+  /* YEAR chips (single-select) */
+  document.getElementById('year-group').querySelectorAll('.chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.getElementById('year-group').querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      state.year = chip.dataset.year;
+      render();
+    });
+  });
+
+  /* TYPE chips (single-select) */
+  document.getElementById('type-group').querySelectorAll('.chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.getElementById('type-group').querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      state.type = chip.dataset.type;
+      render();
+    });
+  });
+
+  /* THEME chips (single-select) */
+  document.getElementById('theme-group').querySelectorAll('.chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.getElementById('theme-group').querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      state.theme = chip.dataset.theme;
+      render();
+    });
+  });
+
+  /* QT chips (multi-select toggle) */
+  document.getElementById('qt-group').querySelectorAll('.chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      chip.classList.toggle('active');
+      var qt = chip.dataset.qt;
+      var idx = state.qts.indexOf(qt);
+      if (idx === -1) state.qts.push(qt);
+      else state.qts.splice(idx, 1);
+      render();
+    });
+  });
+
+  /* RESET */
+  document.getElementById('reset-btn').addEventListener('click', function() {
+    state = { search: '', year: 'all', type: 'all', theme: 'all', qts: [], sort: 'newest' };
+    document.getElementById('search-input').value = '';
+    document.getElementById('sort-select').value = 'newest';
+    ['year-group','type-group','theme-group'].forEach(function(id) {
+      var grp = document.getElementById(id);
+      grp.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+      grp.querySelector('.chip').classList.add('active');
+    });
+    document.getElementById('qt-group').querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+    render();
+  });
+
+})();
+</script>
+<script src="/js/atelier.js"></script>
+</body>
+</html>

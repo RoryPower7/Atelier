@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Verbs — Atelier · LC French HL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/atelier.css">
+<style>
+  /* VERBS — page-specific styles */
+  :root { --green: #5a8a4a; --red: #c2554a; }
+
+  /* MAIN LAYOUT — sidebar + content */
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 50px;
+    align-items: start;
+  }
+
+  /* SIDEBAR */
+  aside.sidebar {
+    position: sticky;
+    top: 24px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 28px 22px;
+  }
+  .sidebar .heading {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+    font-weight: 600;
+    margin-bottom: 14px;
+    padding-left: 14px;
+  }
+  .sidebar .group {
+    margin-bottom: 18px;
+  }
+  .sidebar nav { display: flex; flex-direction: column; gap: 2px; }
+  .sidebar nav a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 9px 14px;
+    border-radius: 10px;
+    display: flex; align-items: center; gap: 10px;
+    transition: all 0.18s;
+    position: relative;
+  }
+  .sidebar nav a:hover { background: var(--bg-2); }
+  .sidebar nav a.active {
+    background: var(--sage-tint);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .sidebar nav a.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 9px; bottom: 9px;
+    width: 3px;
+    background: var(--sage);
+    border-radius: 3px;
+  }
+  .sidebar nav a .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--line);
+    flex-shrink: 0;
+  }
+  .sidebar nav a.active .dot { background: var(--sage); }
+  .sidebar nav a.complete .dot { background: var(--butter); }
+
+  .sidebar .progress-mini {
+    background: var(--bg-2);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 8px;
+  }
+  .sidebar .progress-mini .row {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--ink-soft); margin-bottom: 6px;
+  }
+  .sidebar .progress-mini .row strong { color: var(--ink); font-weight: 600; }
+  .sidebar .progress-mini .bar {
+    height: 6px; background: white; border-radius: 100px; overflow: hidden;
+  }
+  .sidebar .progress-mini .bar > div {
+    height: 100%; width: 33%;
+    background: linear-gradient(90deg, var(--sage), var(--sage-soft));
+    border-radius: 100px;
+  }
+
+  /* CONTENT */
+  main { min-width: 0; }
+
+  .tense-section {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    padding: 42px;
+    margin-bottom: 32px;
+    scroll-margin-top: 24px;
+  }
+  .tense-section.intro {
+    background: linear-gradient(135deg, var(--sage-tint), var(--bg));
+    border-color: var(--sage-soft);
+  }
+
+  .tense-head {
+    display: flex; align-items: end; justify-content: space-between;
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .tense-head .left { flex: 1; min-width: 260px; }
+  .tense-head .kicker {
+    color: var(--sage);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 17px;
+    margin-bottom: 4px;
+  }
+  .tense-head h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 44px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .tense-head h2 em { font-style: italic; font-weight: 300; color: var(--sage); }
+  .tense-head .right {
+    display: flex; gap: 8px;
+  }
+  .pill {
+    background: var(--bg-2);
+    color: var(--ink);
+    padding: 7px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .pill.green { background: var(--sage-tint); color: #3d5a30; }
+  .pill.butter { background: var(--butter-soft); color: #8a6a0c; }
+  .pill.rose { background: var(--rose-soft); color: #8b3a2e; }
+  .pill.sky { background: var(--sky-soft); color: #3a5b76; }
+
+  .blurb {
+    color: var(--ink-soft);
+    font-size: 16px;
+    margin-bottom: 24px;
+    max-width: 720px;
+  }
+  .blurb strong { color: var(--ink); font-weight: 600; }
+
+  /* RULES box */
+  .rule-box {
+    background: var(--bg-2);
+    border-radius: 18px;
+    padding: 22px 26px;
+    margin-bottom: 24px;
+    border-left: 3px solid var(--sage);
+  }
+  .rule-box .rule-h {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--sage);
+    margin-bottom: 8px;
+  }
+  .rule-box ol { padding-left: 20px; }
+  .rule-box ol li { padding: 4px 0; color: var(--ink); }
+  .rule-box ol li code,
+  .rule-box ol li .e {
+    font-family: 'Geist Mono', monospace;
+    background: var(--card);
+    padding: 1px 7px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+
+  /* CONJUGATION TABLE */
+  .table-wrap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .conj-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .conj-card .top {
+    padding: 16px 22px;
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .conj-card .top .verb {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    font-weight: 400;
+  }
+  .conj-card .top .group {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    background: var(--bg-2);
+    padding: 3px 9px;
+    border-radius: 100px;
+    margin-left: auto;
+    font-weight: 600;
+  }
+  .conj-card table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+  .conj-card td {
+    padding: 9px 22px;
+    border-bottom: 1px solid var(--line);
+  }
+  .conj-card tr:last-child td { border-bottom: none; }
+  .conj-card .pron {
+    color: var(--ink-soft);
+    font-weight: 500;
+    width: 50%;
+  }
+  .conj-card .form {
+    font-family: 'Geist Mono', monospace;
+    text-align: right;
+  }
+  .conj-card .form .stem { color: var(--ink); }
+  .conj-card .form .end {
+    color: var(--sage);
+    font-weight: 600;
+    background: var(--sage-tint);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  /* QUIZ MODE TOGGLE */
+  .quiz-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 18px;
+    padding: 16px 24px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .quiz-bar .info { display: flex; align-items: center; gap: 14px; }
+  .quiz-bar .info .ic {
+    width: 38px; height: 38px;
+    border-radius: 12px;
+    background: var(--butter);
+    color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 22px;
+  }
+  .quiz-bar .info .t {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .quiz-bar .info .t em { font-style: italic; color: var(--butter); font-weight: 400; }
+  .quiz-bar .info .s {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .quiz-toggle {
+    display: flex;
+    background: rgba(255,255,255,0.1);
+    border-radius: 100px;
+    padding: 4px;
+    gap: 2px;
+  }
+  .quiz-toggle button {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .quiz-toggle button.on {
+    background: var(--butter);
+    color: var(--ink);
+  }
+  .quiz-score {
+    font-size: 13px;
+    font-family: 'Geist Mono', monospace;
+    background: rgba(255,255,255,0.1);
+    padding: 8px 14px;
+    border-radius: 100px;
+  }
+  .quiz-score .ok { color: var(--butter); font-weight: 600; }
+
+  /* QUIZ INPUTS */
+  .conj-card.quiz td {
+    padding: 7px 16px;
+  }
+  .conj-card.quiz .input-wrap { display: flex; justify-content: flex-end; padding: 4px 0; }
+  .conj-card.quiz input {
+    font-family: 'Geist Mono', monospace;
+    font-size: 15px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    padding: 6px 12px;
+    border-radius: 8px;
+    width: 130px;
+    text-align: right;
+    color: var(--ink);
+    outline: none;
+    transition: all 0.15s;
+  }
+  .conj-card.quiz input:focus { border-color: var(--sage); background: white; }
+  .conj-card.quiz input.correct {
+    background: var(--sage-tint);
+    border-color: var(--sage);
+    color: #2f4a26;
+  }
+  .conj-card.quiz input.incorrect {
+    background: var(--rose-soft);
+    border-color: var(--rose);
+    color: #7c2e25;
+  }
+  .conj-card.quiz .hint {
+    display: none;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--rose);
+    text-align: right;
+    padding: 4px 16px 8px;
+  }
+  .conj-card.quiz .hint.show { display: block; }
+
+  .quiz-actions {
+    display: flex; gap: 10px; margin-top: 18px;
+    align-items: center;
+  }
+  .btn {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 11px 22px;
+    border-radius: 100px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: var(--sage); }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .btn.ghost:hover { background: var(--card); border-color: var(--ink); }
+  .feedback {
+    margin-left: auto;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-soft);
+  }
+  .feedback.good { color: var(--sage); }
+  .feedback.bad { color: var(--rose); }
+
+  /* EXAMPLES */
+  .examples {
+    background: var(--sky-soft);
+    border-radius: 18px;
+    padding: 22px 26px;
+    margin-top: 22px;
+    border-left: 3px solid var(--sky);
+  }
+  .examples .ex-h {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: #3a5b76;
+    margin-bottom: 10px;
+  }
+  .examples ul { list-style: none; }
+  .examples li {
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(58, 91, 118, 0.2);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: center;
+  }
+  .examples li:last-child { border-bottom: none; }
+  .examples li .fr {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+  }
+  .examples li .fr strong {
+    color: #3a5b76;
+    font-style: italic;
+    font-weight: 500;
+  }
+  .examples li .en {
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  /* IRREGULAR/AUX TWO-COL */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* INTRO SECTION SPECIFIC */
+  .endings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 14px 0 22px;
+  }
+  .end-card {
+    background: var(--card);
+    border: 1px solid var(--sage-soft);
+    border-radius: 16px;
+    padding: 18px 20px;
+  }
+  .end-card .group-name {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 24px;
+    color: var(--sage);
+    margin-bottom: 10px;
+  }
+  .end-card .ex-verb { font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; font-family: 'Geist Mono', monospace; }
+  .end-card table { width: 100%; font-size: 14px; }
+  .end-card table td { padding: 4px 0; }
+  .end-card table td:first-child { color: var(--ink-soft); }
+  .end-card table td:last-child { text-align: right; font-family: 'Geist Mono', monospace; }
+  .end-card table td:last-child .e { color: var(--sage); font-weight: 600; }
+
+  /* FLOATING TIP */
+  .tip {
+    background: var(--butter-soft);
+    border: 1px solid var(--butter);
+    border-radius: 16px;
+    padding: 16px 22px;
+    font-size: 14px;
+    margin-top: 18px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .tip::before {
+    content: '⚡';
+    font-size: 18px;
+  }
+  .tip strong { font-weight: 600; }
+
+  /* COMING UP */
+  .coming-up {
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 28px;
+    padding: 36px 42px;
+    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 30px;
+    align-items: center;
+  }
+  .coming-up h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .coming-up h3 em { font-style: italic; color: var(--butter); }
+  .coming-up p { color: rgba(255,255,255,0.65); font-size: 14px; }
+  .coming-up .next-btn {
+    background: var(--butter);
+    color: var(--ink);
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .coming-up .next-btn:hover { background: var(--bg); transform: translateY(-2px); }
+
+  @media (max-width: 1000px) {
+    .layout { grid-template-columns: 1fr; }
+    aside.sidebar { position: relative; top: 0; }
+    .table-wrap, .two-col { grid-template-columns: 1fr; }
+    .endings-grid { grid-template-columns: 1fr; }
+    .coming-up { grid-template-columns: 1fr; text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <nav class="top">
+      <div class="logo">
+        <div class="logo-mark">a</div>
+        <span>atelier<em>.fr</em></span>
+      </div>
+      <div class="nav-pill">
+        <a href="/index.html">Home</a>
+        <a href="/comprehensions.html">Comprehensions</a>
+        <a href="/composing.html">Composing</a>
+        <a href="/aural.html">Aural</a>
+        <a href="/verbs.html" class="active">Verbs</a>
+        <a href="/vocab.html">Vocab</a>
+        <a href="/tips.html">Tips</a>
+      </div>
+      <div class="nav-cta">
+        <div class="streak">7-day streak</div>
+        <div class="avatar">m</div>
+      </div>
+    </nav>
+
+    <div class="crumb">
+      <a href="/index.html">Home</a>
+      <span class="sep">/</span>
+      <span class="here">Verbs · La conjugaison</span>
+    </div>
+
+    <!-- PAGE HEAD -->
+    <header class="page-head">
+      <div>
+        <div class="greeting">Bonjour — let's drill some verbs</div>
+        <h1>The <span class="italic">conjugation</span> hub.</h1>
+        <p class="lead">Every tense you need for the higher paper, with the rules, the irregulars worth memorising, and quizzable tables so you can actually test yourself instead of just staring at them.</p>
+      </div>
+      <div class="meta-cards">
+        <div class="meta-card featured">
+          <div class="lbl">Tenses</div>
+          <div class="val">10 <em>essentiel</em></div>
+          <div class="sub">Plus impératif & reflexives</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Your progress</div>
+          <div class="val">3 / 10</div>
+          <div class="sub">Present · -er drilled today</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Quizzes taken</div>
+          <div class="val">12</div>
+          <div class="sub">82% accuracy this week</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Verb of the day</div>
+          <div class="val" style="font-style:italic; font-family:'Fraunces',serif;">prendre</div>
+          <div class="sub">irregular · all tenses</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN LAYOUT -->
+    <div class="layout">
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="group">
+          <div class="heading">The Basics</div>
+          <nav>
+            <a href="#intro" class="active"><span class="dot"></span>Overview</a>
+            <a href="#present" class="complete"><span class="dot"></span>Present tense</a>
+            <a href="#irregular"><span class="dot"></span>Irregular verbs</a>
+            <a href="#imperatif"><span class="dot"></span>L'impératif</a>
+            <a href="#reflexive"><span class="dot"></span>Reflexive verbs</a>
+          </nav>
+        </div>
+
+        <div class="group">
+          <div class="heading">The Past</div>
+          <nav>
+            <a href="#passe"><span class="dot"></span>Passé composé</a>
+            <a href="#imparfait"><span class="dot"></span>L'imparfait</a>
+            <a href="#plusque"><span class="dot"></span>Plus-que-parfait</a>
+          </nav>
+        </div>
+
+        <div class="group">
+          <div class="heading">The Future & Mood</div>
+          <nav>
+            <a href="#futur"><span class="dot"></span>Le futur</a>
+            <a href="#conditionnel"><span class="dot"></span>Le conditionnel</a>
+            <a href="#subjonctif"><span class="dot"></span>Le subjonctif</a>
+          </nav>
+        </div>
+
+        <div class="progress-mini">
+          <div class="row"><span>Section progress</span><strong>3 / 10</strong></div>
+          <div class="bar"><div></div></div>
+        </div>
+      </aside>
+
+      <!-- CONTENT -->
+      <main>
+
+        <!-- 0. INTRO -->
+        <section id="intro" class="tense-section intro">
+          <div class="tense-head">
+            <div class="left">
+              <div class="kicker">— Start here</div>
+              <h2>Verbs, in <em>five minutes</em>.</h2>
+            </div>
+            <div class="right">
+              <span class="pill green">Overview</span>
+            </div>
+          </div>
+          <p class="blurb">French verbs fall into <strong>three regular groups</strong> based on their infinitive ending — <em>-er, -ir, -re</em> — plus a handful of irregulars you just have to learn. Once you know the patterns, conjugating becomes mechanical.</p>
+
+          <div class="endings-grid">
+            <div class="end-card">
+              <div class="group-name">-er verbs</div>
+              <div class="ex-verb">parler · "to speak"</div>
+              <table>
+                <tr><td>je</td><td>parl<span class="e">e</span></td></tr>
+                <tr><td>tu</td><td>parl<span class="e">es</span></td></tr>
+                <tr><td>il/elle</td><td>parl<span class="e">e</span></td></tr>
+                <tr><td>nous</td><td>parl<span class="e">ons</span></td></tr>
+                <tr><td>vous</td><td>parl<span class="e">ez</span></td></tr>
+                <tr><td>ils/elles</td><td>parl<span class="e">ent</span></td></tr>
+              </table>
+            </div>
+            <div class="end-card">
+              <div class="group-name">-ir verbs</div>
+              <div class="ex-verb">finir · "to finish"</div>
+              <table>
+                <tr><td>je</td><td>fin<span class="e">is</span></td></tr>
+                <tr><td>tu</td><td>fin<span class="e">is</span></td></tr>
+                <tr><td>il/elle</td><td>fin<span class="e">it</span></td></tr>
+                <tr><td>nous</td><td>fin<span class="e">issons</span></td></tr>
+                <tr><td>vous</td><td>fin<span class="e">issez</span></td></tr>
+                <tr><td>ils/elles</td><td>fin<span class="e">issent</span></td></tr>
+              </table>
+            </div>
+            <div class="end-card">
+              <div class="group-name">-re verbs</div>
+              <div class="ex-verb">vendre · "to sell"</div>
+              <table>
+                <tr><td>je</td><td>vend<span class="e">s</span></td></tr>
+                <tr><td>tu</td><td>vend<span class="e">s</span></td></tr>
+                <tr><td>il/elle</td><td>vend</td></tr>
+                <tr><td>nous</td><td>vend<span class="e">ons</span></td></tr>
+                <tr><td>vous</td><td>vend<span class="e">ez</span></td></tr>
+                <tr><td>ils/elles</td><td>vend<span class="e">ent</span></td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="tip"><span><strong>Examiner's eye —</strong> Higher Level rewards control across tenses. A piece using present + passé composé + imparfait + one conditional will outscore one in present tense only, every time.</span></div>
+        </section>
+
+        <!-- 1. PRESENT -->
+        <section id="present" class="tense-section">
+          <div class="tense-head">
+            <div class="left">
+              <div class="kicker">— 01 · Le présent</div>
+              <h2>Present <em>tense</em>.</h2>
+            </div>
+            <div class="right">
+              <span class="pill green">Foundational</span>
+              <span class="pill">3 groups</span>
+            </div>
+          </div>
+          <p class="blurb"><strong>How to form it:</strong> take the infinitive, drop the ending (-er, -ir, -re), and add the endings shown above. Used for things happening now, habits, and general truths.</p>
+
+          <div class="rule-box">
+            <div class="rule-h">The rule, in one line</div>
+            <ol>
+              <li>Find the <strong>stem</strong>: drop <code>-er</code>, <code>-ir</code>, or <code>-re</code> from the infinitive.</li>
+              <li>Add the <strong>ending</strong> that matches the subject pronoun.</li>
+              <li>For <code>-ir</code> verbs, don't forget the <span class="e">-iss-</span> infix in the plural forms.</li>
+            </ol>
+          </div>
+
+          <!-- Quiz bar -->
+          <div class="quiz-bar">
+            <div class="info">
+              <div class="ic">Q</div>
+              <div>
+                <div class="t">Quiz <em>mode</em></div>
+                <div class="s">Toggle on to fill in the conjugations yourself</div>
+              </div>
+            </div>
+            <div class="quiz-toggle" data-section="present">
+              <button class="on" data-mode="view">View</button>
+              <button data-mode="quiz">Quiz me</button>
+            </div>
+            <div class="quiz-score" data-section="present">Score: <span class="ok">—</span></div>
+          </div>
+
+          <div class="table-wrap" data-section="present">
+
+            <!-- parler -->
+            <div class="conj-card" data-verb="parler" data-group="-er">
+              <div class="top"><span class="verb">parler</span><span class="group">-er</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="stem">parl</span><span class="end">e</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">parl</span><span class="end">es</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">parl</span><span class="end">e</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">parl</span><span class="end">ons</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">parl</span><span class="end">ez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">parl</span><span class="end">ent</span></td></tr>
+              </table>
+              <table class="quiz-table" style="display:none;">
+                <tr><td class="pron">je</td><td><div class="input-wrap"><input data-answer="parle" placeholder="parl..."></div></td></tr>
+                <tr><td class="pron">tu</td><td><div class="input-wrap"><input data-answer="parles" placeholder="parl..."></div></td></tr>
+                <tr><td class="pron">il/elle</td><td><div class="input-wrap"><input data-answer="parle" placeholder="parl..."></div></td></tr>
+                <tr><td class="pron">nous</td><td><div class="input-wrap"><input data-answer="parlons" placeholder="parl..."></div></td></tr>
+                <tr><td class="pron">vous</td><td><div class="input-wrap"><input data-answer="parlez" placeholder="parl..."></div></td></tr>
+                <tr><td class="pron">ils/elles</td><td><div class="input-wrap"><input data-answer="parlent" placeholder="parl..."></div></td></tr>
+              </table>
+            </div>
+
+            <!-- finir -->
+            <div class="conj-card" data-verb="finir" data-group="-ir">
+              <div class="top"><span class="verb">finir</span><span class="group">-ir</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="stem">fin</span><span class="end">is</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">fin</span><span class="end">is</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">fin</span><span class="end">it</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">fin</span><span class="end">issons</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">fin</span><span class="end">issez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">fin</span><span class="end">issent</span></td></tr>
+              </table>
+              <table class="quiz-table" style="display:none;">
+                <tr><td class="pron">je</td><td><div class="input-wrap"><input data-answer="finis" placeholder="fin..."></div></td></tr>
+                <tr><td class="pron">tu</td><td><div class="input-wrap"><input data-answer="finis" placeholder="fin..."></div></td></tr>
+                <tr><td class="pron">il/elle</td><td><div class="input-wrap"><input data-answer="finit" placeholder="fin..."></div></td></tr>
+                <tr><td class="pron">nous</td><td><div class="input-wrap"><input data-answer="finissons" placeholder="fin..."></div></td></tr>
+                <tr><td class="pron">vous</td><td><div class="input-wrap"><input data-answer="finissez" placeholder="fin..."></div></td></tr>
+                <tr><td class="pron">ils/elles</td><td><div class="input-wrap"><input data-answer="finissent" placeholder="fin..."></div></td></tr>
+              </table>
+            </div>
+
+            <!-- vendre -->
+            <div class="conj-card" data-verb="vendre" data-group="-re">
+              <div class="top"><span class="verb">vendre</span><span class="group">-re</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="stem">vend</span><span class="end">s</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">vend</span><span class="end">s</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">vend</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">vend</span><span class="end">ons</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">vend</span><span class="end">ez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">vend</span><span class="end">ent</span></td></tr>
+              </table>
+              <table class="quiz-table" style="display:none;">
+                <tr><td class="pron">je</td><td><div class="input-wrap"><input data-answer="vends" placeholder="vend..."></div></td></tr>
+                <tr><td class="pron">tu</td><td><div class="input-wrap"><input data-answer="vends" placeholder="vend..."></div></td></tr>
+                <tr><td class="pron">il/elle</td><td><div class="input-wrap"><input data-answer="vend" placeholder="vend..."></div></td></tr>
+                <tr><td class="pron">nous</td><td><div class="input-wrap"><input data-answer="vendons" placeholder="vend..."></div></td></tr>
+                <tr><td class="pron">vous</td><td><div class="input-wrap"><input data-answer="vendez" placeholder="vend..."></div></td></tr>
+                <tr><td class="pron">ils/elles</td><td><div class="input-wrap"><input data-answer="vendent" placeholder="vend..."></div></td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="quiz-actions" data-section="present" style="display:none;">
+            <button class="btn" data-action="check">Check answers</button>
+            <button class="btn ghost" data-action="reveal">Reveal all</button>
+            <button class="btn ghost" data-action="reset">Reset</button>
+            <span class="feedback"></span>
+          </div>
+
+          <div class="examples">
+            <div class="ex-h">In context</div>
+            <ul>
+              <li><span class="fr">Je <strong>parle</strong> français tous les jours.</span><span class="en">I speak French every day.</span></li>
+              <li><span class="fr">Nous <strong>finissons</strong> nos devoirs avant le dîner.</span><span class="en">We finish our homework before dinner.</span></li>
+              <li><span class="fr">Ils <strong>vendent</strong> leur voiture le mois prochain.</span><span class="en">They are selling their car next month.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 2. IRREGULAR -->
+        <section id="irregular" class="tense-section">
+          <div class="tense-head">
+            <div class="left">
+              <div class="kicker">— 02 · Les verbes irréguliers</div>
+              <h2>Irregular <em>verbs</em>.</h2>
+            </div>
+            <div class="right">
+              <span class="pill rose">High priority</span>
+              <span class="pill">The big 8</span>
+            </div>
+          </div>
+          <p class="blurb">These don't follow the patterns above. They also happen to be the most-used verbs in the language, so the time invested pays off everywhere. <strong>Learn these eight first</strong> — being able to conjugate <em>être</em> and <em>avoir</em> alone unlocks every compound tense.</p>
+
+          <!-- Quiz bar -->
+          <div class="quiz-bar">
+            <div class="info">
+              <div class="ic">Q</div>
+              <div>
+                <div class="t">Quiz <em>mode</em></div>
+                <div class="s">être and avoir — get these to muscle memory</div>
+              </div>
+            </div>
+            <div class="quiz-toggle" data-section="irregular">
+              <button class="on" data-mode="view">View</button>
+              <button data-mode="quiz">Quiz me</button>
+            </div>
+            <div class="quiz-score" data-section="irregular">Score: <span class="ok">—</span></div>
+          </div>
+
+          <div class="table-wrap" data-section="irregular">
+
+            <!-- être -->
+            <div class="conj-card" data-verb="être">
+              <div class="top"><span class="verb">être</span><span class="group">to be</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="end">suis</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="end">es</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="end">est</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="end">sommes</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="end">êtes</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="end">sont</span></td></tr>
+              </table>
+              <table class="quiz-table" style="display:none;">
+                <tr><td class="pron">je</td><td><div class="input-wrap"><input data-answer="suis"></div></td></tr>
+                <tr><td class="pron">tu</td><td><div class="input-wrap"><input data-answer="es"></div></td></tr>
+                <tr><td class="pron">il/elle</td><td><div class="input-wrap"><input data-answer="est"></div></td></tr>
+                <tr><td class="pron">nous</td><td><div class="input-wrap"><input data-answer="sommes"></div></td></tr>
+                <tr><td class="pron">vous</td><td><div class="input-wrap"><input data-answer="êtes"></div></td></tr>
+                <tr><td class="pron">ils/elles</td><td><div class="input-wrap"><input data-answer="sont"></div></td></tr>
+              </table>
+            </div>
+
+            <!-- avoir -->
+            <div class="conj-card" data-verb="avoir">
+              <div class="top"><span class="verb">avoir</span><span class="group">to have</span></div>
+              <table class="view-table">
+                <tr><td class="pron">j'</td><td class="form"><span class="end">ai</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="end">as</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="end">a</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="end">avons</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="end">avez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="end">ont</span></td></tr>
+              </table>
+              <table class="quiz-table" style="display:none;">
+                <tr><td class="pron">j'</td><td><div class="input-wrap"><input data-answer="ai"></div></td></tr>
+                <tr><td class="pron">tu</td><td><div class="input-wrap"><input data-answer="as"></div></td></tr>
+                <tr><td class="pron">il/elle</td><td><div class="input-wrap"><input data-answer="a"></div></td></tr>
+                <tr><td class="pron">nous</td><td><div class="input-wrap"><input data-answer="avons"></div></td></tr>
+                <tr><td class="pron">vous</td><td><div class="input-wrap"><input data-answer="avez"></div></td></tr>
+                <tr><td class="pron">ils/elles</td><td><div class="input-wrap"><input data-answer="ont"></div></td></tr>
+              </table>
+            </div>
+
+            <!-- aller -->
+            <div class="conj-card" data-verb="aller">
+              <div class="top"><span class="verb">aller</span><span class="group">to go</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="end">vais</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="end">vas</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="end">va</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="end">allons</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="end">allez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="end">vont</span></td></tr>
+              </table>
+              <table class="quiz-table" style="display:none;">
+                <tr><td class="pron">je</td><td><div class="input-wrap"><input data-answer="vais"></div></td></tr>
+                <tr><td class="pron">tu</td><td><div class="input-wrap"><input data-answer="vas"></div></td></tr>
+                <tr><td class="pron">il/elle</td><td><div class="input-wrap"><input data-answer="va"></div></td></tr>
+                <tr><td class="pron">nous</td><td><div class="input-wrap"><input data-answer="allons"></div></td></tr>
+                <tr><td class="pron">vous</td><td><div class="input-wrap"><input data-answer="allez"></div></td></tr>
+                <tr><td class="pron">ils/elles</td><td><div class="input-wrap"><input data-answer="vont"></div></td></tr>
+              </table>
+            </div>
+
+            <!-- faire -->
+            <div class="conj-card" data-verb="faire">
+              <div class="top"><span class="verb">faire</span><span class="group">to do/make</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="end">fais</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="end">fais</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="end">fait</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="end">faisons</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="end">faites</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="end">font</span></td></tr>
+              </table>
+              <table class="quiz-table" style="display:none;">
+                <tr><td class="pron">je</td><td><div class="input-wrap"><input data-answer="fais"></div></td></tr>
+                <tr><td class="pron">tu</td><td><div class="input-wrap"><input data-answer="fais"></div></td></tr>
+                <tr><td class="pron">il/elle</td><td><div class="input-wrap"><input data-answer="fait"></div></td></tr>
+                <tr><td class="pron">nous</td><td><div class="input-wrap"><input data-answer="faisons"></div></td></tr>
+                <tr><td class="pron">vous</td><td><div class="input-wrap"><input data-answer="faites"></div></td></tr>
+                <tr><td class="pron">ils/elles</td><td><div class="input-wrap"><input data-answer="font"></div></td></tr>
+              </table>
+            </div>
+
+            <!-- pouvoir -->
+            <div class="conj-card" data-verb="pouvoir">
+              <div class="top"><span class="verb">pouvoir</span><span class="group">can / to be able</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="end">peux</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="end">peux</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="end">peut</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="end">pouvons</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="end">pouvez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="end">peuvent</span></td></tr>
+              </table>
+              <table class="quiz-table" style="display:none;">
+                <tr><td class="pron">je</td><td><div class="input-wrap"><input data-answer="peux"></div></td></tr>
+                <tr><td class="pron">tu</td><td><div class="input-wrap"><input data-answer="peux"></div></td></tr>
+                <tr><td class="pron">il/elle</td><td><div class="input-wrap"><input data-answer="peut"></div></td></tr>
+                <tr><td class="pron">nous</td><td><div class="input-wrap"><input data-answer="pouvons"></div></td></tr>
+                <tr><td class="pron">vous</td><td><div class="input-wrap"><input data-answer="pouvez"></div></td></tr>
+                <tr><td class="pron">ils/elles</td><td><div class="input-wrap"><input data-answer="peuvent"></div></td></tr>
+              </table>
+            </div>
+
+            <!-- vouloir -->
+            <div class="conj-card" data-verb="vouloir">
+              <div class="top"><span class="verb">vouloir</span><span class="group">to want</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="end">veux</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="end">veux</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="end">veut</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="end">voulons</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="end">voulez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="end">veulent</span></td></tr>
+              </table>
+              <table class="quiz-table" style="display:none;">
+                <tr><td class="pron">je</td><td><div class="input-wrap"><input data-answer="veux"></div></td></tr>
+                <tr><td class="pron">tu</td><td><div class="input-wrap"><input data-answer="veux"></div></td></tr>
+                <tr><td class="pron">il/elle</td><td><div class="input-wrap"><input data-answer="veut"></div></td></tr>
+                <tr><td class="pron">nous</td><td><div class="input-wrap"><input data-answer="voulons"></div></td></tr>
+                <tr><td class="pron">vous</td><td><div class="input-wrap"><input data-answer="voulez"></div></td></tr>
+                <tr><td class="pron">ils/elles</td><td><div class="input-wrap"><input data-answer="veulent"></div></td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="quiz-actions" data-section="irregular" style="display:none;">
+            <button class="btn" data-action="check">Check answers</button>
+            <button class="btn ghost" data-action="reveal">Reveal all</button>
+            <button class="btn ghost" data-action="reset">Reset</button>
+            <span class="feedback"></span>
+          </div>
+
+          <div class="tip"><span><strong>Memory hack —</strong> <em>aller, faire, pouvoir, vouloir, devoir, voir, savoir, prendre</em>. Eight verbs. Drill them until they're automatic. You'll use them in nearly every sentence you write.</span></div>
+        </section>
+
+        <!-- 3. IMPÉRATIF -->
+        <section id="imperatif" class="tense-section">
+          <div class="tense-head">
+            <div class="left">
+              <div class="kicker">— 03 · L'impératif</div>
+              <h2>The <em>imperative</em>.</h2>
+            </div>
+            <div class="right">
+              <span class="pill butter">Useful</span>
+              <span class="pill">3 forms only</span>
+            </div>
+          </div>
+          <p class="blurb">Used to give <strong>commands, instructions, or invitations</strong>. There are only three forms — <em>tu, nous, vous</em> — and they're just the present tense without the pronoun. Common in messages, formal letters and advice-giving.</p>
+
+          <div class="rule-box">
+            <div class="rule-h">How to form it</div>
+            <ol>
+              <li>Take the <strong>present tense</strong> form for <em>tu, nous,</em> or <em>vous</em>.</li>
+              <li>Drop the subject pronoun.</li>
+              <li>For <code>-er</code> verbs, <strong>drop the final 's'</strong> from the <em>tu</em> form. <span class="e">tu parles → parle!</span></li>
+            </ol>
+          </div>
+
+          <div class="table-wrap">
+            <div class="conj-card">
+              <div class="top"><span class="verb">parler</span><span class="group">-er</span></div>
+              <table class="view-table">
+                <tr><td class="pron">(tu)</td><td class="form"><span class="end">parle !</span></td></tr>
+                <tr><td class="pron">(nous)</td><td class="form"><span class="end">parlons !</span></td></tr>
+                <tr><td class="pron">(vous)</td><td class="form"><span class="end">parlez !</span></td></tr>
+              </table>
+            </div>
+            <div class="conj-card">
+              <div class="top"><span class="verb">finir</span><span class="group">-ir</span></div>
+              <table class="view-table">
+                <tr><td class="pron">(tu)</td><td class="form"><span class="end">finis !</span></td></tr>
+                <tr><td class="pron">(nous)</td><td class="form"><span class="end">finissons !</span></td></tr>
+                <tr><td class="pron">(vous)</td><td class="form"><span class="end">finissez !</span></td></tr>
+              </table>
+            </div>
+            <div class="conj-card">
+              <div class="top"><span class="verb">être/avoir</span><span class="group">irregular</span></div>
+              <table class="view-table">
+                <tr><td class="pron">être</td><td class="form"><span class="end">sois · soyons · soyez</span></td></tr>
+                <tr><td class="pron">avoir</td><td class="form"><span class="end">aie · ayons · ayez</span></td></tr>
+                <tr><td class="pron">aller</td><td class="form"><span class="end">va · allons · allez</span></td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="examples">
+            <div class="ex-h">In context</div>
+            <ul>
+              <li><span class="fr"><strong>Écoute</strong> bien, c'est important.</span><span class="en">Listen carefully, it's important.</span></li>
+              <li><span class="fr"><strong>Allons</strong>-y !</span><span class="en">Let's go!</span></li>
+              <li><span class="fr"><strong>Soyez</strong> patient, s'il vous plaît.</span><span class="en">Please be patient.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 4. REFLEXIVE -->
+        <section id="reflexive" class="tense-section">
+          <div class="tense-head">
+            <div class="left">
+              <div class="kicker">— 04 · Les verbes pronominaux</div>
+              <h2>Reflexive <em>verbs</em>.</h2>
+            </div>
+            <div class="right">
+              <span class="pill rose">Trip-up zone</span>
+              <span class="pill">être in past</span>
+            </div>
+          </div>
+          <p class="blurb">Reflexive verbs describe actions you do <strong>to yourself</strong>: <em>se laver</em> (to wash oneself), <em>se lever</em> (to get up), <em>s'amuser</em> (to enjoy oneself). They take a reflexive pronoun (me, te, se, nous, vous, se) that matches the subject.</p>
+
+          <div class="rule-box">
+            <div class="rule-h">Two things to remember</div>
+            <ol>
+              <li>The pronoun goes <strong>before</strong> the verb: <code>je <span class="e">me</span> lève</code>, <code>nous <span class="e">nous</span> levons</code>.</li>
+              <li>In the past tense, reflexive verbs always use <strong>être</strong> as the auxiliary, and the past participle <strong>agrees</strong> with the subject. <code>elle s'est lev<span class="e">ée</span></code></li>
+            </ol>
+          </div>
+
+          <div class="table-wrap">
+            <div class="conj-card">
+              <div class="top"><span class="verb">se laver</span><span class="group">present</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="end">me</span> <span class="stem">lave</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="end">te</span> <span class="stem">laves</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="end">se</span> <span class="stem">lave</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="end">nous</span> <span class="stem">lavons</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="end">vous</span> <span class="stem">lavez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="end">se</span> <span class="stem">lavent</span></td></tr>
+              </table>
+            </div>
+            <div class="conj-card">
+              <div class="top"><span class="verb">se laver</span><span class="group">passé composé</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="stem">me suis</span> <span class="end">lavé(e)</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">t'es</span> <span class="end">lavé(e)</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">s'est</span> <span class="end">lavé(e)</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">nous sommes</span> <span class="end">lavé(e)s</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">vous êtes</span> <span class="end">lavé(e)(s)</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">se sont</span> <span class="end">lavé(e)s</span></td></tr>
+              </table>
+            </div>
+            <div class="conj-card">
+              <div class="top"><span class="verb">common ones</span><span class="group">to know</span></div>
+              <table class="view-table">
+                <tr><td class="pron">se lever</td><td class="form">to get up</td></tr>
+                <tr><td class="pron">se coucher</td><td class="form">to go to bed</td></tr>
+                <tr><td class="pron">s'amuser</td><td class="form">to have fun</td></tr>
+                <tr><td class="pron">s'habiller</td><td class="form">to get dressed</td></tr>
+                <tr><td class="pron">se sentir</td><td class="form">to feel</td></tr>
+                <tr><td class="pron">s'intéresser à</td><td class="form">to be interested in</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="tip"><span><strong>Examiner trap —</strong> in the passé composé, <em>"elle s'est lavée"</em> takes an extra -e on lavée because the reflexive pronoun is a direct object. Get the agreement right, especially for feminine subjects. It's a frequent dropped mark.</span></div>
+        </section>
+
+        <!-- 5. PASSÉ COMPOSÉ -->
+        <section id="passe" class="tense-section">
+          <div class="tense-head">
+            <div class="left">
+              <div class="kicker">— 05 · Le passé composé</div>
+              <h2>Passé <em>composé</em>.</h2>
+            </div>
+            <div class="right">
+              <span class="pill green">Essential</span>
+              <span class="pill butter">Used constantly</span>
+            </div>
+          </div>
+          <p class="blurb">The main past tense for <strong>completed actions</strong>: "I went, I did, I saw". Formed with the present tense of <em>avoir</em> or <em>être</em>, plus the past participle.</p>
+
+          <div class="rule-box">
+            <div class="rule-h">The formula</div>
+            <ol>
+              <li><strong>Auxiliary verb</strong> (avoir or être, in present) + <strong>past participle</strong>.</li>
+              <li>Most verbs take <code>avoir</code>: <em>j'ai mangé, tu as fini, nous avons vendu</em>.</li>
+              <li>The "<strong>Dr & Mrs Vandertramp</strong>" verbs and all reflexives take <code>être</code> — and agree with the subject in number and gender.</li>
+            </ol>
+          </div>
+
+          <div class="two-col">
+            <div class="conj-card">
+              <div class="top"><span class="verb">manger (avoir)</span><span class="group">most verbs</span></div>
+              <table class="view-table">
+                <tr><td class="pron">j'</td><td class="form"><span class="stem">ai</span> <span class="end">mangé</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">as</span> <span class="end">mangé</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">a</span> <span class="end">mangé</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">avons</span> <span class="end">mangé</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">avez</span> <span class="end">mangé</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">ont</span> <span class="end">mangé</span></td></tr>
+              </table>
+            </div>
+            <div class="conj-card">
+              <div class="top"><span class="verb">aller (être)</span><span class="group">Dr Mrs Vandertramp</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="stem">suis</span> <span class="end">allé(e)</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">es</span> <span class="end">allé(e)</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">est</span> <span class="end">allé(e)</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">sommes</span> <span class="end">allé(e)s</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">êtes</span> <span class="end">allé(e)(s)</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">sont</span> <span class="end">allé(e)s</span></td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="rule-box" style="border-left-color: var(--rose); margin-top: 22px;">
+            <div class="rule-h" style="color: var(--rose);">Past participle endings</div>
+            <ol>
+              <li><code>-er</code> verbs → <span class="e">-é</span> (parler → parlé)</li>
+              <li><code>-ir</code> verbs → <span class="e">-i</span> (finir → fini)</li>
+              <li><code>-re</code> verbs → <span class="e">-u</span> (vendre → vendu)</li>
+              <li>Irregulars: <em>avoir → eu, être → été, faire → fait, voir → vu, prendre → pris, mettre → mis, écrire → écrit, dire → dit, vouloir → voulu, pouvoir → pu</em></li>
+            </ol>
+          </div>
+
+          <div class="examples">
+            <div class="ex-h">In context</div>
+            <ul>
+              <li><span class="fr">Hier, j'<strong>ai mangé</strong> au restaurant avec mes amis.</span><span class="en">Yesterday I ate at a restaurant with my friends.</span></li>
+              <li><span class="fr">Elle <strong>est partie</strong> à six heures.</span><span class="en">She left at six o'clock.</span></li>
+              <li><span class="fr">Nous <strong>avons vu</strong> un excellent film.</span><span class="en">We saw an excellent film.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 6. IMPARFAIT -->
+        <section id="imparfait" class="tense-section">
+          <div class="tense-head">
+            <div class="left">
+              <div class="kicker">— 06 · L'imparfait</div>
+              <h2>The <em>imperfect</em>.</h2>
+            </div>
+            <div class="right">
+              <span class="pill green">Essential</span>
+              <span class="pill">One rule, no exceptions</span>
+            </div>
+          </div>
+          <p class="blurb">Used for <strong>descriptions in the past, habits, and ongoing actions</strong>: "I used to, I was doing". Pairs beautifully with the passé composé to set scenes ("I <em>was reading</em> when he <em>arrived</em>"). Examiners love seeing the contrast.</p>
+
+          <div class="rule-box">
+            <div class="rule-h">Endings — same for every verb</div>
+            <ol>
+              <li>Take the <em>nous</em> form of the present (e.g. <em>nous parl<span class="e">ons</span></em>), drop the <code>-ons</code> to get the stem.</li>
+              <li>Add: <span class="e">-ais, -ais, -ait, -ions, -iez, -aient</span>.</li>
+              <li><strong>One exception:</strong> <em>être</em> uses the stem <code>ét-</code>.</li>
+            </ol>
+          </div>
+
+          <div class="two-col">
+            <div class="conj-card">
+              <div class="top"><span class="verb">parler</span><span class="group">stem: parl-</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="stem">parl</span><span class="end">ais</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">parl</span><span class="end">ais</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">parl</span><span class="end">ait</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">parl</span><span class="end">ions</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">parl</span><span class="end">iez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">parl</span><span class="end">aient</span></td></tr>
+              </table>
+            </div>
+            <div class="conj-card">
+              <div class="top"><span class="verb">être</span><span class="group">stem: ét-</span></div>
+              <table class="view-table">
+                <tr><td class="pron">j'</td><td class="form"><span class="stem">ét</span><span class="end">ais</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">ét</span><span class="end">ais</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">ét</span><span class="end">ait</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">ét</span><span class="end">ions</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">ét</span><span class="end">iez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">ét</span><span class="end">aient</span></td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="examples">
+            <div class="ex-h">Passé composé vs Imparfait</div>
+            <ul>
+              <li><span class="fr">Je <strong>lisais</strong> quand le téléphone <strong>a sonné</strong>.</span><span class="en">I was reading when the phone rang.</span></li>
+              <li><span class="fr">Quand j'<strong>étais</strong> jeune, je <strong>jouais</strong> au foot tous les jours.</span><span class="en">When I was young, I used to play football every day.</span></li>
+              <li><span class="fr">Il <strong>faisait</strong> beau, alors nous <strong>sommes sortis</strong>.</span><span class="en">The weather was nice, so we went out.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 7. PLUS-QUE-PARFAIT -->
+        <section id="plusque" class="tense-section">
+          <div class="tense-head">
+            <div class="left">
+              <div class="kicker">— 07 · Le plus-que-parfait</div>
+              <h2>The <em>pluperfect</em>.</h2>
+            </div>
+            <div class="right">
+              <span class="pill butter">Bonus marks</span>
+              <span class="pill">"Had done"</span>
+            </div>
+          </div>
+          <p class="blurb">Used for an action that happened <strong>before another past action</strong>: "I had already eaten when she arrived". A reliable way to show sophistication on the higher paper — use it once or twice per piece.</p>
+
+          <div class="rule-box">
+            <div class="rule-h">The formula</div>
+            <ol>
+              <li>Take the <strong>imparfait</strong> of <code>avoir</code> or <code>être</code>.</li>
+              <li>Add the <strong>past participle</strong>, with same agreement rules as passé composé.</li>
+            </ol>
+          </div>
+
+          <div class="two-col">
+            <div class="conj-card">
+              <div class="top"><span class="verb">manger</span><span class="group">avoir + p.p.</span></div>
+              <table class="view-table">
+                <tr><td class="pron">j'</td><td class="form"><span class="stem">avais</span> <span class="end">mangé</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">avais</span> <span class="end">mangé</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">avait</span> <span class="end">mangé</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">avions</span> <span class="end">mangé</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">aviez</span> <span class="end">mangé</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">avaient</span> <span class="end">mangé</span></td></tr>
+              </table>
+            </div>
+            <div class="conj-card">
+              <div class="top"><span class="verb">partir</span><span class="group">être + p.p.</span></div>
+              <table class="view-table">
+                <tr><td class="pron">j'</td><td class="form"><span class="stem">étais</span> <span class="end">parti(e)</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">étais</span> <span class="end">parti(e)</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">était</span> <span class="end">parti(e)</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">étions</span> <span class="end">parti(e)s</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">étiez</span> <span class="end">parti(e)(s)</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">étaient</span> <span class="end">parti(e)s</span></td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="examples">
+            <div class="ex-h">In context</div>
+            <ul>
+              <li><span class="fr">Quand elle est arrivée, j'<strong>avais déjà mangé</strong>.</span><span class="en">When she arrived, I had already eaten.</span></li>
+              <li><span class="fr">Nous <strong>étions partis</strong> avant le début du film.</span><span class="en">We had left before the start of the film.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 8. FUTUR -->
+        <section id="futur" class="tense-section">
+          <div class="tense-head">
+            <div class="left">
+              <div class="kicker">— 08 · Le futur simple</div>
+              <h2>The <em>future</em>.</h2>
+            </div>
+            <div class="right">
+              <span class="pill green">Essential</span>
+              <span class="pill">Built on infinitive</span>
+            </div>
+          </div>
+          <p class="blurb">Used for what <strong>will happen</strong>: "I will go, I will do". The stem for most verbs is the <strong>infinitive itself</strong> — making this one of the easier tenses to form.</p>
+
+          <div class="rule-box">
+            <div class="rule-h">Endings — same for every verb</div>
+            <ol>
+              <li><strong>Stem:</strong> the infinitive (for <code>-re</code> verbs, drop the final <em>e</em>).</li>
+              <li><strong>Endings:</strong> <span class="e">-ai, -as, -a, -ons, -ez, -ont</span> (same as <em>avoir</em>!).</li>
+              <li><strong>Irregular stems</strong> to memorise: aller → <em>ir-</em>, avoir → <em>aur-</em>, être → <em>ser-</em>, faire → <em>fer-</em>, pouvoir → <em>pourr-</em>, vouloir → <em>voudr-</em>, voir → <em>verr-</em>, savoir → <em>saur-</em>, venir → <em>viendr-</em>.</li>
+            </ol>
+          </div>
+
+          <div class="two-col">
+            <div class="conj-card">
+              <div class="top"><span class="verb">parler</span><span class="group">regular</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="stem">parler</span><span class="end">ai</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">parler</span><span class="end">as</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">parler</span><span class="end">a</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">parler</span><span class="end">ons</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">parler</span><span class="end">ez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">parler</span><span class="end">ont</span></td></tr>
+              </table>
+            </div>
+            <div class="conj-card">
+              <div class="top"><span class="verb">être</span><span class="group">stem: ser-</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="stem">ser</span><span class="end">ai</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">ser</span><span class="end">as</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">ser</span><span class="end">a</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">ser</span><span class="end">ons</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">ser</span><span class="end">ez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">ser</span><span class="end">ont</span></td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="examples">
+            <div class="ex-h">In context</div>
+            <ul>
+              <li><span class="fr">L'année prochaine, je <strong>visiterai</strong> Paris.</span><span class="en">Next year I will visit Paris.</span></li>
+              <li><span class="fr">Nous <strong>serons</strong> là à huit heures.</span><span class="en">We will be there at eight o'clock.</span></li>
+              <li><span class="fr">Si tu travailles, tu <strong>réussiras</strong>.</span><span class="en">If you work, you will succeed.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 9. CONDITIONNEL -->
+        <section id="conditionnel" class="tense-section">
+          <div class="tense-head">
+            <div class="left">
+              <div class="kicker">— 09 · Le conditionnel</div>
+              <h2>The <em>conditional</em>.</h2>
+            </div>
+            <div class="right">
+              <span class="pill green">Essential</span>
+              <span class="pill butter">Politeness</span>
+            </div>
+          </div>
+          <p class="blurb">Used for <strong>"would" statements</strong>, hypotheticals, and polite requests. Formed exactly like the future, but with imparfait endings.</p>
+
+          <div class="rule-box">
+            <div class="rule-h">The formula</div>
+            <ol>
+              <li><strong>Stem:</strong> same as the future (infinitive, or irregular stem).</li>
+              <li><strong>Endings:</strong> imparfait endings — <span class="e">-ais, -ais, -ait, -ions, -iez, -aient</span>.</li>
+            </ol>
+          </div>
+
+          <div class="two-col">
+            <div class="conj-card">
+              <div class="top"><span class="verb">parler</span><span class="group">regular</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="stem">parler</span><span class="end">ais</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">parler</span><span class="end">ais</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">parler</span><span class="end">ait</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">parler</span><span class="end">ions</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">parler</span><span class="end">iez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">parler</span><span class="end">aient</span></td></tr>
+              </table>
+            </div>
+            <div class="conj-card">
+              <div class="top"><span class="verb">vouloir</span><span class="group">stem: voudr-</span></div>
+              <table class="view-table">
+                <tr><td class="pron">je</td><td class="form"><span class="stem">voudr</span><span class="end">ais</span></td></tr>
+                <tr><td class="pron">tu</td><td class="form"><span class="stem">voudr</span><span class="end">ais</span></td></tr>
+                <tr><td class="pron">il/elle</td><td class="form"><span class="stem">voudr</span><span class="end">ait</span></td></tr>
+                <tr><td class="pron">nous</td><td class="form"><span class="stem">voudr</span><span class="end">ions</span></td></tr>
+                <tr><td class="pron">vous</td><td class="form"><span class="stem">voudr</span><span class="end">iez</span></td></tr>
+                <tr><td class="pron">ils/elles</td><td class="form"><span class="stem">voudr</span><span class="end">aient</span></td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="examples">
+            <div class="ex-h">In context</div>
+            <ul>
+              <li><span class="fr">Je <strong>voudrais</strong> un café, s'il vous plaît.</span><span class="en">I would like a coffee, please. (polite)</span></li>
+              <li><span class="fr">Si j'avais le temps, je <strong>voyagerais</strong> plus.</span><span class="en">If I had time, I would travel more. (hypothesis)</span></li>
+              <li><span class="fr">Le gouvernement <strong>devrait</strong> agir.</span><span class="en">The government should act. (opinion writing)</span></li>
+            </ul>
+          </div>
+
+          <div class="tip"><span><strong>Opinion-piece gold —</strong> "Je dirais que…", "On pourrait penser que…", "Il faudrait que…" — these conditional openers consistently lift written answers. Memorise three and use them.</span></div>
+        </section>
+
+        <!-- 10. SUBJONCTIF -->
+        <section id="subjonctif" class="tense-section">
+          <div class="tense-head">
+            <div class="left">
+              <div class="kicker">— 10 · Le subjonctif</div>
+              <h2>The <em>subjunctive</em>.</h2>
+            </div>
+            <div class="right">
+              <span class="pill rose">Advanced</span>
+              <span class="pill">After triggers</span>
+            </div>
+          </div>
+          <p class="blurb">Used to express <strong>doubt, emotion, necessity, or desire</strong> — typically after specific trigger phrases like <em>il faut que, je veux que, bien que</em>. Show one or two of these correctly and you instantly look like a confident higher-level student.</p>
+
+          <div class="rule-box">
+            <div class="rule-h">How to form it</div>
+            <ol>
+              <li><strong>Stem:</strong> take the <em>ils/elles</em> form of the present, drop the <code>-ent</code>. <span class="e">parlent → parl-</span></li>
+              <li><strong>Endings:</strong> <span class="e">-e, -es, -e, -ions, -iez, -ent</span>.</li>
+              <li>Common irregulars: <em>avoir, être, aller, faire, pouvoir, savoir, vouloir</em> — memorise these.</li>
+            </ol>
+          </div>
+
+          <div class="two-col">
+            <div class="conj-card">
+              <div class="top"><span class="verb">parler</span><span class="group">regular</span></div>
+              <table class="view-table">
+                <tr><td class="pron">que je</td><td class="form"><span class="stem">parl</span><span class="end">e</span></td></tr>
+                <tr><td class="pron">que tu</td><td class="form"><span class="stem">parl</span><span class="end">es</span></td></tr>
+                <tr><td class="pron">qu'il/elle</td><td class="form"><span class="stem">parl</span><span class="end">e</span></td></tr>
+                <tr><td class="pron">que nous</td><td class="form"><span class="stem">parl</span><span class="end">ions</span></td></tr>
+                <tr><td class="pron">que vous</td><td class="form"><span class="stem">parl</span><span class="end">iez</span></td></tr>
+                <tr><td class="pron">qu'ils/elles</td><td class="form"><span class="stem">parl</span><span class="end">ent</span></td></tr>
+              </table>
+            </div>
+            <div class="conj-card">
+              <div class="top"><span class="verb">être</span><span class="group">irregular</span></div>
+              <table class="view-table">
+                <tr><td class="pron">que je</td><td class="form"><span class="end">sois</span></td></tr>
+                <tr><td class="pron">que tu</td><td class="form"><span class="end">sois</span></td></tr>
+                <tr><td class="pron">qu'il/elle</td><td class="form"><span class="end">soit</span></td></tr>
+                <tr><td class="pron">que nous</td><td class="form"><span class="end">soyons</span></td></tr>
+                <tr><td class="pron">que vous</td><td class="form"><span class="end">soyez</span></td></tr>
+                <tr><td class="pron">qu'ils/elles</td><td class="form"><span class="end">soient</span></td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="rule-box" style="border-left-color: var(--butter); margin-top: 22px;">
+            <div class="rule-h" style="color: #8a6a0c;">Trigger phrases — memorise five</div>
+            <ol>
+              <li><em>Il faut que…</em> — it is necessary that…</li>
+              <li><em>Je veux que…</em> — I want… to</li>
+              <li><em>Bien que…</em> — although…</li>
+              <li><em>Avant que…</em> — before…</li>
+              <li><em>Pour que…</em> — so that…</li>
+            </ol>
+          </div>
+
+          <div class="examples">
+            <div class="ex-h">In context</div>
+            <ul>
+              <li><span class="fr">Il faut que je <strong>fasse</strong> mes devoirs.</span><span class="en">I have to do my homework.</span></li>
+              <li><span class="fr">Bien qu'il <strong>soit</strong> tard, je continue à étudier.</span><span class="en">Although it's late, I'm still studying.</span></li>
+              <li><span class="fr">Je veux que tu <strong>viennes</strong> avec moi.</span><span class="en">I want you to come with me.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- COMING UP -->
+        <div class="coming-up">
+          <div>
+            <h3>Next up: <em>Vocab</em></h3>
+            <p>Themed lists — environment, technology, work — with one-tap quizzes.</p>
+          </div>
+          <a href="#" class="next-btn">Open vocab →</a>
+        </div>
+
+      </main>
+    </div>
+
+    <footer>
+      <div>Atelier · <em>built for Leaving Cert HL French</em></div>
+      <div>Bonne chance pour les examens 🍀</div>
+    </footer>
+
+  </div>
+
+<script>
+(function() {
+  // QUIZ TOGGLE: switch between view and quiz mode per section
+  document.querySelectorAll('.quiz-toggle').forEach(function(toggle) {
+    var section = toggle.dataset.section;
+    toggle.querySelectorAll('button').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var mode = btn.dataset.mode;
+        toggle.querySelectorAll('button').forEach(function(b) { b.classList.remove('on'); });
+        btn.classList.add('on');
+
+        var tables = document.querySelectorAll('.table-wrap[data-section="' + section + '"] .conj-card');
+        tables.forEach(function(card) {
+          var viewT = card.querySelector('.view-table');
+          var quizT = card.querySelector('.quiz-table');
+          if (mode === 'quiz') {
+            card.classList.add('quiz');
+            if (viewT) viewT.style.display = 'none';
+            if (quizT) quizT.style.display = '';
+          } else {
+            card.classList.remove('quiz');
+            if (viewT) viewT.style.display = '';
+            if (quizT) quizT.style.display = 'none';
+          }
+        });
+
+        var actions = document.querySelector('.quiz-actions[data-section="' + section + '"]');
+        if (actions) actions.style.display = (mode === 'quiz') ? '' : 'none';
+      });
+    });
+  });
+
+  // Normalise: lowercase, strip accents for forgiving check (but display original answer if wrong)
+  function norm(s) {
+    return s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  // CHECK / REVEAL / RESET handlers
+  document.querySelectorAll('.quiz-actions').forEach(function(actions) {
+    var section = actions.dataset.section;
+    var wrap = document.querySelector('.table-wrap[data-section="' + section + '"]');
+    var scoreEl = document.querySelector('.quiz-score[data-section="' + section + '"] .ok');
+    var feedback = actions.querySelector('.feedback');
+
+    actions.querySelectorAll('button').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var action = btn.dataset.action;
+        var inputs = wrap.querySelectorAll('input');
+
+        if (action === 'check') {
+          var correct = 0, total = 0;
+          inputs.forEach(function(inp) {
+            total++;
+            var answer = inp.dataset.answer;
+            var given = inp.value;
+            // clear old hints
+            var hint = inp.closest('td').querySelector('.hint');
+            if (hint) hint.remove();
+            if (given && norm(given) === norm(answer)) {
+              inp.classList.remove('incorrect');
+              inp.classList.add('correct');
+              correct++;
+            } else if (given) {
+              inp.classList.remove('correct');
+              inp.classList.add('incorrect');
+              var h = document.createElement('div');
+              h.className = 'hint show';
+              h.textContent = '→ ' + answer;
+              inp.closest('td').appendChild(h);
+            } else {
+              inp.classList.remove('correct', 'incorrect');
+            }
+          });
+          scoreEl.textContent = correct + ' / ' + total;
+          feedback.classList.remove('good', 'bad');
+          if (correct === total) {
+            feedback.textContent = 'Parfait ! All correct.';
+            feedback.classList.add('good');
+          } else if (correct >= total * 0.75) {
+            feedback.textContent = 'Pas mal — almost there.';
+            feedback.classList.add('good');
+          } else {
+            feedback.textContent = 'Try again — check the highlighted ones.';
+            feedback.classList.add('bad');
+          }
+        }
+
+        if (action === 'reveal') {
+          inputs.forEach(function(inp) {
+            inp.value = inp.dataset.answer;
+            inp.classList.remove('incorrect');
+            inp.classList.add('correct');
+            var hint = inp.closest('td').querySelector('.hint');
+            if (hint) hint.remove();
+          });
+          scoreEl.textContent = '—';
+          feedback.textContent = 'Revealed. Now try to recall them.';
+          feedback.classList.remove('good', 'bad');
+        }
+
+        if (action === 'reset') {
+          inputs.forEach(function(inp) {
+            inp.value = '';
+            inp.classList.remove('correct', 'incorrect');
+            var hint = inp.closest('td').querySelector('.hint');
+            if (hint) hint.remove();
+          });
+          scoreEl.textContent = '—';
+          feedback.textContent = '';
+          feedback.classList.remove('good', 'bad');
+        }
+      });
+    });
+  });
+
+  // SIDEBAR: highlight active section on scroll
+  var sections = Array.from(document.querySelectorAll('.tense-section'));
+  var navLinks = document.querySelectorAll('aside.sidebar nav a');
+  function updateActive() {
+    var pos = window.scrollY + 120;
+    var current = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= pos) current = sections[i];
+    }
+    navLinks.forEach(function(a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current.id);
+    });
+  }
+  window.addEventListener('scroll', updateActive);
+  updateActive();
+})();
+</script>
+<script src="/js/atelier.js"></script>
+</body>
+</html>

@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Composing — Atelier · LC French HL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/atelier.css">
+<style>
+  /* COMPOSING — page-specific styles */
+
+  /* FORMAT TABS — big, prominent */
+  .format-tabs {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    margin-bottom: 36px;
+  }
+  .fmt-tab {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 22px; padding: 26px 24px; cursor: pointer;
+    transition: all 0.22s cubic-bezier(.2,.7,.2,1);
+    text-align: left; font-family: inherit;
+    display: flex; gap: 18px; align-items: center;
+  }
+  .fmt-tab:hover { transform: translateY(-2px); box-shadow: 0 14px 32px -16px rgba(0,0,0,0.12); }
+  .fmt-tab.active { border-color: transparent; }
+  .fmt-tab.active.opinion { background: var(--sage-tint); }
+  .fmt-tab.active.diary { background: var(--rose-soft); }
+  .fmt-tab.active.letter { background: var(--sky-soft); }
+  .fmt-tab .icon {
+    width: 52px; height: 52px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 26px; font-weight: 500;
+    flex-shrink: 0;
+  }
+  .fmt-tab.opinion .icon { background: var(--sage-tint); color: var(--sage); }
+  .fmt-tab.diary   .icon { background: var(--rose-soft); color: #8b3a2e; }
+  .fmt-tab.letter  .icon { background: var(--sky-soft);  color: #3a5b76; }
+  .fmt-tab.active.opinion .icon { background: white; }
+  .fmt-tab.active.diary   .icon { background: white; }
+  .fmt-tab.active.letter  .icon { background: white; }
+  .fmt-tab .body .ttl { font-family: 'Fraunces', serif; font-weight: 500; font-size: 19px; letter-spacing: -0.01em; }
+  .fmt-tab .body .sub { font-size: 13px; color: var(--ink-soft); margin-top: 3px; }
+  .fmt-tab.active .body .sub { color: var(--ink); }
+
+  /* PANEL VISIBILITY */
+  .fmt-panel { display: none; }
+  .fmt-panel.active { display: block; }
+
+  /* PANEL CONTAINER */
+  .panel-section { margin-bottom: 36px; }
+  .panel-section .ps-head {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--line);
+  }
+  .panel-section .ps-head h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 26px; letter-spacing: -0.02em; }
+  .panel-section .ps-head h2 em { font-style: italic; color: var(--sage); font-weight: 300; }
+  .panel-section .ps-head .ps-num {
+    width: 36px; height: 36px; border-radius: 12px;
+    background: var(--bg-2); color: var(--ink-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Geist Mono', monospace; font-size: 14px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .panel-section .ps-lead { color: var(--ink-soft); font-size: 14px; line-height: 1.55; margin-bottom: 22px; max-width: 720px; }
+
+  /* STRUCTURE GUIDE (single column, larger) */
+  .structure-large {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 22px; padding: 28px 32px;
+  }
+  .structure-large .step {
+    display: grid; grid-template-columns: 44px 1fr; gap: 18px;
+    padding: 16px 0; border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+  .structure-large .step:last-child { border-bottom: none; }
+  .structure-large .step:first-child { padding-top: 4px; }
+  .structure-large .step-n {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--sage-tint); color: var(--sage);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; font-weight: 600;
+  }
+  .diary-panel .structure-large .step-n { background: var(--rose-soft); color: #8b3a2e; }
+  .letter-panel .structure-large .step-n { background: var(--sky-soft); color: #3a5b76; }
+  .structure-large .step-t {
+    font-family: 'Fraunces', serif; font-weight: 500; font-size: 17px;
+    margin-bottom: 4px;
+  }
+  .structure-large .step-d { font-size: 13px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 5px; }
+  .structure-large .step-eg {
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 14px;
+    background: var(--bg-2); padding: 8px 12px; border-radius: 10px;
+    color: var(--ink); display: inline-block; line-height: 1.4;
+  }
+
+  /* PHRASE GROUPS */
+  .phrase-group {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 18px; padding: 22px 24px; margin-bottom: 12px;
+  }
+  .phrase-group .pg-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  }
+  .phrase-group .pg-head h3 {
+    font-family: 'Fraunces', serif; font-weight: 500; font-size: 17px; letter-spacing: -0.01em;
+  }
+  .phrase-group .pg-head h3 em { font-style: italic; color: var(--sage); font-weight: 400; }
+  .diary-panel .phrase-group .pg-head h3 em { color: #8b3a2e; }
+  .letter-panel .phrase-group .pg-head h3 em { color: #3a5b76; }
+  .phrase-group .pg-head .step-tag {
+    font-family: 'Geist Mono', monospace; font-size: 11px; font-weight: 700;
+    color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .phrase-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .phrase-item {
+    padding: 10px 12px; border-radius: 10px; background: var(--bg-2);
+    display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
+    transition: background 0.15s;
+  }
+  .phrase-item:hover { background: var(--sage-tint); }
+  .diary-panel .phrase-item:hover { background: var(--rose-soft); }
+  .letter-panel .phrase-item:hover { background: var(--sky-soft); }
+  .phrase-item .text .fr {
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 15px; line-height: 1.35;
+  }
+  .phrase-item .text .en {
+    font-size: 12px; color: var(--ink-soft); margin-top: 2px;
+  }
+  .phrase-item button.copy {
+    background: white; border: 1px solid var(--line); color: var(--ink-soft);
+    width: 28px; height: 28px; border-radius: 8px; cursor: pointer;
+    font-size: 13px; display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; flex-shrink: 0;
+  }
+  .phrase-item button.copy:hover { background: var(--sage); color: white; border-color: var(--sage); }
+
+  /* PREDICTION CARDS */
+  .pred-intro {
+    background: var(--ink); color: var(--bg);
+    border-radius: 22px; padding: 28px 32px; margin-bottom: 18px;
+  }
+  .pred-intro h3 {
+    font-family: 'Fraunces', serif; font-weight: 400; font-size: 24px; letter-spacing: -0.02em; margin-bottom: 6px;
+  }
+  .pred-intro h3 em { font-style: italic; color: var(--butter); font-weight: 300; }
+  .pred-intro p { color: rgba(255,255,255,0.75); font-size: 14px; line-height: 1.6; }
+
+  .pred-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .pred-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 18px; padding: 22px 24px;
+    border-left: 4px solid var(--sage);
+  }
+  .pred-card.likely  { border-left-color: var(--rose); }
+  .pred-card.medium  { border-left-color: var(--butter); }
+  .pred-card.outside { border-left-color: var(--sky); }
+  .pred-card .pc-head {
+    display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;
+  }
+  .pred-card h4 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 18px; letter-spacing: -0.01em; }
+  .pred-card .pc-tag {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 3px 9px; border-radius: 100px; background: var(--bg-2); color: var(--ink-soft);
+  }
+  .pred-card.likely  .pc-tag { background: var(--rose-soft);   color: #8b3a2e; }
+  .pred-card.medium  .pc-tag { background: var(--butter-soft); color: #8a6a0c; }
+  .pred-card.outside .pc-tag { background: var(--sky-soft);    color: #3a5b76; }
+  .pred-card .pc-rationale { font-size: 13px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 12px; }
+  .pred-card .pc-vocab {
+    font-size: 12px; color: var(--ink-soft); padding-top: 10px; border-top: 1px dashed var(--line);
+  }
+  .pred-card .pc-vocab strong { color: var(--ink); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 11px; }
+  .pred-card .pc-vocab span {
+    display: inline-block; background: var(--bg-2); padding: 2px 8px; border-radius: 6px; margin: 4px 4px 0 0;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 12px; color: var(--ink);
+  }
+
+  /* RECENT THEMES TABLE */
+  .themes-table {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 18px; padding: 22px 26px; margin-bottom: 24px;
+  }
+  .themes-table h3 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 18px; margin-bottom: 14px; }
+  .themes-table table { width: 100%; border-collapse: collapse; }
+  .themes-table th, .themes-table td {
+    text-align: left; padding: 9px 10px; font-size: 13px; border-bottom: 1px solid var(--line);
+  }
+  .themes-table tr:last-child td { border-bottom: none; }
+  .themes-table th {
+    font-family: 'Geist Mono', monospace; font-size: 11px; font-weight: 700;
+    color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .themes-table td.year { font-family: 'Geist Mono', monospace; font-weight: 700; color: var(--ink); width: 60px; }
+  .themes-table td.opt  { font-family: 'Geist Mono', monospace; color: var(--ink-soft); width: 40px; }
+  .themes-table td.theme { font-style: italic; font-family: 'Fraunces', serif; }
+  .themes-table td.tag {
+    font-size: 11px; color: var(--ink-soft); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 900px) {
+    .format-tabs { grid-template-columns: 1fr; }
+    .pred-grid { grid-template-columns: 1fr; }
+    .phrase-list { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <div class="logo">
+        <div class="logo-mark">a</div>
+        <span>atelier<em>.fr</em></span>
+      </div>
+      <div class="nav-pill">
+        <a href="/index.html">Home</a>
+        <a href="/comprehensions.html">Comprehensions</a>
+        <a href="/composing.html" class="active">Composing</a>
+        <a href="/aural.html">Aural</a>
+        <a href="/verbs.html">Verbs</a>
+        <a href="/vocab.html">Vocab</a>
+        <a href="/tips.html">Tips</a>
+      </div>
+      <div class="nav-cta">
+        <div class="streak">7-day streak</div>
+        <div class="avatar">m</div>
+      </div>
+    </nav>
+
+    <div class="crumb">
+      <a href="/index.html">Home</a>
+      <span class="sep">/</span>
+      <span class="here">Composing · Production écrite</span>
+    </div>
+
+    <!-- PAGE HEAD -->
+    <header class="page-head">
+      <div>
+        <div class="greeting">Bonjour — own Section II</div>
+        <h1>The composing <span class="italic">toolkit.</span></h1>
+        <p class="lead">Section II is half the written paper — 100 marks for the production écrite. Pick a format below and study one at a time: structure, the phrases that score, and predicted themes for opinion pieces in 2026.</p>
+      </div>
+      <div class="meta-cards">
+        <div class="meta-card featured">
+          <div class="lbl">Section II worth</div>
+          <div class="val">100 <em>marks</em></div>
+          <div class="sub">50% of written paper</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Target length</div>
+          <div class="val">75–90 <em>words</em></div>
+          <div class="sub">Q2 short tasks</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Three formats</div>
+          <div class="val" style="font-size:22px;">Opinion · Diary · Letter</div>
+          <div class="sub">choose what to drill</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Predictions</div>
+          <div class="val" style="font-size:22px;">2026 themes</div>
+          <div class="sub">based on past 5 years</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- FORMAT TABS -->
+    <div class="format-tabs">
+      <button class="fmt-tab opinion active" data-tab="opinion">
+        <div class="icon">O</div>
+        <div class="body">
+          <div class="ttl">Texte d'opinion</div>
+          <div class="sub">Structured argument · ~90 words</div>
+        </div>
+      </button>
+      <button class="fmt-tab diary" data-tab="diary">
+        <div class="icon">J</div>
+        <div class="body">
+          <div class="ttl">Journal intime</div>
+          <div class="sub">Diary entry · ~75 words</div>
+        </div>
+      </button>
+      <button class="fmt-tab letter" data-tab="letter">
+        <div class="icon">L</div>
+        <div class="body">
+          <div class="ttl">Lettre formelle</div>
+          <div class="sub">Formal letter · ~75 words</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- OPINION PIECE PANEL                                               -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="fmt-panel opinion-panel active" id="panel-opinion">
+
+      <!-- 1. STRUCTURE -->
+      <div class="panel-section">
+        <div class="ps-head">
+          <div class="ps-num">01</div>
+          <h2>The <em>structure</em></h2>
+        </div>
+        <p class="ps-lead">Five steps, in order. Hit each one and you cover everything the examiner is looking for — agreement, reasoning, examples, solutions, and a memorable close.</p>
+
+        <div class="structure-large">
+          <div class="step">
+            <div class="step-n">1</div>
+            <div>
+              <div class="step-t">Introduction — agree or disagree</div>
+              <div class="step-d">State your position clearly in the very first sentence, then add 2–3 strong opening phrases that frame your answer.</div>
+              <div class="step-eg">Je suis tout à fait d'accord avec cette affirmation…</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-n">2</div>
+            <div>
+              <div class="step-t">Why? What is the issue?</div>
+              <div class="step-d">React to the topic — frame the debate clearly so the examiner knows you understood the prompt.</div>
+              <div class="step-eg">De quoi s'agit-il, en fait ? La première constatation qui s'impose, c'est que…</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-n">3</div>
+            <div>
+              <div class="step-t">Examples — opinions, criticism, comparisons</div>
+              <div class="step-d">Back up your argument with personal opinion, criticism of the status quo, and comparison to other situations.</div>
+              <div class="step-eg">Prenons par exemple… / C'est une situation inquiétante…</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-n">4</div>
+            <div>
+              <div class="step-t">Solutions / outcomes / thoughts</div>
+              <div class="step-d">Use conditional + subjunctive here. Propose what should happen. This is where you score top-band language marks.</div>
+              <div class="step-eg">Ce serait un grand pas en avant si l'on arrivait à…</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-n">5</div>
+            <div>
+              <div class="step-t">Conclusion + idiom or proverb</div>
+              <div class="step-d">Wrap up in one sentence. Then close with a relevant French proverb — examiners notice these.</div>
+              <div class="step-eg">Je terminerai en disant que… / Qui vivra verra.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. PHRASES BY STEP -->
+      <div class="panel-section">
+        <div class="ps-head">
+          <div class="ps-num">02</div>
+          <h2>Phrases by <em>step</em></h2>
+        </div>
+        <p class="ps-lead">Copy any phrase with one click. Learn 2–3 from each step — that gives you enough variety to handle any prompt without sounding rehearsed.</p>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Opening — <em>agree / disagree</em></h3><span class="step-tag">Step 1</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">Je suis tout à fait d'accord avec cette affirmation</div><div class="en">I completely agree with this statement</div></div><button class="copy" data-phrase="Je suis tout à fait d'accord avec cette affirmation">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je ne suis pas du tout d'accord</div><div class="en">I completely disagree</div></div><button class="copy" data-phrase="Je ne suis pas du tout d'accord">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">J'ai des sentiments mitigés concernant cette idée</div><div class="en">I have mixed feelings about this idea</div></div><button class="copy" data-phrase="J'ai des sentiments mitigés concernant cette idée">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Il faut d'abord faire le point sur cette question</div><div class="en">We must first summarise this question</div></div><button class="copy" data-phrase="Il faut d'abord faire le point sur cette question">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Comme point de départ, on pourrait dire que…</div><div class="en">As a starting point, we could say that…</div></div><button class="copy" data-phrase="Comme point de départ, on pourrait dire que…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Réfléchissons d'abord à…</div><div class="en">Let us first reflect on…</div></div><button class="copy" data-phrase="Réfléchissons d'abord à…">⊕</button></div>
+          </div>
+        </div>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Framing — <em>what is the issue?</em></h3><span class="step-tag">Step 2</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">De quoi s'agit-il, en fait ?</div><div class="en">What exactly is at issue?</div></div><button class="copy" data-phrase="De quoi s'agit-il, en fait ?">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">La première constatation qui s'impose, c'est que…</div><div class="en">The first observation to make is that…</div></div><button class="copy" data-phrase="La première constatation qui s'impose, c'est que…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">On exagérerait à peine en disant que…</div><div class="en">It would scarcely be an exaggeration to say that…</div></div><button class="copy" data-phrase="On exagérerait à peine en disant que…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Tout le monde est conscient de l'ampleur du problème</div><div class="en">Everyone is aware of the scale of the problem</div></div><button class="copy" data-phrase="Tout le monde est conscient de l'ampleur du problème">⊕</button></div>
+          </div>
+        </div>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Examples &amp; criticism</h3><span class="step-tag">Step 3</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">Prenons par exemple…</div><div class="en">Let's take for example…</div></div><button class="copy" data-phrase="Prenons par exemple…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Personnellement, je trouve que…</div><div class="en">Personally, I find that…</div></div><button class="copy" data-phrase="Personnellement, je trouve que…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Les gens / le gouvernement ne font rien pour résoudre…</div><div class="en">People / the government do nothing to solve…</div></div><button class="copy" data-phrase="Les gens / le gouvernement ne font rien pour résoudre…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">C'est une situation inquiétante</div><div class="en">It is a worrying situation</div></div><button class="copy" data-phrase="C'est une situation inquiétante">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Il en est de même pour…</div><div class="en">The same is true of…</div></div><button class="copy" data-phrase="Il en est de même pour…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Cela rappelle…</div><div class="en">That's reminiscent of…</div></div><button class="copy" data-phrase="Cela rappelle…">⊕</button></div>
+          </div>
+        </div>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Solutions &amp; thoughts</h3><span class="step-tag">Step 4</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">Quelles solutions pourrait-on envisager ?</div><div class="en">What solutions might one consider?</div></div><button class="copy" data-phrase="Quelles solutions pourrait-on envisager ?">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Il faut que le gouvernement fasse quelque chose</div><div class="en">The government has to do something</div></div><button class="copy" data-phrase="Il faut que le gouvernement fasse quelque chose">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Si j'étais président, j'éduquerais les jeunes sur…</div><div class="en">If I were president, I would educate young people on…</div></div><button class="copy" data-phrase="Si j'étais président, j'éduquerais les jeunes sur…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Ce serait un grand pas en avant si l'on arrivait à…</div><div class="en">It would be a big step forward if we managed to…</div></div><button class="copy" data-phrase="Ce serait un grand pas en avant si l'on arrivait à…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je crois que chaque individu doit essayer de…</div><div class="en">I believe each individual must try to…</div></div><button class="copy" data-phrase="Je crois que chaque individu doit essayer de…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Il faut qu'on fasse de son mieux pour…</div><div class="en">One must do one's best to…</div></div><button class="copy" data-phrase="Il faut qu'on fasse de son mieux pour…">⊕</button></div>
+          </div>
+        </div>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Conclusion + proverbs</h3><span class="step-tag">Step 5</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">Je terminerai en disant que…</div><div class="en">I will finish by saying that…</div></div><button class="copy" data-phrase="Je terminerai en disant que…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Toute réflexion faite, je crois que…</div><div class="en">All things considered, I believe that…</div></div><button class="copy" data-phrase="Toute réflexion faite, je crois que…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">J'espère que les choses vont s'arranger</div><div class="en">I hope things will get better</div></div><button class="copy" data-phrase="J'espère que les choses vont s'arranger">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Qu'on le veuille ou non…</div><div class="en">Whether we like it or not…</div></div><button class="copy" data-phrase="Qu'on le veuille ou non…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Qui vivra verra</div><div class="en">Time will tell</div></div><button class="copy" data-phrase="Qui vivra verra">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Après la pluie, le beau temps</div><div class="en">Every cloud has a silver lining</div></div><button class="copy" data-phrase="Après la pluie, le beau temps">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Vouloir, c'est pouvoir</div><div class="en">Where there's a will, there's a way</div></div><button class="copy" data-phrase="Vouloir, c'est pouvoir">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Tout est bien qui finit bien</div><div class="en">All's well that ends well</div></div><button class="copy" data-phrase="Tout est bien qui finit bien">⊕</button></div>
+          </div>
+        </div>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Linking words</h3><span class="step-tag">Throughout</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">Tout d'abord,</div><div class="en">First of all,</div></div><button class="copy" data-phrase="Tout d'abord,">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">De plus,</div><div class="en">Furthermore,</div></div><button class="copy" data-phrase="De plus,">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Cependant,</div><div class="en">However,</div></div><button class="copy" data-phrase="Cependant,">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">En revanche,</div><div class="en">On the other hand,</div></div><button class="copy" data-phrase="En revanche,">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Par conséquent,</div><div class="en">Consequently,</div></div><button class="copy" data-phrase="Par conséquent,">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">En effet,</div><div class="en">Indeed,</div></div><button class="copy" data-phrase="En effet,">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">D'une part… d'autre part…</div><div class="en">On one hand… on the other…</div></div><button class="copy" data-phrase="D'une part… d'autre part…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">En ce qui concerne…</div><div class="en">As regards…</div></div><button class="copy" data-phrase="En ce qui concerne…">⊕</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Q1 PREDICTIONS — main opinion piece -->
+      <div class="panel-section">
+        <div class="ps-head">
+          <div class="ps-num">03</div>
+          <h2>Q1 predictions — <em>main opinion piece</em></h2>
+        </div>
+        <p class="ps-lead">Section II Q1 (a/b/c) — the long opinion piece worth 40 marks, ~90 words. Based on the last five years of prompts. Topics typically draw from current affairs, youth issues, and recurring societal themes. Here's what's likely — and what's overdue.</p>
+
+        <div class="themes-table">
+          <h3>What's been asked: <em>Q1, 2020 – 2025</em></h3>
+          <table>
+            <thead><tr><th>Year</th><th>Opt.</th><th>Theme</th><th>Tag</th></tr></thead>
+            <tbody>
+              <tr><td class="year">2025</td><td class="opt">a</td><td class="theme">Le scoutisme et l'engagement civique</td><td class="tag">Society · Youth</td></tr>
+              <tr><td class="year">2025</td><td class="opt">b</td><td class="theme">Les traditions familiales</td><td class="tag">Family</td></tr>
+              <tr><td class="year">2024</td><td class="opt">a</td><td class="theme">Réseaux sociaux &amp; loi sur les mineurs</td><td class="tag">Technology</td></tr>
+              <tr><td class="year">2024</td><td class="opt">b</td><td class="theme">Relations familiales / tensions</td><td class="tag">Family</td></tr>
+              <tr><td class="year">2023</td><td class="opt">a</td><td class="theme">Changement climatique en Bretagne</td><td class="tag">Environment</td></tr>
+              <tr><td class="year">2023</td><td class="opt">b</td><td class="theme">Le staycation / vacances chez soi</td><td class="tag">Lifestyle</td></tr>
+              <tr><td class="year">2022</td><td class="opt">a</td><td class="theme">Choisir sa carrière</td><td class="tag">Work</td></tr>
+              <tr><td class="year">2022</td><td class="opt">b</td><td class="theme">Jeunes adultes &amp; soutien financier</td><td class="tag">Society</td></tr>
+              <tr><td class="year">2022</td><td class="opt">c</td><td class="theme">Une grande décision personnelle</td><td class="tag">Personal</td></tr>
+              <tr><td class="year">2021</td><td class="opt">a</td><td class="theme">Le potentiel de la technologie</td><td class="tag">Technology</td></tr>
+              <tr><td class="year">2021</td><td class="opt">b</td><td class="theme">Personnes en situation de handicap</td><td class="tag">Society</td></tr>
+              <tr><td class="year">2021</td><td class="opt">c</td><td class="theme">Les voyages / découvrir le monde</td><td class="tag">Travel</td></tr>
+              <tr><td class="year">2020</td><td class="opt">—</td><td class="theme">Confinement / Covid (paper cancelled, special)</td><td class="tag">Special</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pred-intro">
+          <h3>Predictions for <em>2026</em></h3>
+          <p>Three high-probability themes, two medium, and an outsider. Drill the vocab for the top three at least — at least one of these is very likely to feature. The exam typically picks one big societal theme + one personal/lifestyle option + one experiential prompt.</p>
+        </div>
+
+        <div class="pred-grid">
+
+          <div class="pred-card likely">
+            <div class="pc-head"><h4>Intelligence artificielle</h4><span class="pc-tag">Very likely</span></div>
+            <div class="pc-rationale">AI exploded into public discourse from 2023 onwards (ChatGPT, generative tools, regulation debates). Tech themes recur every 2–3 years and the SEC has not yet directly asked about AI. Expect a prompt on AI in education, in work, or in everyday life.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>l'intelligence artificielle</span><span>un algorithme</span><span>la désinformation</span><span>remplacer les emplois</span><span>la dépendance</span><span>l'innovation</span><span>encadrer</span></div>
+          </div>
+
+          <div class="pred-card likely">
+            <div class="pc-head"><h4>Santé mentale des jeunes</h4><span class="pc-tag">Very likely</span></div>
+            <div class="pc-rationale">Youth mental health is the dominant story in French and Irish education media in 2025–2026. The SEC has not asked it directly since 2018. Expect a prompt linking screen time, exam pressure, or social isolation to wellbeing.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>la santé mentale</span><span>le bien-être</span><span>la pression scolaire</span><span>l'anxiété</span><span>la solitude</span><span>se confier à</span><span>chercher de l'aide</span></div>
+          </div>
+
+          <div class="pred-card likely">
+            <div class="pc-head"><h4>Climat &amp; urgence écologique</h4><span class="pc-tag">Very likely</span></div>
+            <div class="pc-rationale">Climate has appeared every 2–3 years (2023 directly, 2020 indirectly). With successive record-hot summers and floods across France, expect a 2026 prompt — likely on individual action vs. government action.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>le réchauffement climatique</span><span>la canicule</span><span>les inondations</span><span>réduire son empreinte carbone</span><span>le développement durable</span><span>les énergies renouvelables</span></div>
+          </div>
+
+          <div class="pred-card medium">
+            <div class="pc-head"><h4>Le télétravail &amp; le futur du travail</h4><span class="pc-tag">Medium</span></div>
+            <div class="pc-rationale">Career and work themes have hit every year since 2021. Remote work, the 4-day week, and AI's impact on jobs are all live debates. A prompt on "the future of work" or "work-life balance" would fit the pattern.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>le télétravail</span><span>l'équilibre vie pro/vie perso</span><span>le marché du travail</span><span>la formation</span><span>les compétences</span><span>le burn-out</span></div>
+          </div>
+
+          <div class="pred-card medium">
+            <div class="pc-head"><h4>Migration &amp; intégration en Europe</h4><span class="pc-tag">Medium</span></div>
+            <div class="pc-rationale">Last directly asked in 2016. Migration has been a dominant European political theme since 2022. Eight years since the last direct prompt — it's overdue. Expect framing around integration or French/Irish responsibilities.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>l'immigration</span><span>l'intégration</span><span>les réfugiés</span><span>accueillir</span><span>la diversité culturelle</span><span>les inégalités</span><span>sensibiliser</span></div>
+          </div>
+
+          <div class="pred-card outside">
+            <div class="pc-head"><h4>Les J.O. de Paris 2024 — héritage</h4><span class="pc-tag">Outside bet</span></div>
+            <div class="pc-rationale">An outsider — but the SEC sometimes leans on recent cultural events. The Paris 2024 Olympics were huge for France. A prompt on sport, national pride, or the legacy of the Games is possible.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>les Jeux Olympiques</span><span>l'esprit sportif</span><span>l'héritage</span><span>la fierté nationale</span><span>les infrastructures</span><span>rassembler</span></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 4. Q4-6 PREDICTIONS — short opinion piece -->
+      <div class="panel-section">
+        <div class="ps-head">
+          <div class="ps-num">04</div>
+          <h2>Q4–6 predictions — <em>short opinion piece</em></h2>
+        </div>
+        <p class="ps-lead">In Section II you pick ONE question from Q2–Q6 (30 marks, ~75 words). Q2 is always a diary entry, Q3 is usually an email — but <strong>Q4, Q5 and Q6 are all opinion pieces</strong>, each framed around a quote, statistic or short statement. They reward focused, punchy answers built around one clear angle.</p>
+
+        <div class="themes-table">
+          <h3>What's been asked: <em>Q4–6 opinion prompts, 2021 – 2025</em></h3>
+          <table>
+            <thead><tr><th>Year</th><th>Q</th><th>Prompt</th><th>Tag</th></tr></thead>
+            <tbody>
+              <tr><td class="year">2025</td><td class="opt">4</td><td class="theme">Consommation de drogues chez les jeunes</td><td class="tag">Health · Youth</td></tr>
+              <tr><td class="year">2025</td><td class="opt">5</td><td class="theme">L'inégalité hommes-femmes persiste</td><td class="tag">Society</td></tr>
+              <tr><td class="year">2025</td><td class="opt">6</td><td class="theme">Les jeunes en politique</td><td class="tag">Politics</td></tr>
+              <tr><td class="year">2024</td><td class="opt">4</td><td class="theme">Les Jeux Olympiques — bonheur de se réunir</td><td class="tag">Sport</td></tr>
+              <tr><td class="year">2024</td><td class="opt">6</td><td class="theme">« Nous sommes tous des pollueurs »</td><td class="tag">Environment</td></tr>
+              <tr><td class="year">2023</td><td class="opt">3</td><td class="theme">Impact des réseaux sociaux sur les jeunes</td><td class="tag">Technology</td></tr>
+              <tr><td class="year">2023</td><td class="opt">5</td><td class="theme">Survivre à la fac</td><td class="tag">Education</td></tr>
+              <tr><td class="year">2023</td><td class="opt">6</td><td class="theme">L'école en ligne — succès ou échec ?</td><td class="tag">Education</td></tr>
+              <tr><td class="year">2022</td><td class="opt">4</td><td class="theme">Remplacer le bac par le contrôle continu</td><td class="tag">Education</td></tr>
+              <tr><td class="year">2022</td><td class="opt">5</td><td class="theme">Le sport — efficacité &amp; santé</td><td class="tag">Health · Sport</td></tr>
+              <tr><td class="year">2022</td><td class="opt">6</td><td class="theme">L'Europe et les personnes migrantes</td><td class="tag">Society</td></tr>
+              <tr><td class="year">2021</td><td class="opt">3</td><td class="theme">Acheter d'occasion plutôt que neuf</td><td class="tag">Environment</td></tr>
+              <tr><td class="year">2021</td><td class="opt">5</td><td class="theme">« Bien manger » — régimes restrictifs</td><td class="tag">Health</td></tr>
+              <tr><td class="year">2021</td><td class="opt">6</td><td class="theme">Les plaisirs de la lecture</td><td class="tag">Culture</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pred-intro">
+          <h3>Predictions for Q4–6 <em>in 2026</em></h3>
+          <p>Short opinion prompts tend to be more <em>personal</em> and <em>lifestyle-focused</em> than Q1. They're usually framed by a quote from a magazine or website, or a striking statistic. Three high-likelihood themes, two medium, one outside bet — distinct from the Q1 picks above.</p>
+        </div>
+
+        <div class="pred-grid">
+
+          <div class="pred-card likely">
+            <div class="pc-head"><h4>L'IA dans la vie quotidienne</h4><span class="pc-tag">Very likely</span></div>
+            <div class="pc-rationale">AI is the topic the SEC has been circling but never asked directly. Q4–6 prompts often come from a quote about lifestyle change ("Bientôt, l'IA fera la moitié de nos tâches…") — perfect fit for a 75-word personal opinion piece.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>l'intelligence artificielle</span><span>indispensable</span><span>la dépendance technologique</span><span>les outils numériques</span><span>la créativité humaine</span><span>encadrer son usage</span></div>
+          </div>
+
+          <div class="pred-card likely">
+            <div class="pc-head"><h4>La pression des examens</h4><span class="pc-tag">Very likely</span></div>
+            <div class="pc-rationale">Education-stress is the dominant student conversation in France and Ireland. 2022 (bac reform) and 2023 (online school, surviving fac) flirted with it but the SEC hasn't directly asked about exam pressure or student burn-out. Overdue.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>la pression scolaire</span><span>le stress des examens</span><span>l'épuisement</span><span>la santé mentale</span><span>la charge de travail</span><span>chercher de l'aide</span></div>
+          </div>
+
+          <div class="pred-card likely">
+            <div class="pc-head"><h4>Les influenceurs &amp; les jeunes</h4><span class="pc-tag">Very likely</span></div>
+            <div class="pc-rationale">2023 asked about social media impact. The next logical step is influencer culture specifically — body image, consumerism, fake authenticity. Highly topical and perfectly suited to a quote-framed Q5 or Q6.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>un influenceur</span><span>la publicité cachée</span><span>l'image de soi</span><span>l'estime de soi</span><span>la consommation</span><span>la manipulation</span></div>
+          </div>
+
+          <div class="pred-card medium">
+            <div class="pc-head"><h4>Mode rapide / fast fashion</h4><span class="pc-tag">Medium</span></div>
+            <div class="pc-rationale">2021 covered second-hand vs new; 2024 covered pollution; mode rapide sits at the intersection and would fit a quote-style Q6 about consumer choices. A topical extension of past environment themes without repeating them.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>la mode rapide</span><span>la surconsommation</span><span>les conditions de travail</span><span>les déchets textiles</span><span>acheter d'occasion</span><span>responsable</span></div>
+          </div>
+
+          <div class="pred-card medium">
+            <div class="pc-head"><h4>Le temps d'écran chez les jeunes</h4><span class="pc-tag">Medium</span></div>
+            <div class="pc-rationale">2024 Q1 covered the law restricting under-15s on social media. A Q5 or Q6 quote-prompt about whether young people spend too much time on screens — sleep, friendships, study — would be a natural follow-up.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>le temps d'écran</span><span>l'addiction</span><span>la sédentarité</span><span>le sommeil</span><span>les relations réelles</span><span>déconnecter</span></div>
+          </div>
+
+          <div class="pred-card outside">
+            <div class="pc-head"><h4>Le bénévolat des jeunes</h4><span class="pc-tag">Outside bet</span></div>
+            <div class="pc-rationale">2025 Q1 was about scouting and civic engagement — could be followed up at Q4–6 level with a more provocative angle: "Tous les jeunes devraient faire du bénévolat avant l'université. Êtes-vous d'accord ?" Fits the pattern of moral-question prompts.</div>
+            <div class="pc-vocab"><strong>Key vocab:</strong> <span>le bénévolat</span><span>l'engagement</span><span>la solidarité</span><span>la citoyenneté</span><span>les valeurs</span><span>servir la communauté</span></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- DIARY PANEL                                                       -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="fmt-panel diary-panel" id="panel-diary">
+
+      <!-- 1. STRUCTURE -->
+      <div class="panel-section">
+        <div class="ps-head">
+          <div class="ps-num">01</div>
+          <h2>The <em>structure</em></h2>
+        </div>
+        <p class="ps-lead">A diary entry is personal and emotional. You're writing to yourself. The examiner wants to see <strong>three tenses</strong> (passé composé, imparfait, future) and a strong emotional register.</p>
+
+        <div class="structure-large">
+          <div class="step">
+            <div class="step-n">1</div>
+            <div>
+              <div class="step-t">Date + greeting</div>
+              <div class="step-d">Always open with the date in French, then "Cher journal" or "Chère amie". Standard layout.</div>
+              <div class="step-eg">Cher journal, le 15 mai…</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-n">2</div>
+            <div>
+              <div class="step-t">Set the scene</div>
+              <div class="step-d">What happened? Use passé composé for completed actions and imparfait for background atmosphere. Combine them naturally.</div>
+              <div class="step-eg">Aujourd'hui, j'ai appris que… Il faisait beau quand…</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-n">3</div>
+            <div>
+              <div class="step-t">Express feelings</div>
+              <div class="step-d">This is what diaries score marks on. Use a wide emotional vocabulary — happiness, sadness, surprise, regret, anger, gratitude.</div>
+              <div class="step-eg">Je me sens tellement… Cela m'a rendu(e)…</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-n">4</div>
+            <div>
+              <div class="step-t">Look forward + sign off</div>
+              <div class="step-d">Use the future tense at least once. Sign off warmly with "À bientôt" + your name.</div>
+              <div class="step-eg">Demain, j'espère que… À bientôt, Marie.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. PHRASES -->
+      <div class="panel-section">
+        <div class="ps-head">
+          <div class="ps-num">02</div>
+          <h2>Phrases by <em>step</em></h2>
+        </div>
+        <p class="ps-lead">Diary scenarios are usually emotional events: an argument, an unexpected encounter, a piece of news, a celebration. These phrases work across most scenarios.</p>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Openers</h3><span class="step-tag">Step 1</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">Cher journal,</div><div class="en">Dear diary,</div></div><button class="copy" data-phrase="Cher journal,">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Chère amie,</div><div class="en">Dear friend, (informal diary voice)</div></div><button class="copy" data-phrase="Chère amie,">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Quelle journée inoubliable !</div><div class="en">What an unforgettable day!</div></div><button class="copy" data-phrase="Quelle journée inoubliable !">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je dois absolument te raconter ce qui s'est passé</div><div class="en">I absolutely must tell you what happened</div></div><button class="copy" data-phrase="Je dois absolument te raconter ce qui s'est passé">⊕</button></div>
+          </div>
+        </div>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Setting the scene</h3><span class="step-tag">Step 2</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">Aujourd'hui, j'ai appris que…</div><div class="en">Today, I learned that…</div></div><button class="copy" data-phrase="Aujourd'hui, j'ai appris que…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Ce matin, en me levant…</div><div class="en">This morning, when I got up…</div></div><button class="copy" data-phrase="Ce matin, en me levant…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Il faisait un temps magnifique</div><div class="en">The weather was beautiful</div></div><button class="copy" data-phrase="Il faisait un temps magnifique">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Tout a commencé quand…</div><div class="en">It all started when…</div></div><button class="copy" data-phrase="Tout a commencé quand…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je n'aurais jamais cru que…</div><div class="en">I never would have thought that…</div></div><button class="copy" data-phrase="Je n'aurais jamais cru que…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">À ma grande surprise…</div><div class="en">To my great surprise…</div></div><button class="copy" data-phrase="À ma grande surprise…">⊕</button></div>
+          </div>
+        </div>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Feelings &amp; emotion</h3><span class="step-tag">Step 3 — key marks</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">Je me sens tellement heureux/heureuse</div><div class="en">I feel so happy</div></div><button class="copy" data-phrase="Je me sens tellement heureux/heureuse">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je suis bouleversé(e)</div><div class="en">I am deeply moved / shaken</div></div><button class="copy" data-phrase="Je suis bouleversé(e)">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Cela m'a vraiment touché(e)</div><div class="en">This really moved me</div></div><button class="copy" data-phrase="Cela m'a vraiment touché(e)">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je suis fier/fière de moi</div><div class="en">I'm proud of myself</div></div><button class="copy" data-phrase="Je suis fier/fière de moi">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">J'avais le cœur lourd</div><div class="en">I had a heavy heart</div></div><button class="copy" data-phrase="J'avais le cœur lourd">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je n'en revenais pas</div><div class="en">I couldn't believe it</div></div><button class="copy" data-phrase="Je n'en revenais pas">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Quelle déception !</div><div class="en">What a disappointment!</div></div><button class="copy" data-phrase="Quelle déception !">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">J'étais aux anges</div><div class="en">I was over the moon</div></div><button class="copy" data-phrase="J'étais aux anges">⊕</button></div>
+          </div>
+        </div>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Looking forward + sign off</h3><span class="step-tag">Step 4</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">J'espère que demain sera meilleur</div><div class="en">I hope tomorrow will be better</div></div><button class="copy" data-phrase="J'espère que demain sera meilleur">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Demain, j'irai…</div><div class="en">Tomorrow, I will go…</div></div><button class="copy" data-phrase="Demain, j'irai…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je te raconterai la suite demain</div><div class="en">I'll tell you the rest tomorrow</div></div><button class="copy" data-phrase="Je te raconterai la suite demain">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">À bientôt, journal.</div><div class="en">See you soon, diary.</div></div><button class="copy" data-phrase="À bientôt, journal.">⊕</button></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- LETTER PANEL                                                      -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="fmt-panel letter-panel" id="panel-letter">
+
+      <!-- 1. STRUCTURE -->
+      <div class="panel-section">
+        <div class="ps-head">
+          <div class="ps-num">01</div>
+          <h2>The <em>structure</em></h2>
+        </div>
+        <p class="ps-lead">A formal letter needs <strong>layout marks</strong> (date, address, salutation, closing). Get those right first — they're cheap marks. Then write tight, polite, formal French.</p>
+
+        <div class="structure-large">
+          <div class="step">
+            <div class="step-n">1</div>
+            <div>
+              <div class="step-t">Layout — sender + date + recipient</div>
+              <div class="step-d">Your name and address top-left, the city and date top-right, the recipient's name/role below left.</div>
+              <div class="step-eg">Marie Dupont, Cork, le 15 mai 2026 · Monsieur le Directeur,</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-n">2</div>
+            <div>
+              <div class="step-t">Opening formula</div>
+              <div class="step-d">Never use "Bonjour" or "Salut" in a formal letter. Use the proper salutation matching the recipient.</div>
+              <div class="step-eg">Monsieur, / Madame, / Madame, Monsieur,</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-n">3</div>
+            <div>
+              <div class="step-t">State your purpose immediately</div>
+              <div class="step-d">First sentence makes clear why you're writing. No small talk.</div>
+              <div class="step-eg">Je vous écris afin de vous informer de…</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-n">4</div>
+            <div>
+              <div class="step-t">Closing formula</div>
+              <div class="step-d">Two marks for the formal closing alone. Always include it — even if you ran out of time, write the closing.</div>
+              <div class="step-eg">Veuillez agréer, Monsieur, l'expression de mes sentiments distingués.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. PHRASES -->
+      <div class="panel-section">
+        <div class="ps-head">
+          <div class="ps-num">02</div>
+          <h2>Phrases by <em>step</em></h2>
+        </div>
+        <p class="ps-lead">Common letter scenarios: complaint, application, booking, request for information. The opening formula tells the examiner what kind of letter you're writing — pick the right one.</p>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Opening formulas</h3><span class="step-tag">Step 2–3</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">Je vous écris afin de…</div><div class="en">I am writing to you in order to…</div></div><button class="copy" data-phrase="Je vous écris afin de…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">J'ai l'honneur de vous informer que…</div><div class="en">I have the honour of informing you that…</div></div><button class="copy" data-phrase="J'ai l'honneur de vous informer que…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je me permets de vous contacter au sujet de…</div><div class="en">I am taking the liberty of contacting you regarding…</div></div><button class="copy" data-phrase="Je me permets de vous contacter au sujet de…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Suite à votre annonce, je voudrais…</div><div class="en">Following your advertisement, I would like to…</div></div><button class="copy" data-phrase="Suite à votre annonce, je voudrais…">⊕</button></div>
+          </div>
+        </div>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Body — requesting / complaining</h3><span class="step-tag">Step 3</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">Je vous serais reconnaissant(e) de bien vouloir…</div><div class="en">I would be grateful if you would kindly…</div></div><button class="copy" data-phrase="Je vous serais reconnaissant(e) de bien vouloir…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Pourriez-vous m'envoyer des renseignements sur…</div><div class="en">Could you send me information about…</div></div><button class="copy" data-phrase="Pourriez-vous m'envoyer des renseignements sur…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je voudrais réserver…</div><div class="en">I would like to book…</div></div><button class="copy" data-phrase="Je voudrais réserver…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je tiens à exprimer mon mécontentement face à…</div><div class="en">I wish to express my dissatisfaction with…</div></div><button class="copy" data-phrase="Je tiens à exprimer mon mécontentement face à…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je souhaiterais poser ma candidature pour le poste de…</div><div class="en">I would like to apply for the position of…</div></div><button class="copy" data-phrase="Je souhaiterais poser ma candidature pour le poste de…">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Veuillez trouver ci-joint…</div><div class="en">Please find attached…</div></div><button class="copy" data-phrase="Veuillez trouver ci-joint…">⊕</button></div>
+          </div>
+        </div>
+
+        <div class="phrase-group">
+          <div class="pg-head"><h3>Closing formulas</h3><span class="step-tag">Step 4 — layout marks</span></div>
+          <div class="phrase-list">
+            <div class="phrase-item"><div class="text"><div class="fr">Dans l'attente de votre réponse,</div><div class="en">Awaiting your reply,</div></div><button class="copy" data-phrase="Dans l'attente de votre réponse,">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je vous remercie d'avance de votre compréhension</div><div class="en">Thank you in advance for your understanding</div></div><button class="copy" data-phrase="Je vous remercie d'avance de votre compréhension">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Veuillez agréer, Madame/Monsieur, l'expression de mes sentiments distingués.</div><div class="en">Yours faithfully / sincerely. (full formal closing)</div></div><button class="copy" data-phrase="Veuillez agréer, Madame/Monsieur, l'expression de mes sentiments distingués.">⊕</button></div>
+            <div class="phrase-item"><div class="text"><div class="fr">Je vous prie d'agréer, Monsieur, mes salutations distinguées.</div><div class="en">Yours sincerely. (alternative formal closing)</div></div><button class="copy" data-phrase="Je vous prie d'agréer, Monsieur, mes salutations distinguées.">⊕</button></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>
+      <div>Atelier · <em>built for Leaving Cert HL French</em></div>
+      <div>Bonne chance pour les examens 🍀</div>
+    </footer>
+
+  </div>
+
+<script>
+(function() {
+
+  /* FORMAT TABS */
+  document.querySelectorAll('.fmt-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.fmt-tab').forEach(function(t) { t.classList.remove('active'); });
+      document.querySelectorAll('.fmt-panel').forEach(function(p) { p.classList.remove('active'); });
+      tab.classList.add('active');
+      var target = document.getElementById('panel-' + tab.dataset.tab);
+      if (target) target.classList.add('active');
+      window.scrollTo({ top: tab.offsetTop - 20, behavior: 'smooth' });
+    });
+  });
+
+  /* COPY PHRASES */
+  document.querySelectorAll('.phrase-item button.copy').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var text = btn.dataset.phrase;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.textContent = '✓';
+          setTimeout(function() { btn.textContent = '⊕'; }, 1400);
+        });
+      }
+    });
+  });
+
+})();
+</script>
+<script src="/js/atelier.js"></script>
+</body>
+</html>

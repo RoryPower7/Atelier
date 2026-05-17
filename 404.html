@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>404 — Atelier · LC French HL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/atelier.css">
+<style>
+  .nf-stage {
+    min-height: 60vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; gap: 18px;
+    padding: 60px 20px;
+  }
+  .nf-stage .big {
+    font-family: 'Fraunces', serif; font-weight: 300; font-style: italic;
+    font-size: clamp(96px, 18vw, 200px); letter-spacing: -0.03em;
+    color: var(--sage); line-height: 1;
+  }
+  .nf-stage h1 {
+    font-family: 'Fraunces', serif; font-weight: 400; font-size: 36px; letter-spacing: -0.02em;
+  }
+  .nf-stage h1 em { font-style: italic; color: var(--sage); font-weight: 300; }
+  .nf-stage p { color: var(--ink-soft); font-size: 16px; max-width: 480px; line-height: 1.55; }
+  .nf-stage .links {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 14px;
+  }
+  .nf-stage .links a {
+    background: var(--card); border: 1px solid var(--line); color: var(--ink);
+    text-decoration: none; padding: 10px 18px; border-radius: 100px;
+    font-size: 14px; font-weight: 500; transition: all 0.15s;
+  }
+  .nf-stage .links a:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); transform: translateY(-2px); }
+  .nf-stage .links a.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .nf-stage .links a.primary:hover { background: var(--sage); border-color: var(--sage); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <div class="logo">
+        <div class="logo-mark">a</div>
+        <span>atelier<em>.fr</em></span>
+      </div>
+      <div class="nav-pill">
+        <a href="/index.html">Home</a>
+        <a href="/comprehensions.html">Comprehensions</a>
+        <a href="/composing.html">Composing</a>
+        <a href="/aural.html">Aural</a>
+        <a href="/verbs.html">Verbs</a>
+        <a href="/vocab.html">Vocab</a>
+        <a href="/tips.html">Tips</a>
+      </div>
+      <div class="nav-cta">
+        <div class="streak">7-day streak</div>
+        <div class="avatar">m</div>
+      </div>
+    </nav>
+
+    <div class="nf-stage">
+      <div class="big">404</div>
+      <h1>Page <em>introuvable.</em></h1>
+      <p>Cette page n'existe pas — ou plus. Maybe a comprehension or aural year that hasn't been built yet, a typo in the URL, or a link we missed in a recent reshuffle.</p>
+      <div class="links">
+        <a href="/index.html" class="primary">← Back home</a>
+        <a href="/comprehensions.html">Comprehensions</a>
+        <a href="/composing.html">Composing</a>
+        <a href="/aural.html">Aural</a>
+        <a href="/vocab.html">Vocab</a>
+        <a href="/tips.html">Tips</a>
+      </div>
+    </div>
+
+    <footer>
+      <div>Atelier · <em>built for Leaving Cert HL French</em></div>
+      <div>Bonne chance pour les examens 🍀</div>
+    </footer>
+
+  </div>
+<script src="/js/atelier.js"></script>
+</body>
+</html>

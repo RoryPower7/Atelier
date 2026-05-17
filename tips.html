@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Exam Tips — Atelier · LC French HL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/atelier.css">
+<style>
+  /* TIPS — page-specific styles */
+
+  /* PAPER OVERVIEW */
+  .paper-overview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+  .overview-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 24px; padding: 28px 30px;
+  }
+  .overview-card.dark { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .overview-card.sage { background: var(--sage-tint); border-color: var(--sage-soft); }
+  .overview-card h3 {
+    font-family: 'Fraunces', serif; font-weight: 400; font-size: 26px; letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  .overview-card h3 em { font-style: italic; color: var(--sage); font-weight: 300; }
+  .overview-card.dark h3 em { color: var(--butter); }
+  .mark-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 11px 0; border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .overview-card.dark .mark-row { border-color: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8); }
+  .mark-row:last-child { border-bottom: none; }
+  .mark-row .label { font-weight: 500; }
+  .mark-row .marks {
+    font-family: 'Geist Mono', monospace; font-weight: 700; font-size: 16px;
+    background: var(--bg-2); padding: 3px 10px; border-radius: 8px; color: var(--ink);
+  }
+  .overview-card.dark .mark-row .marks { background: rgba(255,255,255,0.12); color: var(--bg); }
+  .mark-row .marks.big { background: var(--butter-soft); color: #8a6a0c; font-size: 18px; }
+  .mark-row .marks.done { background: var(--sage-tint); color: var(--sage); font-family: inherit; font-size: 13px; font-weight: 700; }
+  .overview-card.sage .mark-row { border-color: var(--sage-soft); }
+  .overview-card.sage .mark-row .marks { background: white; color: var(--ink); }
+  .overview-card.sage .mark-row .marks.done { background: var(--sage); color: white; }
+
+  /* TIMING GUIDE */
+  .timing-guide {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 28px; padding: 36px 40px; margin-bottom: 48px;
+  }
+  .timing-guide h2 {
+    font-family: 'Fraunces', serif; font-weight: 400; font-size: 30px; letter-spacing: -0.02em; margin-bottom: 6px;
+  }
+  .timing-guide h2 em { font-style: italic; color: var(--sage); font-weight: 300; }
+  .timing-guide .lead { color: var(--ink-soft); font-size: 15px; margin-bottom: 26px; }
+  .timeline {
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .tl-row {
+    display: grid; grid-template-columns: 90px 1fr;
+    gap: 0 20px; align-items: stretch;
+    position: relative;
+  }
+  .tl-time {
+    font-family: 'Geist Mono', monospace; font-size: 14px; font-weight: 600;
+    color: var(--ink-soft); padding: 18px 0; text-align: right;
+    border-right: 2px solid var(--line); padding-right: 20px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .tl-content {
+    padding: 14px 0 14px 0; position: relative;
+  }
+  .tl-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--sage);
+    position: absolute; left: -6px; top: 20px;
+    border: 2px solid var(--bg);
+  }
+  .tl-row.highlight .tl-dot { background: var(--rose); width: 16px; height: 16px; left: -8px; }
+  .tl-content .tl-title {
+    font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500; margin-bottom: 3px; padding-left: 20px;
+  }
+  .tl-content .tl-desc {
+    font-size: 13px; color: var(--ink-soft); line-height: 1.5; padding-left: 20px;
+  }
+  .tl-row.highlight .tl-content .tl-title { color: var(--rose); }
+  .tl-row.highlight .tl-time { color: var(--rose); border-color: var(--rose); }
+
+  /* TIPS ACCORDION */
+  .tips-section { margin-bottom: 48px; }
+  .tips-section-head {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--line);
+  }
+  .tips-section-head .icon {
+    width: 42px; height: 42px; border-radius: 14px;
+    background: var(--sage-tint); color: var(--sage);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 20px;
+    flex-shrink: 0;
+  }
+  .tips-section-head h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 26px; letter-spacing: -0.02em; }
+  .tips-section-head h2 em { font-style: italic; color: var(--sage); font-weight: 300; }
+
+  .tip-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .tip-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 20px; padding: 22px 24px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .tip-card .n {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: white; border: 1px solid var(--sage-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 15px; color: var(--sage);
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .tip-card .body .t { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .tip-card .body .d { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+  .tip-card .body .eg {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 14px; color: var(--sage); margin-top: 6px;
+    padding: 6px 10px; background: var(--sage-tint); border-radius: 8px;
+    display: inline-block;
+  }
+  .tip-card.warning { border-color: var(--rose); background: var(--rose-soft); }
+  .tip-card.warning .n { border-color: var(--rose); color: var(--rose); }
+  .tip-card.warning .body .t { color: #7c2e25; }
+  .tip-card.warning .body .d { color: #7c2e25; }
+
+  /* GRADE BOX */
+  .grade-box {
+    background: var(--ink); color: var(--bg);
+    border-radius: 28px; padding: 36px 44px; margin-bottom: 48px;
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center;
+  }
+  .grade-box h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 30px; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .grade-box h2 em { color: var(--butter); font-style: italic; font-weight: 300; }
+  .grade-box .sub { color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 24px; }
+  .grade-table { width: 100%; border-collapse: collapse; }
+  .grade-table td { padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px; }
+  .grade-table tr:last-child td { border-bottom: none; }
+  .grade-table .grade { font-family: 'Geist Mono', monospace; font-weight: 700; }
+  .grade-table .h1 { color: var(--butter); }
+  .grade-table .h2 { color: #c8d4b8; }
+  .grade-table .h3 { color: #a8c5d8; }
+  .grade-table .points { text-align: right; color: rgba(255,255,255,0.7); }
+  .grade-box .right { background: rgba(255,255,255,0.06); border-radius: 18px; padding: 24px; }
+  .grade-box .right h3 { font-family: 'Fraunces', serif; font-style: italic; font-size: 20px; color: var(--butter); margin-bottom: 14px; }
+  .grade-bullet { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 14px; color: rgba(255,255,255,0.8); }
+  .grade-bullet:last-child { border-bottom: none; }
+  .grade-bullet::before { content: '→'; color: var(--butter); font-weight: 700; flex-shrink: 0; }
+
+  /* COMMON MISTAKES */
+  .mistakes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 48px; }
+  .mistake-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 20px; padding: 22px 24px;
+  }
+  .mistake-card .m-head {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .mistake-card .m-tag {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 3px 9px; border-radius: 100px;
+  }
+  .m-tag.grammar { background: var(--rose-soft); color: #8b3a2e; }
+  .m-tag.timing  { background: var(--butter-soft); color: #8a6a0c; }
+  .m-tag.layout  { background: var(--sky-soft); color: #3a5b76; }
+  .m-tag.vocab   { background: var(--sage-tint); color: #3d5a30; }
+  .mistake-card .m-title { font-weight: 600; font-size: 15px; }
+  .mistake-card .m-desc  { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+  .mistake-card .m-fix {
+    margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line);
+    font-size: 13px; color: var(--sage); font-family: 'Fraunces', serif; font-style: italic;
+  }
+
+  @media (max-width: 1100px) { .paper-overview { grid-template-columns: 1fr 1fr; } .grade-box { grid-template-columns: 1fr; } }
+  @media (max-width: 700px)  { .paper-overview { grid-template-columns: 1fr; } }
+  @media (max-width: 800px)  { .tip-cards { grid-template-columns: 1fr; } .mistakes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <div class="logo">
+        <div class="logo-mark">a</div>
+        <span>atelier<em>.fr</em></span>
+      </div>
+      <div class="nav-pill">
+        <a href="/index.html">Home</a>
+        <a href="/comprehensions.html">Comprehensions</a>
+        <a href="/composing.html">Composing</a>
+        <a href="/aural.html">Aural</a>
+        <a href="/verbs.html">Verbs</a>
+        <a href="/vocab.html">Vocab</a>
+        <a href="/tips.html" class="active">Tips</a>
+      </div>
+      <div class="nav-cta">
+        <div class="streak">7-day streak</div>
+        <div class="avatar">m</div>
+      </div>
+    </nav>
+
+    <div class="crumb">
+      <a href="/index.html">Home</a>
+      <span class="sep">/</span>
+      <span class="here">Exam Tips · Conseils pratiques</span>
+    </div>
+
+    <!-- PAGE HEAD -->
+    <header class="page-head">
+      <div>
+        <div class="greeting">Bonjour — know the exam inside out</div>
+        <h1>Smarter <span class="italic">exam strategy.</span></h1>
+        <p class="lead">Timing guides, mark-scheme breakdowns, the mistakes that cost marks every year, and the phrases examiners actually want to see. Updated for 2026.</p>
+      </div>
+      <div class="meta-cards">
+        <div class="meta-card featured">
+          <div class="lbl">Exam date</div>
+          <div class="val" style="font-size:22px;">10 <em>June</em></div>
+          <div class="sub">Wednesday · 9:30 a.m.</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Duration</div>
+          <div class="val">2h 30m</div>
+          <div class="sub">150 minutes total</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Total marks</div>
+          <div class="val">300 <em>marks</em></div>
+          <div class="sub">written paper total</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">H1 boundary</div>
+          <div class="val">90%</div>
+          <div class="sub">270 / 300 written marks</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAPER OVERVIEW -->
+    <div class="paper-overview">
+      <div class="overview-card">
+        <h3>Section I — <em>Reading</em></h3>
+        <div class="mark-row"><span class="label">Q1 — Compréhension écrite (Text A)</span><span class="marks">60</span></div>
+        <div class="mark-row"><span class="label">Q2 — Compréhension écrite (Text B)</span><span class="marks">60</span></div>
+        <div class="mark-row"><span class="label">Q3 — Langue (grammar / vocab)</span><span class="marks">30</span></div>
+        <div class="mark-row" style="padding-top:14px; margin-top:6px; border-top: 2px solid var(--line);">
+          <span class="label" style="font-weight:700;">Section I total</span>
+          <span class="marks big">150</span>
+        </div>
+      </div>
+      <div class="overview-card dark">
+        <h3>Section II — <em>Writing</em></h3>
+        <div class="mark-row"><span class="label">Part A — Short task (~80–100 words)</span><span class="marks">50</span></div>
+        <div class="mark-row"><span class="label">Part B — Extended task (~150–200 words)</span><span class="marks">100</span></div>
+        <div class="mark-row" style="padding-top:14px; margin-top:6px; border-top: 2px solid rgba(255,255,255,0.15);">
+          <span class="label" style="font-weight:700;">Section II total</span>
+          <span class="marks big">150</span>
+        </div>
+      </div>
+
+      <div class="overview-card sage">
+        <h3>Oral &amp; <em>Aural</em></h3>
+        <div class="mark-row">
+          <span class="label">Oral examination — 25% of LC French grade</span>
+          <span class="marks done">✓ done</span>
+        </div>
+        <div class="mark-row">
+          <span class="label">Aural — 20% of LC French grade</span>
+          <span class="marks">20%</span>
+        </div>
+        <div class="mark-row" style="border-bottom:none; padding-top:14px; margin-top:6px; border-top: 2px solid var(--sage-soft);">
+          <span class="label" style="font-size:13px; color:var(--ink-soft);">Aural follows the written paper on the same day</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMING GUIDE -->
+    <div class="timing-guide">
+      <h2>How to <em>use your 150 minutes</em></h2>
+      <p class="lead">Timing is the most common reason students lose marks. Below is the examiner's recommended allocation — stick to it even if a question feels unfinished.</p>
+      <div class="timeline">
+        <div class="tl-row">
+          <div class="tl-time">0:00</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Read the whole paper first (5 min)</div>
+            <div class="tl-desc">Scan Section I and II before writing a single word. Underline key terms in each question. Choose your Section II tasks.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-time">0:05</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Q1 — Text A comprehension (35 min)</div>
+            <div class="tl-desc">Read Text A once for gist, then section by section as you answer. Answer in French throughout. Locate-and-quote = lift from text; infer = rephrase in your own words.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-time">0:40</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Q2 — Text B comprehension (35 min)</div>
+            <div class="tl-desc">Same approach as Q1. Don't let Q1 eat into Q2 time — they're worth the same marks (60 each).</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-time">1:15</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Q3 — Langue (15 min)</div>
+            <div class="tl-desc">Grammar and vocabulary questions. 30 marks — worth about 10 minutes of focused effort. Do not over-invest here.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-time">1:30</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Section II, Part A — Short task (20 min)</div>
+            <div class="tl-desc">50 marks for ~80–100 words. Note / message / short email. Plan in 3 minutes, write in 15, check in 2.</div>
+          </div>
+        </div>
+        <div class="tl-row highlight">
+          <div class="tl-time">1:50</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Section II, Part B — Extended task (50 min)</div>
+            <div class="tl-desc">100 marks for ~150–200 words. The most valuable single question on the paper. Plan in 5 min, write in 38 min, check in 7 min. Use all three tenses. Use connectors.</div>
+          </div>
+        </div>
+        <div class="tl-row highlight">
+          <div class="tl-time">2:22</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Final check — verb endings &amp; accents (8 min)</div>
+            <div class="tl-desc">The cheapest marks on the paper. Check every past tense ending (-é, -i, -u), every agreement, every accent. These are lost marks that require zero extra knowledge to fix.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-time">2:30</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Pens down</div>
+            <div class="tl-desc">If you've followed the guide, every section has been attempted. Resist the urge to add last-minute, unchecked sentences.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPREHENSION TIPS -->
+    <div class="tips-section">
+      <div class="tips-section-head">
+        <div class="icon">C</div>
+        <h2>Comprehension <em>tips</em></h2>
+      </div>
+      <div class="tip-cards">
+        <div class="tip-card">
+          <div class="n">1</div>
+          <div class="body">
+            <div class="t">Read the questions before the text</div>
+            <div class="d">Knowing what you're looking for makes the reading far more efficient. Underline the key focus of each question before reading paragraph one.</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">2</div>
+          <div class="body">
+            <div class="t">Locate-and-quote = lift exactly</div>
+            <div class="d">For L&amp;Q questions, copy the exact phrase from the text — do not paraphrase. Even a changed word-order loses marks.</div>
+            <div class="eg">« Citez l'expression… » = copy from text</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">3</div>
+          <div class="body">
+            <div class="t">Infer questions require manipulation</div>
+            <div class="d">When the question says "correct manipulation required", the examiner expects you to rephrase the text in your own French — a direct quote scores 1 or 0.</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">4</div>
+          <div class="body">
+            <div class="t">Vocabulary questions: quote exactly</div>
+            <div class="d">For "trouvez un mot qui veut dire…", find the single exact word (usually an infinitive). Extra words cause mark deductions.</div>
+            <div class="eg">"Un mot" = one word, nothing more</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">5</div>
+          <div class="body">
+            <div class="t">True/false: justify with a quote</div>
+            <div class="d">Mark the statement T or F first, then support your choice with a phrase from the correct section. No quote = no full marks.</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">6</div>
+          <div class="body">
+            <div class="t">Section references matter</div>
+            <div class="d">If a question directs you to "la deuxième section", your answer must come from that section only. An answer from the wrong section scores zero even if it's true.</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">7</div>
+          <div class="body">
+            <div class="t">Opinion question: stay text-based</div>
+            <div class="d">The final opinion question (answered in English or Irish) requires text evidence. Opinions without textual support score the minimum content marks.</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">8</div>
+          <div class="body">
+            <div class="t">Two points, clearly separated</div>
+            <div class="d">The opinion question usually asks for two points. Write them as clearly distinct paragraphs or numbered sentences. One long paragraph risks being read as one point.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WRITING TIPS -->
+    <div class="tips-section">
+      <div class="tips-section-head">
+        <div class="icon" style="background:var(--butter-soft);color:#8a6a0c;">W</div>
+        <h2>Writing <em>tips</em></h2>
+      </div>
+      <div class="tip-cards">
+        <div class="tip-card">
+          <div class="n">1</div>
+          <div class="body">
+            <div class="t">Anchor in the stimulus</div>
+            <div class="d">The task always gives you a stimulus — a headline, a statement, a situation. Quote or paraphrase it explicitly in your opening sentence. It earns points and focuses your answer.</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">2</div>
+          <div class="body">
+            <div class="t">Three tenses, minimum</div>
+            <div class="d">The marking scheme rewards use of multiple tenses. At minimum: present (for statements) + passé composé (for what happened) + imparfait (for context/description). Throw in a future too.</div>
+            <div class="eg">Present + Passé Composé + Imparfait = base H3</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">3</div>
+          <div class="body">
+            <div class="t">Use three named connectors</div>
+            <div class="d">Néanmoins, en revanche, par ailleurs — drop them naturally at the start of paragraphs. Examiners notice them. They signal a structured argument.</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">4</div>
+          <div class="body">
+            <div class="t">Plan before you write</div>
+            <div class="d">Spend 3–5 minutes on a quick plan. Bullet points only. This prevents the classic mistake of a strong first paragraph and a wandering, unfinished second.</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">5</div>
+          <div class="body">
+            <div class="t">Formal letters need layout marks</div>
+            <div class="d">Sender address, date, recipient name/role, salutation, body, closing formula. Two marks are awarded purely for having the layout right — free marks if you've learned the format.</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">6</div>
+          <div class="body">
+            <div class="t">Vary your sentence structure</div>
+            <div class="d">Subject-verb-object gets boring fast. Try relative clauses (qui, que), gerunds (en + present participle), and infinitive constructions (pour + infinitif) to show real mastery.</div>
+            <div class="eg">En rentrant chez moi, j'ai remarqué que…</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">7</div>
+          <div class="body">
+            <div class="t">Don't use English sentence structure</div>
+            <div class="d">French word order is different from English. "I love swimming" → "J'aime nager" (not "J'aime la natation" when you mean the activity). Translate thoughts, not words.</div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="n">8</div>
+          <div class="body">
+            <div class="t">Close the loop in your conclusion</div>
+            <div class="d">The final sentence should echo the opening idea. This gives the piece a circular, controlled feel that examiners reward. Use "Ainsi,", "Pour conclure,", "En fin de compte,".</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMMON MISTAKES -->
+    <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:32px;letter-spacing:-0.02em;margin-bottom:20px;">Common <em style="font-style:italic;color:var(--rose);font-weight:300;">mistakes</em></h2>
+    <div class="mistakes">
+      <div class="mistake-card">
+        <div class="m-head">
+          <span class="m-tag grammar">Grammar</span>
+          <span class="m-title">Forgetting past participle agreements</span>
+        </div>
+        <div class="m-desc">In the passé composé with être, the participle must agree with the subject. With avoir + preceding direct object, it must agree with the object.</div>
+        <div class="m-fix">→ Elle est allée (not allé) / Les livres que j'ai lus (not lu)</div>
+      </div>
+      <div class="mistake-card">
+        <div class="m-head">
+          <span class="m-tag grammar">Grammar</span>
+          <span class="m-title">Mixing up passé composé &amp; imparfait</span>
+        </div>
+        <div class="m-desc">Passé composé for completed actions; imparfait for ongoing states, descriptions, or repeated actions. Getting this wrong is the most penalised grammar error.</div>
+        <div class="m-fix">→ Il faisait beau (imparfait: weather context) + Je suis sorti(e) (PC: completed action)</div>
+      </div>
+      <div class="mistake-card">
+        <div class="m-head">
+          <span class="m-tag timing">Timing</span>
+          <span class="m-title">Spending too long on Section I</span>
+        </div>
+        <div class="m-desc">Many students spend 95 minutes on reading and only 55 on writing. Section II is worth the same — and writing takes longer to do well. Watch the clock.</div>
+        <div class="m-fix">→ Set a hard stop at 1h30 for Section I, even mid-sentence.</div>
+      </div>
+      <div class="mistake-card">
+        <div class="m-head">
+          <span class="m-tag layout">Layout</span>
+          <span class="m-title">No formal letter salutation/closing</span>
+        </div>
+        <div class="m-desc">Two layout marks are awarded for the opening salutation (Monsieur,) and closing formula. Students who skip these lose free marks.</div>
+        <div class="m-fix">→ Always include: Monsieur, / Madame, … Veuillez agréer…</div>
+      </div>
+      <div class="mistake-card">
+        <div class="m-head">
+          <span class="m-tag vocab">Vocab</span>
+          <span class="m-title">Missing accents</span>
+        </div>
+        <div class="m-desc">Accents change meaning in French. "a" ≠ "à", "ou" ≠ "où", "e" ≠ "é". The final 8 minutes should be used to check every accent in your writing.</div>
+        <div class="m-fix">→ Reserve the final 8 minutes purely for accents and verb endings.</div>
+      </div>
+      <div class="mistake-card">
+        <div class="m-head">
+          <span class="m-tag grammar">Grammar</span>
+          <span class="m-title">Wrong gender on nouns</span>
+        </div>
+        <div class="m-desc">Le/la, un/une, mon/ma all depend on gender. "Le problème" (not la), "la solution" (not le). Learn nouns with their article from the start.</div>
+        <div class="m-fix">→ Always learn: le problème, la situation, le gouvernement, la société</div>
+      </div>
+      <div class="mistake-card">
+        <div class="m-head">
+          <span class="m-tag timing">Timing</span>
+          <span class="m-title">Answering Q6 too briefly</span>
+        </div>
+        <div class="m-desc">The opinion question is 10 marks and requires two distinct, text-supported points. Many students write 20 words. Aim for 50 words across two clear points.</div>
+        <div class="m-fix">→ Two points, each in its own sentence, each with a text reference.</div>
+      </div>
+      <div class="mistake-card warning">
+        <div class="m-head">
+          <span class="m-tag timing">Critical</span>
+          <span class="m-title">Not attempting a question</span>
+        </div>
+        <div class="m-desc">A blank answer scores zero. A rough attempt in broken French can still earn 1–3 marks. Always write something — even a half-remembered phrase or educated guess.</div>
+        <div class="m-fix">→ Never leave a question blank. A partial answer always beats zero.</div>
+      </div>
+    </div>
+
+    <!-- GRADE BREAKDOWN -->
+    <div class="grade-box">
+      <div>
+        <h2>What it takes to <em>get a H1</em></h2>
+        <div class="sub">The marking scheme rewards accuracy, range and register — not just length. Here's what the grades look like in practice.</div>
+        <table class="grade-table">
+          <tr><td class="grade h1">H1</td><td>90–100% · 360–400 marks</td><td class="points">112–120 CAO pts</td></tr>
+          <tr><td class="grade h2">H2</td><td>80–90% · 320–359 marks</td><td class="points">104 CAO pts</td></tr>
+          <tr><td class="grade h3">H3</td><td>70–80% · 280–319 marks</td><td class="points">96 CAO pts</td></tr>
+          <tr><td class="grade">H4</td><td>60–70% · 240–279 marks</td><td class="points">88 CAO pts</td></tr>
+          <tr><td class="grade">H5</td><td>50–60% · 200–239 marks</td><td class="points">80 CAO pts</td></tr>
+          <tr><td class="grade">H6</td><td>40–50% · 160–199 marks</td><td class="points">72 CAO pts</td></tr>
+        </table>
+      </div>
+      <div class="right">
+        <h3>H1 markers</h3>
+        <div class="grade-bullet">Consistent use of 4+ tenses across Section II</div>
+        <div class="grade-bullet">Named connectors used naturally (not forced)</div>
+        <div class="grade-bullet">Accurate accents and verb endings throughout</div>
+        <div class="grade-bullet">Varied sentence structure — not just SVO every time</div>
+        <div class="grade-bullet">Comprehension answers clearly anchored in the text</div>
+        <div class="grade-bullet">Formal letter layout done correctly</div>
+        <div class="grade-bullet">Opinion question has two distinct, well-supported points</div>
+      </div>
+    </div>
+
+    <footer>
+      <div>Atelier · <em>built for Leaving Cert HL French</em></div>
+      <div>Bonne chance pour les examens 🍀</div>
+    </footer>
+
+  </div>
+<script src="/js/atelier.js"></script>
+</body>
+</html>

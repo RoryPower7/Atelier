@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aural — Atelier · LC French HL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/atelier.css">
+<style>
+  /* AURAL — page-specific styles */
+
+  /* SECTION GUIDE STRIP */
+  .section-guide {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 40px;
+  }
+  .sec-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 20px; padding: 22px 18px; text-align: center;
+    transition: all 0.22s cubic-bezier(.2,.7,.2,1);
+  }
+  .sec-card:hover { transform: translateY(-3px); box-shadow: 0 14px 32px -14px rgba(0,0,0,0.12); border-color: var(--sky-soft); }
+  .sec-card .letter {
+    width: 44px; height: 44px; border-radius: 14px;
+    background: var(--sky-soft); color: #3a5b76;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 22px; font-weight: 500;
+    margin: 0 auto 12px;
+  }
+  .sec-card h4 { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+  .sec-card .pts { font-size: 12px; color: var(--ink-soft); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+  .sec-card .pts strong { color: #3a5b76; font-weight: 700; }
+  .sec-card .desc { font-size: 12px; color: var(--ink-soft); margin-top: 8px; line-height: 1.4; }
+
+  /* STRATEGY PANEL */
+  .strategy-panel {
+    background: var(--ink); color: var(--bg);
+    border-radius: 28px; padding: 40px 44px; margin-bottom: 48px;
+  }
+  .strategy-panel h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 32px; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .strategy-panel h2 em { font-style: italic; color: var(--butter); font-weight: 300; }
+  .strategy-panel .lead { color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 28px; }
+  .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .strat-tip {
+    background: rgba(255,255,255,0.06); border-radius: 16px; padding: 18px 20px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .strat-tip .n {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--butter); color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 15px; font-weight: 600;
+    flex-shrink: 0;
+  }
+  .strat-tip .body .t { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; margin-bottom: 3px; color: white; }
+  .strat-tip .body .d { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.5; }
+  .strat-tip .body .d em { font-style: italic; color: var(--butter); font-weight: 500; }
+
+  /* PAPER ARCHIVE */
+  .archive-head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 18px; }
+  .archive-head h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 32px; letter-spacing: -0.02em; }
+  .archive-head h2 em { font-style: italic; color: var(--sage); font-weight: 300; }
+  .archive-head .count { color: var(--ink-soft); font-size: 14px; }
+  .archive-head .count strong { color: var(--ink); font-weight: 600; }
+
+  .papers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 60px; }
+  .paper-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 22px 22px 20px; display: flex; flex-direction: column;
+    transition: all 0.22s cubic-bezier(.2,.7,.2,1); cursor: pointer;
+    text-decoration: none; color: var(--ink); min-height: 180px;
+  }
+  .paper-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -20px rgba(0,0,0,0.15); border-color: transparent; }
+  .paper-card.audio { background: linear-gradient(135deg, var(--sky-soft), var(--bg)); border-color: var(--sky-soft); }
+  .paper-card .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .paper-card .year-tag {
+    font-family: 'Fraunces', serif; font-weight: 500; font-size: 28px; letter-spacing: -0.02em;
+  }
+  .paper-card.audio .year-tag { color: #3a5b76; }
+  .paper-card .badge {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 4px 10px; border-radius: 100px;
+    background: var(--bg-2); color: var(--ink-soft);
+  }
+  .paper-card.audio .badge { background: #3a5b76; color: white; }
+  .paper-card .desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; flex: 1; }
+  .paper-card .foot {
+    margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: var(--ink-soft);
+  }
+  .paper-card.audio .foot { border-color: rgba(58,91,118,0.18); }
+  .paper-card .foot .arr {
+    width: 24px; height: 24px; border-radius: 50%; background: var(--bg-2);
+    display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.2s;
+  }
+  .paper-card.audio .foot .arr { background: #3a5b76; color: white; }
+  .paper-card:hover .foot .arr { transform: rotate(-45deg); }
+
+  /* FILTER */
+  .filter-row { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .filter-row .chip {
+    background: var(--card); border: 1px solid var(--line); color: var(--ink);
+    padding: 8px 16px; border-radius: 100px;
+    font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+  }
+  .filter-row .chip:hover { background: var(--bg-2); }
+  .filter-row .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  @media (max-width: 1000px) {
+    .section-guide { grid-template-columns: repeat(3, 1fr); }
+    .papers-grid { grid-template-columns: 1fr 1fr; }
+    .strategy-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .section-guide { grid-template-columns: 1fr 1fr; }
+    .papers-grid { grid-template-columns: 1fr; }
+    .strategy-panel { padding: 28px 22px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <div class="logo">
+        <div class="logo-mark">a</div>
+        <span>atelier<em>.fr</em></span>
+      </div>
+      <div class="nav-pill">
+        <a href="/index.html">Home</a>
+        <a href="/comprehensions.html">Comprehensions</a>
+        <a href="/composing.html">Composing</a>
+        <a href="/aural.html" class="active">Aural</a>
+        <a href="/verbs.html">Verbs</a>
+        <a href="/vocab.html">Vocab</a>
+        <a href="/tips.html">Tips</a>
+      </div>
+      <div class="nav-cta">
+        <div class="streak">7-day streak</div>
+        <div class="avatar">m</div>
+      </div>
+    </nav>
+
+    <div class="crumb">
+      <a href="/index.html">Home</a>
+      <span class="sep">/</span>
+      <span class="here">Aural · Triail Chluastuisceana</span>
+    </div>
+
+    <!-- PAGE HEAD -->
+    <header class="page-head">
+      <div>
+        <div class="greeting">Bonjour — train your ear</div>
+        <h1>The aural <span class="italic">paper.</span></h1>
+        <p class="lead">Eleven years of past papers with transcripts and marking schemes. Audio for the four most recent years, with adjustable playback speed. Section-by-section practice, with answers and marking notes from the SEC schemes.</p>
+      </div>
+      <div class="meta-cards">
+        <div class="meta-card featured">
+          <div class="lbl">Past papers</div>
+          <div class="val">11 <em>years</em></div>
+          <div class="sub">2015 – 2025</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">With audio</div>
+          <div class="val">4 <em>years</em></div>
+          <div class="sub">2022 – 2025</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Paper worth</div>
+          <div class="val">80 <em>marks</em></div>
+          <div class="sub">20% of LC French</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Exam length</div>
+          <div class="val">40 <em>minutes</em></div>
+          <div class="sub">straight after written</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- SECTION GUIDE -->
+    <h2 style="font-family:'Fraunces',serif; font-weight:400; font-size:30px; letter-spacing:-0.02em; margin-bottom:14px;">Five <em style="font-style:italic; color:var(--sage); font-weight:300;">sections,</em> in order.</h2>
+    <p style="color:var(--ink-soft); font-size:15px; margin-bottom:22px; max-width:780px;">Each paper has the same five sections in the same order. Sections A–D are played <strong>three times</strong> (full → segmented → full). Section E (news) is played <strong>twice</strong> only.</p>
+
+    <div class="section-guide">
+      <div class="sec-card">
+        <div class="letter">A</div>
+        <h4>3 monologues</h4>
+        <div class="pts"><strong>12 marks</strong></div>
+        <div class="desc">Three young people on the same topic. One short question per speaker.</div>
+      </div>
+      <div class="sec-card">
+        <div class="letter">B</div>
+        <h4>1 speaker</h4>
+        <div class="pts"><strong>21 marks</strong></div>
+        <div class="desc">Long interview, single speaker. Four detailed questions, often two-part.</div>
+      </div>
+      <div class="sec-card">
+        <div class="letter">C</div>
+        <h4>Conversation</h4>
+        <div class="pts"><strong>18 marks</strong></div>
+        <div class="desc">Two friends or family — informal register. Three multi-part questions.</div>
+      </div>
+      <div class="sec-card">
+        <div class="letter">D</div>
+        <h4>Interview</h4>
+        <div class="pts"><strong>21 marks</strong></div>
+        <div class="desc">Journalist + guest on a current-affairs topic. Four detailed questions.</div>
+      </div>
+      <div class="sec-card">
+        <div class="letter">E</div>
+        <h4>3 news items</h4>
+        <div class="pts"><strong>8 marks</strong> · 2× only</div>
+        <div class="desc">Short news flashes — crime, accidents, sport. One question each. Fast.</div>
+      </div>
+    </div>
+
+    <!-- STRATEGY PANEL -->
+    <div class="strategy-panel">
+      <h2>How to <em>play it.</em></h2>
+      <p class="lead">Four habits that move marks in this paper, taken from the chief examiner's reports.</p>
+      <div class="strategy-grid">
+        <div class="strat-tip">
+          <div class="n">1</div>
+          <div class="body">
+            <div class="t">Answers in English — not full sentences.</div>
+            <div class="d">The SEC instructions are explicit: <em>"not necessarily in complete sentences"</em>. Single phrases or bullet points score full marks. If you write in French, a <em>50% penalty</em> is applied to the section.</div>
+          </div>
+        </div>
+        <div class="strat-tip">
+          <div class="n">2</div>
+          <div class="body">
+            <div class="t">First listen = gist only. Don't write.</div>
+            <div class="d">Use the first full play to understand the topic and identify speakers. Start writing on the second (segmented) play. Final play is for verification.</div>
+          </div>
+        </div>
+        <div class="strat-tip">
+          <div class="n">3</div>
+          <div class="body">
+            <div class="t">Section E is played twice only.</div>
+            <div class="d">Pre-read the three questions <em>before</em> the audio starts. News items are fast and short — you don't get the leisurely third pass that A–D give you.</div>
+          </div>
+        </div>
+        <div class="strat-tip">
+          <div class="n">4</div>
+          <div class="body">
+            <div class="t">"Two details" means two distinct points.</div>
+            <div class="d">If the question asks for two details and you write one detail twice, you only get half marks. Each detail must be a separate idea. The marking scheme is unforgiving here.</div>
+          </div>
+        </div>
+        <div class="strat-tip">
+          <div class="n">5</div>
+          <div class="body">
+            <div class="t">Watch the numbers.</div>
+            <div class="d">Specific quantities (money, time, age, distance) appear in every paper. An <em>incorrect amount = 0 marks</em>, even if everything else is right. Always cross-check on the third play.</div>
+          </div>
+        </div>
+        <div class="strat-tip">
+          <div class="n">6</div>
+          <div class="body">
+            <div class="t">Common topics: jobs, holidays, school, family.</div>
+            <div class="d">Section B is nearly always someone describing their <em>job</em>. Section D is usually a <em>current-affairs interview</em>. Drill the vocab on the Vocab page — it'll come up.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-row" id="filter-row">
+      <button class="chip active" data-filter="all">All papers</button>
+      <button class="chip" data-filter="audio">With audio</button>
+      <button class="chip" data-filter="transcript">Transcript only</button>
+    </div>
+
+    <!-- PAPER ARCHIVE -->
+    <div class="archive-head">
+      <h2>Past <em>papers</em></h2>
+      <div class="count">Showing <strong id="count-shown">11</strong> of <strong>11</strong></div>
+    </div>
+
+    <div class="papers-grid" id="papers-grid">
+
+      <a href="/aural/2025.html" class="paper-card audio" data-has-audio="true">
+        <div class="top-row">
+          <span class="year-tag">2025</span>
+          <span class="badge">Audio + transcript</span>
+        </div>
+        <div class="desc">Holidays · Postwoman · Pets · School uniforms · News (pharmacy, driving, tennis).</div>
+        <div class="foot">
+          <span>Full practice</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a href="/aural/2024.html" class="paper-card audio" data-has-audio="true">
+        <div class="top-row">
+          <span class="year-tag">2024</span>
+          <span class="badge">Audio + transcript</span>
+        </div>
+        <div class="desc">Coming soon — audio is in place, page being built.</div>
+        <div class="foot">
+          <span>Stub</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a href="/aural/2023.html" class="paper-card audio" data-has-audio="true">
+        <div class="top-row">
+          <span class="year-tag">2023</span>
+          <span class="badge">Audio + transcript</span>
+        </div>
+        <div class="desc">Coming soon — audio is in place, page being built.</div>
+        <div class="foot">
+          <span>Stub</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a href="/aural/2022.html" class="paper-card audio" data-has-audio="true">
+        <div class="top-row">
+          <span class="year-tag">2022</span>
+          <span class="badge">Audio + transcript</span>
+        </div>
+        <div class="desc">Coming soon — audio is in place, page being built.</div>
+        <div class="foot">
+          <span>Stub</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a href="/aural/2021.html" class="paper-card" data-has-audio="false">
+        <div class="top-row">
+          <span class="year-tag">2021</span>
+          <span class="badge">Transcript only</span>
+        </div>
+        <div class="desc">No audio — transcript-based practice from the marking scheme.</div>
+        <div class="foot">
+          <span>Stub</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a href="/aural/2020.html" class="paper-card" data-has-audio="false">
+        <div class="top-row">
+          <span class="year-tag">2020</span>
+          <span class="badge">Transcript only</span>
+        </div>
+        <div class="desc">No audio — transcript-based practice from the marking scheme.</div>
+        <div class="foot">
+          <span>Stub</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a href="/aural/2019.html" class="paper-card" data-has-audio="false">
+        <div class="top-row">
+          <span class="year-tag">2019</span>
+          <span class="badge">Transcript only</span>
+        </div>
+        <div class="desc">No audio — transcript-based practice from the marking scheme.</div>
+        <div class="foot">
+          <span>Stub</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a href="/aural/2018.html" class="paper-card" data-has-audio="false">
+        <div class="top-row">
+          <span class="year-tag">2018</span>
+          <span class="badge">Transcript only</span>
+        </div>
+        <div class="desc">No audio — transcript-based practice from the marking scheme.</div>
+        <div class="foot">
+          <span>Stub</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a href="/aural/2017.html" class="paper-card" data-has-audio="false">
+        <div class="top-row">
+          <span class="year-tag">2017</span>
+          <span class="badge">Transcript only</span>
+        </div>
+        <div class="desc">No audio — transcript-based practice from the marking scheme.</div>
+        <div class="foot">
+          <span>Stub</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a href="/aural/2016.html" class="paper-card" data-has-audio="false">
+        <div class="top-row">
+          <span class="year-tag">2016</span>
+          <span class="badge">Transcript only</span>
+        </div>
+        <div class="desc">No audio — transcript-based practice from the marking scheme.</div>
+        <div class="foot">
+          <span>Stub</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a href="/aural/2015.html" class="paper-card" data-has-audio="false">
+        <div class="top-row">
+          <span class="year-tag">2015</span>
+          <span class="badge">Transcript only</span>
+        </div>
+        <div class="desc">No audio — transcript-based practice from the marking scheme.</div>
+        <div class="foot">
+          <span>Stub</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+    </div>
+
+    <footer>
+      <div>Atelier · <em>built for Leaving Cert HL French</em></div>
+      <div>Bonne chance pour les examens 🍀</div>
+    </footer>
+
+  </div>
+
+<script>
+(function() {
+  /* FILTER */
+  document.getElementById('filter-row').querySelectorAll('.chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.getElementById('filter-row').querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      var filter = chip.dataset.filter;
+      var cards = document.getElementById('papers-grid').querySelectorAll('.paper-card');
+      var shown = 0;
+      cards.forEach(function(card) {
+        var hasAudio = card.dataset.hasAudio === 'true';
+        var show = filter === 'all' || (filter === 'audio' && hasAudio) || (filter === 'transcript' && !hasAudio);
+        card.style.display = show ? '' : 'none';
+        if (show) shown++;
+      });
+      document.getElementById('count-shown').textContent = shown;
+    });
+  });
+})();
+</script>
+<script src="/js/atelier.js"></script>
+</body>
+</html>

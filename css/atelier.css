@@ -1,0 +1,296 @@
+/* =========================================================
+   ATELIER — Leaving Cert French HL
+   Shared design system: tokens, reset, layout, components
+   ========================================================= */
+
+/* TOKENS */
+:root {
+  --bg:          #fbfaf6;
+  --bg-2:        #f3f1e8;
+  --ink:         #1a1a17;
+  --ink-soft:    #5b5d54;
+  --sage:        #7d9468;
+  --sage-soft:   #c8d4b8;
+  --sage-tint:   #e7eede;
+  --butter:      #f4d77a;
+  --butter-soft: #faeab8;
+  --rose:        #d97a6c;
+  --rose-soft:   #f3cfc8;
+  --sky:         #a8c5d8;
+  --sky-soft:    #d8e5ee;
+  --lilac:       #b8a8d4;
+  --lilac-soft:  #e2d9ee;
+  --line:        #e2dfd2;
+  --card:        #ffffff;
+}
+
+/* RESET */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* BASE */
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Geist', sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+.wrap { max-width: 1340px; margin: 0 auto; padding: 0 32px; }
+
+/* ── NAV ─────────────────────────────────────────────────── */
+nav.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0;
+}
+
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  color: var(--ink);
+}
+.logo-mark {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: var(--sage);
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-style: italic;
+  transform: rotate(-4deg);
+}
+.logo span em { font-family: 'Fraunces', serif; font-style: italic; color: var(--sage); font-weight: 300; }
+
+.nav-pill {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 6px;
+  display: flex;
+  gap: 2px;
+}
+.nav-pill a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 9px 18px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.nav-pill a:hover { background: var(--bg-2); color: var(--ink); }
+.nav-pill a.active { background: var(--ink); color: var(--bg); }
+
+.nav-cta { display: flex; gap: 10px; align-items: center; }
+
+.streak {
+  background: var(--butter-soft);
+  border: 1px solid var(--butter);
+  padding: 8px 14px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex; align-items: center; gap: 6px;
+}
+.streak::before { content: '🔥'; font-size: 14px; }
+
+.avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--rose);
+  color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* ── BREADCRUMB ──────────────────────────────────────────── */
+.crumb {
+  margin: 12px 0 28px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.crumb a { color: var(--ink-soft); text-decoration: none; }
+.crumb a:hover { color: var(--ink); }
+.crumb .sep { color: var(--sage); }
+.crumb .here { color: var(--ink); font-weight: 500; }
+
+/* ── PAGE HEAD (comprehensions, verbs, opinions, vocab, tips) */
+.page-head {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 40px;
+  align-items: end;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 36px;
+}
+.page-head .greeting {
+  color: var(--sage);
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 19px;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 12px;
+}
+.page-head .greeting::before { content: ''; width: 28px; height: 1px; background: var(--sage); }
+.page-head h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(48px, 6vw, 76px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+.page-head h1 .italic { font-style: italic; color: var(--sage); font-weight: 300; }
+.page-head .lead { color: var(--ink-soft); font-size: 17px; margin-top: 18px; max-width: 540px; }
+.page-head .meta-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ── META CARDS ──────────────────────────────────────────── */
+.meta-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+}
+.meta-card.featured { background: var(--sage-tint); border-color: var(--sage-soft); }
+.meta-card .lbl {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--ink-soft); font-weight: 500; margin-bottom: 4px;
+}
+.meta-card .val {
+  font-family: 'Fraunces', serif;
+  font-size: 28px; font-weight: 400; letter-spacing: -0.02em;
+}
+.meta-card .val em { font-style: italic; color: var(--sage); font-weight: 300; }
+.meta-card .sub { font-size: 13px; color: var(--ink-soft); }
+
+/* ── BUTTONS ─────────────────────────────────────────────── */
+.btn {
+  background: var(--ink); color: var(--bg);
+  padding: 14px 26px;
+  border-radius: 100px;
+  text-decoration: none;
+  font-size: 15px; font-weight: 500;
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+  border: none; cursor: pointer; font-family: inherit;
+}
+.btn:hover { background: var(--sage); transform: translateY(-1px); }
+
+.btn-2 {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+.btn-2:hover { background: var(--card); border-color: var(--ink); transform: none; }
+
+.btn.ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+.btn.ghost:hover { background: var(--card); border-color: var(--ink); transform: none; }
+
+/* ── BADGES ──────────────────────────────────────────────── */
+.badge {
+  background: var(--card); color: var(--ink);
+  padding: 6px 12px; border-radius: 100px;
+  font-size: 12px; font-weight: 600;
+  border: 1px solid var(--line);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.badge.year { background: var(--ink); color: var(--bg); border-color: var(--ink); font-family: 'Geist Mono', monospace; }
+.badge.type { background: var(--sage); color: white; border-color: var(--sage); text-transform: uppercase; letter-spacing: 0.05em; }
+.badge.points { background: var(--butter-soft); border-color: var(--butter); color: #8a6a0c; }
+
+/* ── HOVER-VOCAB (.vw) ───────────────────────────────────── */
+.vw {
+  border-bottom: 1.5px dotted var(--sage);
+  cursor: help;
+  position: relative;
+  color: var(--ink);
+  transition: all 0.15s;
+}
+body.vocab-off .vw { border-bottom: none; cursor: text; }
+body.vocab-off .vw:hover::after,
+body.vocab-off .vw:hover::before { display: none; }
+
+.vw:hover { background: var(--sage-tint); color: #2f4a26; border-bottom-color: transparent; border-radius: 3px; }
+
+.vw::after {
+  content: attr(data-en) " — " attr(data-pos);
+  position: absolute;
+  bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  background: var(--ink); color: var(--bg);
+  padding: 8px 12px; border-radius: 8px;
+  font-family: 'Geist', sans-serif; font-size: 12px; font-weight: 500;
+  white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity 0.15s; z-index: 100;
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
+}
+.vw::before {
+  content: '';
+  position: absolute; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: var(--ink);
+  opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 100;
+}
+.vw:hover::after, .vw:hover::before { opacity: 1; }
+
+/* ── QUESTION TYPE DOTS ──────────────────────────────────── */
+/* Default size for question cards */
+.qt-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: white;
+  font-family: 'Geist', sans-serif;
+  cursor: help; position: relative; flex-shrink: 0;
+}
+/* Small variant for library cards */
+.qt-dot.sm { width: 14px; height: 14px; font-size: 9px; }
+
+.qt-dot.locate  { background: var(--sage); }
+.qt-dot.tf      { background: var(--butter); color: var(--ink); }
+.qt-dot.vocab   { background: var(--rose); }
+.qt-dot.infer   { background: var(--sky); color: var(--ink); }
+.qt-dot.opinion { background: var(--lilac); }
+
+/* ── GENERIC TOOLTIP ─────────────────────────────────────── */
+[data-tooltip] { position: relative; }
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  background: var(--ink); color: var(--bg);
+  padding: 6px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 500; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity 0.15s;
+  z-index: 50; text-transform: none; letter-spacing: 0;
+  font-family: 'Geist', sans-serif;
+}
+[data-tooltip]:hover::after { opacity: 1; }
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+footer {
+  margin-top: 80px;
+  padding: 40px 0;
+  border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center;
+  color: var(--ink-soft); font-size: 14px;
+  flex-wrap: wrap; gap: 10px;
+}
+footer em { font-family: 'Fraunces', serif; font-style: italic; color: var(--sage); }
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .nav-pill { display: none; }
+  .wrap { padding: 0 20px; }
+  .page-head { grid-template-columns: 1fr; }
+}

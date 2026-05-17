@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Flashcards — Atelier · LC French HL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/atelier.css">
+<style>
+  /* FLASHCARDS — page-specific styles */
+
+  /* DECK SETUP */
+  .deck-setup {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 22px; padding: 24px 28px; margin-bottom: 28px;
+  }
+  .deck-setup .ds-row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .deck-setup .ds-row + .ds-row { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .deck-setup .ds-label {
+    font-size: 12px; color: var(--ink-soft); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+  }
+  .theme-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .theme-chip {
+    background: var(--bg); border: 1px solid var(--line); color: var(--ink);
+    padding: 7px 13px; border-radius: 100px;
+    font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+  }
+  .theme-chip:hover { background: var(--bg-2); }
+  .theme-chip.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .theme-chip.all-toggle { font-weight: 700; }
+
+  .dir-toggle {
+    display: flex; background: var(--bg-2); border-radius: 100px; padding: 4px;
+  }
+  .dir-toggle button {
+    background: transparent; border: none; color: var(--ink-soft);
+    padding: 7px 14px; border-radius: 100px;
+    font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+  }
+  .dir-toggle button.on { background: var(--ink); color: var(--bg); }
+
+  .start-btn, .reset-btn-big {
+    background: var(--sage); color: white; border: none;
+    padding: 12px 26px; border-radius: 100px;
+    font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: all 0.18s; display: inline-flex; align-items: center; gap: 8px;
+    margin-left: auto;
+  }
+  .start-btn:hover { background: #6b8156; }
+  .start-btn:disabled { background: var(--line); color: var(--ink-soft); cursor: not-allowed; }
+  .reset-btn-big { background: var(--rose); margin-left: 10px; }
+  .reset-btn-big:hover { background: #c46a5d; }
+
+  /* PROGRESS BAR */
+  .session-bar {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 18px; padding: 14px 22px; margin-bottom: 18px;
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: 22px; align-items: center;
+  }
+  .sb-counter { font-family: 'Geist Mono', monospace; font-size: 13px; color: var(--ink-soft); }
+  .sb-counter strong { color: var(--ink); font-weight: 700; }
+  .sb-track { background: var(--bg-2); height: 8px; border-radius: 100px; overflow: hidden; }
+  .sb-fill { height: 100%; background: linear-gradient(90deg, var(--sage), var(--sage-soft)); border-radius: 100px; transition: width 0.3s; }
+  .sb-stats { font-family: 'Geist Mono', monospace; font-size: 13px; color: var(--ink-soft); display: flex; gap: 14px; }
+  .sb-stats .got { color: var(--sage); font-weight: 700; }
+  .sb-stats .miss { color: var(--rose); font-weight: 700; }
+  .sb-end {
+    background: transparent; border: 1px solid var(--line); color: var(--ink-soft);
+    padding: 6px 14px; border-radius: 100px; cursor: pointer; font-family: inherit; font-size: 12px;
+  }
+  .sb-end:hover { color: var(--ink); }
+
+  /* FLASHCARD */
+  .card-stage { margin: 0 auto 22px; max-width: 640px; }
+  .flashcard {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 28px; padding: 56px 44px;
+    min-height: 360px; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    cursor: pointer; transition: transform 0.18s cubic-bezier(.2,.7,.2,1), box-shadow 0.18s, border-color 0.18s;
+    position: relative;
+  }
+  .flashcard:hover { transform: translateY(-3px); box-shadow: 0 22px 50px -24px rgba(0,0,0,0.18); border-color: var(--sage-soft); }
+  .flashcard.flipped { background: linear-gradient(180deg, var(--sage-tint), var(--card)); border-color: var(--sage-soft); }
+
+  .fc-theme-tag {
+    position: absolute; top: 18px; left: 22px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-soft); padding: 4px 9px; border-radius: 100px; background: var(--bg-2);
+  }
+  .fc-side {
+    position: absolute; top: 18px; right: 22px;
+    font-family: 'Geist Mono', monospace; font-size: 11px; font-weight: 600;
+    color: var(--ink-soft); padding: 4px 10px; border-radius: 100px; background: var(--bg-2);
+  }
+  .fc-prompt {
+    font-family: 'Fraunces', serif; font-weight: 400; font-size: 40px; line-height: 1.2;
+    color: var(--ink); letter-spacing: -0.01em;
+  }
+  .fc-prompt.italic { font-style: italic; color: var(--sage); }
+  .fc-pos {
+    margin-top: 14px; font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--ink-soft);
+  }
+  .fc-answer {
+    margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--sage-soft);
+    width: 100%; display: none;
+  }
+  .flashcard.flipped .fc-answer { display: block; }
+  .fc-answer .fc-en {
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 26px;
+    color: var(--sage); line-height: 1.3;
+  }
+  .fc-tap-hint {
+    position: absolute; bottom: 18px;
+    font-size: 11px; color: var(--ink-soft); font-style: italic;
+    font-family: 'Fraunces', serif;
+  }
+  .flashcard.flipped .fc-tap-hint { display: none; }
+
+  /* JUDGEMENT BUTTONS */
+  .judge-row { display: flex; gap: 14px; justify-content: center; margin-top: 6px; }
+  .judge-btn {
+    flex: 1; max-width: 220px; padding: 16px 24px; border-radius: 18px;
+    border: none; cursor: pointer; font-family: inherit; font-size: 15px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: all 0.18s;
+  }
+  .judge-btn.miss { background: var(--rose-soft); color: #7c2e25; }
+  .judge-btn.miss:hover { background: var(--rose); color: white; transform: translateY(-2px); }
+  .judge-btn.got  { background: var(--sage-tint); color: var(--sage); }
+  .judge-btn.got:hover  { background: var(--sage); color: white; transform: translateY(-2px); }
+  .judge-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .judge-btn .kbd {
+    font-family: 'Geist Mono', monospace; font-size: 10px;
+    padding: 2px 6px; border-radius: 5px; background: rgba(0,0,0,0.08); font-weight: 700;
+  }
+
+  /* REVEAL BUTTON (when not flipped) */
+  .reveal-row { display: flex; justify-content: center; margin-top: 6px; }
+  .reveal-btn {
+    background: var(--ink); color: white; border: none;
+    padding: 14px 32px; border-radius: 18px;
+    font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: all 0.18s; display: inline-flex; align-items: center; gap: 10px;
+  }
+  .reveal-btn:hover { background: var(--sage); transform: translateY(-2px); }
+  .reveal-btn .kbd {
+    font-family: 'Geist Mono', monospace; font-size: 10px;
+    padding: 2px 6px; border-radius: 5px; background: rgba(255,255,255,0.18); font-weight: 700;
+  }
+
+  /* COMPLETION SCREEN */
+  .completion {
+    background: var(--ink); color: var(--bg);
+    border-radius: 28px; padding: 44px 48px; text-align: center;
+    max-width: 640px; margin: 0 auto;
+  }
+  .completion h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 36px; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .completion h2 em { font-style: italic; color: var(--butter); font-weight: 300; }
+  .completion .summary { color: rgba(255,255,255,0.7); font-size: 15px; margin-bottom: 28px; }
+  .completion-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+  .completion-stats .stat {
+    background: rgba(255,255,255,0.06); border-radius: 16px; padding: 20px 14px;
+  }
+  .completion-stats .stat .v { font-family: 'Fraunces', serif; font-weight: 400; font-size: 32px; letter-spacing: -0.02em; }
+  .completion-stats .stat .v em { color: var(--butter); font-style: italic; font-weight: 300; }
+  .completion-stats .stat .l { font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; margin-top: 4px; }
+  .completion .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .completion .actions button {
+    background: var(--butter); color: var(--ink); border: none;
+    padding: 12px 24px; border-radius: 100px;
+    font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: all 0.18s;
+  }
+  .completion .actions button:hover { background: white; }
+  .completion .actions button.ghost {
+    background: transparent; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.2);
+  }
+  .completion .actions button.ghost:hover { color: white; border-color: white; background: rgba(255,255,255,0.06); }
+
+  /* EMPTY STATE (no themes selected) */
+  .empty-deck {
+    text-align: center; padding: 60px 20px;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 18px; color: var(--ink-soft);
+  }
+
+  @media (max-width: 700px) {
+    .session-bar { grid-template-columns: 1fr; gap: 10px; }
+    .flashcard { padding: 40px 24px; min-height: 280px; }
+    .fc-prompt { font-size: 30px; }
+    .completion-stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <div class="logo">
+        <div class="logo-mark">a</div>
+        <span>atelier<em>.fr</em></span>
+      </div>
+      <div class="nav-pill">
+        <a href="/index.html">Home</a>
+        <a href="/comprehensions.html">Comprehensions</a>
+        <a href="/composing.html">Composing</a>
+        <a href="/aural.html">Aural</a>
+        <a href="/verbs.html">Verbs</a>
+        <a href="/vocab.html">Vocab</a>
+        <a href="/tips.html">Tips</a>
+      </div>
+      <div class="nav-cta">
+        <div class="streak">7-day streak</div>
+        <div class="avatar">m</div>
+      </div>
+    </nav>
+
+    <div class="crumb">
+      <a href="/index.html">Home</a>
+      <span class="sep">/</span>
+      <a href="/vocab.html">Vocab</a>
+      <span class="sep">/</span>
+      <span class="here">Flashcards</span>
+    </div>
+
+    <!-- PAGE HEAD -->
+    <header class="page-head">
+      <div>
+        <div class="greeting">Bonjour — drill the words you forget</div>
+        <h1>The <span class="italic">flashcard</span> deck.</h1>
+        <p class="lead">Spaced-repetition study using your full vocab list. Pick a theme, flip cards, and mark each one. Wrong cards re-appear at the end of the deck until you've got every word. Progress is saved on this device.</p>
+      </div>
+      <div class="meta-cards">
+        <div class="meta-card featured">
+          <div class="lbl">Cards available</div>
+          <div class="val" id="m-total">— <em>cards</em></div>
+          <div class="sub">across 13 themes</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Mastered</div>
+          <div class="val" id="m-mastered">0 <em>cards</em></div>
+          <div class="sub">got it 3× in a row</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Today's session</div>
+          <div class="val" id="m-today">0 <em>reviewed</em></div>
+          <div class="sub" id="m-today-sub">— accuracy</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Total reviewed</div>
+          <div class="val" id="m-alltime">0 <em>all-time</em></div>
+          <div class="sub">on this device</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- DECK SETUP -->
+    <div class="deck-setup" id="setup-panel">
+      <div class="ds-row">
+        <span class="ds-label">Themes</span>
+        <div class="theme-chips" id="theme-chips">
+          <button class="theme-chip all-toggle on" data-theme="all">All</button>
+          <!-- chips populated by JS -->
+        </div>
+      </div>
+      <div class="ds-row">
+        <span class="ds-label">Direction</span>
+        <div class="dir-toggle" id="dir-toggle">
+          <button class="on" data-dir="fr-en">FR → EN</button>
+          <button data-dir="en-fr">EN → FR</button>
+        </div>
+        <span class="ds-label">Mode</span>
+        <div class="dir-toggle" id="mode-toggle">
+          <button class="on" data-mode="all">All cards</button>
+          <button data-mode="weak">Weak only</button>
+        </div>
+        <button class="start-btn" id="start-btn">Start session <span style="font-size:18px;">→</span></button>
+        <button class="reset-btn-big" id="reset-btn" title="Reset all flashcard progress on this device">Reset progress</button>
+      </div>
+    </div>
+
+    <!-- SESSION (initially hidden) -->
+    <div id="session" style="display:none;">
+
+      <div class="session-bar">
+        <div class="sb-counter">Card <strong id="sb-cur">1</strong> of <strong id="sb-total">0</strong></div>
+        <div class="sb-track"><div class="sb-fill" id="sb-fill" style="width:0%"></div></div>
+        <div class="sb-stats">
+          <span class="got">✓ <span id="sb-got">0</span></span>
+          <span class="miss">✗ <span id="sb-miss">0</span></span>
+        </div>
+        <button class="sb-end" id="sb-end">End session</button>
+      </div>
+
+      <div class="card-stage">
+        <div class="flashcard" id="card">
+          <span class="fc-theme-tag" id="fc-theme">—</span>
+          <span class="fc-side" id="fc-side">FR → EN</span>
+          <div class="fc-prompt italic" id="fc-prompt">—</div>
+          <div class="fc-pos" id="fc-pos">—</div>
+          <div class="fc-answer">
+            <div class="fc-en" id="fc-answer">—</div>
+          </div>
+          <div class="fc-tap-hint">Click card or press <kbd style="font-family:'Geist Mono',monospace;font-size:10px;background:var(--bg-2);padding:2px 6px;border-radius:5px;">space</kbd> to reveal</div>
+        </div>
+      </div>
+
+      <div class="reveal-row" id="reveal-row">
+        <button class="reveal-btn" id="reveal-btn">Show answer <span class="kbd">space</span></button>
+      </div>
+
+      <div class="judge-row" id="judge-row" style="display:none;">
+        <button class="judge-btn miss" data-judge="miss">✗ Missed it <span class="kbd">1</span></button>
+        <button class="judge-btn got"  data-judge="got">✓ Got it <span class="kbd">2</span></button>
+      </div>
+    </div>
+
+    <!-- COMPLETION (initially hidden) -->
+    <div id="completion" style="display:none;">
+      <div class="completion">
+        <h2>Session <em>complete.</em></h2>
+        <div class="summary" id="comp-summary">You worked through the deck. Here's how it went.</div>
+        <div class="completion-stats">
+          <div class="stat"><div class="v"><span id="comp-got">0</span></div><div class="l">Got right</div></div>
+          <div class="stat"><div class="v"><span id="comp-miss">0</span></div><div class="l">Missed</div></div>
+          <div class="stat"><div class="v"><span id="comp-acc">0%</span></div><div class="l">Accuracy</div></div>
+        </div>
+        <div class="actions">
+          <button id="comp-again">Another round</button>
+          <button class="ghost" id="comp-home">Back to deck setup</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div>Atelier · <em>built for Leaving Cert HL French</em></div>
+      <div>Bonne chance pour les examens 🍀</div>
+    </footer>
+
+  </div>
+
+<script src="/js/vocab-data.js"></script>
+<script>
+(function() {
+
+  /* ── STORAGE ───────────────────────────────────────────── */
+  var STORE_KEY = 'atelier_flashcards_v1';
+  function loadState() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+  function saveState(s) { localStorage.setItem(STORE_KEY, JSON.stringify(s)); }
+
+  /* card progress shape: { "fr-word": { streak: 0, total: 0, got: 0 } } */
+  var state = loadState();
+  state.cards = state.cards || {};
+  state.today = state.today || { date: '', reviewed: 0, got: 0 };
+  state.allTime = state.allTime || 0;
+
+  function ensureToday() {
+    var today = new Date().toDateString();
+    if (state.today.date !== today) {
+      state.today = { date: today, reviewed: 0, got: 0 };
+    }
+  }
+  ensureToday();
+
+  /* ── DECK SETUP UI ─────────────────────────────────────── */
+  var THEMES = Object.keys(window.THEME_META);
+  var selectedThemes = new Set(['all']);
+  var direction = 'fr-en';
+  var sessionMode = 'all';
+
+  function renderThemeChips() {
+    var container = document.getElementById('theme-chips');
+    THEMES.forEach(function(key) {
+      var meta = window.THEME_META[key];
+      var label = meta.label.replace('&amp;', '&');
+      var count = window.VOCAB.filter(function(w) { return w.theme === key; }).length;
+      var btn = document.createElement('button');
+      btn.className = 'theme-chip';
+      btn.dataset.theme = key;
+      btn.innerHTML = label + ' <span style="opacity:0.55;font-size:10px;">' + count + '</span>';
+      btn.addEventListener('click', function() { toggleTheme(key); });
+      container.appendChild(btn);
+    });
+    document.querySelector('.theme-chip.all-toggle').addEventListener('click', function() {
+      selectedThemes = new Set(['all']);
+      refreshChips();
+      updateTotalCount();
+    });
+  }
+  function toggleTheme(key) {
+    if (selectedThemes.has('all')) { selectedThemes = new Set(); }
+    if (selectedThemes.has(key)) { selectedThemes.delete(key); }
+    else { selectedThemes.add(key); }
+    if (selectedThemes.size === 0) { selectedThemes = new Set(['all']); }
+    refreshChips();
+    updateTotalCount();
+  }
+  function refreshChips() {
+    document.querySelectorAll('.theme-chip').forEach(function(btn) {
+      btn.classList.toggle('on', selectedThemes.has(btn.dataset.theme));
+    });
+  }
+
+  document.querySelectorAll('#dir-toggle button').forEach(function(b) {
+    b.addEventListener('click', function() {
+      document.querySelectorAll('#dir-toggle button').forEach(function(x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      direction = b.dataset.dir;
+    });
+  });
+
+  document.querySelectorAll('#mode-toggle button').forEach(function(b) {
+    b.addEventListener('click', function() {
+      document.querySelectorAll('#mode-toggle button').forEach(function(x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      sessionMode = b.dataset.mode;
+      updateTotalCount();
+    });
+  });
+
+  function getEligibleCards() {
+    var cards = window.VOCAB.slice();
+    if (!selectedThemes.has('all')) {
+      cards = cards.filter(function(c) { return selectedThemes.has(c.theme); });
+    }
+    if (sessionMode === 'weak') {
+      cards = cards.filter(function(c) {
+        var p = state.cards[c.fr];
+        return !p || p.streak < 2;
+      });
+    }
+    return cards;
+  }
+
+  function updateTotalCount() {
+    var n = getEligibleCards().length;
+    document.getElementById('m-total').innerHTML = n + ' <em>cards</em>';
+    document.getElementById('start-btn').disabled = n === 0;
+  }
+
+  function updateStats() {
+    var mastered = 0;
+    Object.keys(state.cards).forEach(function(k) {
+      if (state.cards[k].streak >= 3) mastered++;
+    });
+    document.getElementById('m-mastered').innerHTML = mastered + ' <em>cards</em>';
+    document.getElementById('m-today').innerHTML = state.today.reviewed + ' <em>reviewed</em>';
+    var acc = state.today.reviewed > 0
+      ? Math.round((state.today.got / state.today.reviewed) * 100) + '% accuracy'
+      : '— accuracy';
+    document.getElementById('m-today-sub').textContent = acc;
+    document.getElementById('m-alltime').innerHTML = state.allTime + ' <em>all-time</em>';
+  }
+
+  /* ── SESSION ───────────────────────────────────────────── */
+  var deck = [];
+  var deckIndex = 0;
+  var sessionStats = { got: 0, miss: 0 };
+  var revealed = false;
+  var retryQueue = [];
+
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    return arr;
+  }
+
+  function startSession() {
+    deck = shuffle(getEligibleCards().slice());
+    if (deck.length === 0) return;
+    deckIndex = 0;
+    retryQueue = [];
+    sessionStats = { got: 0, miss: 0 };
+    document.getElementById('setup-panel').style.display = 'none';
+    document.getElementById('completion').style.display = 'none';
+    document.getElementById('session').style.display = '';
+    document.getElementById('sb-total').textContent = deck.length;
+    renderCard();
+  }
+
+  function endSession(natural) {
+    document.getElementById('session').style.display = 'none';
+    if (natural) {
+      document.getElementById('comp-got').textContent = sessionStats.got;
+      document.getElementById('comp-miss').textContent = sessionStats.miss;
+      var total = sessionStats.got + sessionStats.miss;
+      var acc = total > 0 ? Math.round((sessionStats.got / total) * 100) : 0;
+      document.getElementById('comp-acc').textContent = acc + '%';
+      document.getElementById('comp-summary').textContent =
+        'You worked through ' + total + ' card' + (total === 1 ? '' : 's') + '. Progress saved.';
+      document.getElementById('completion').style.display = '';
+    } else {
+      document.getElementById('setup-panel').style.display = '';
+    }
+    updateStats();
+  }
+
+  function renderCard() {
+    var card = deck[deckIndex];
+    revealed = false;
+    var fc = document.getElementById('card');
+    fc.classList.remove('flipped');
+    var themeMeta = window.THEME_META[card.theme];
+    document.getElementById('fc-theme').textContent =
+      (themeMeta ? themeMeta.label.replace('&amp;', '&') : card.theme);
+    document.getElementById('fc-side').textContent = direction === 'fr-en' ? 'FR → EN' : 'EN → FR';
+    var promptEl = document.getElementById('fc-prompt');
+    var posEl = document.getElementById('fc-pos');
+    var ansEl = document.getElementById('fc-answer');
+    if (direction === 'fr-en') {
+      promptEl.textContent = card.fr;
+      promptEl.classList.add('italic');
+      posEl.textContent = card.pos;
+      ansEl.textContent = card.en;
+    } else {
+      promptEl.textContent = card.en;
+      promptEl.classList.remove('italic');
+      posEl.textContent = card.pos;
+      ansEl.textContent = card.fr;
+    }
+    document.getElementById('reveal-row').style.display = '';
+    document.getElementById('judge-row').style.display = 'none';
+    document.getElementById('sb-cur').textContent = deckIndex + 1;
+    document.getElementById('sb-got').textContent = sessionStats.got;
+    document.getElementById('sb-miss').textContent = sessionStats.miss;
+    var pct = (deckIndex / deck.length) * 100;
+    document.getElementById('sb-fill').style.width = pct + '%';
+  }
+
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+    document.getElementById('card').classList.add('flipped');
+    document.getElementById('reveal-row').style.display = 'none';
+    document.getElementById('judge-row').style.display = '';
+  }
+
+  function judge(verdict) {
+    if (!revealed) return;
+    var card = deck[deckIndex];
+    var key = card.fr;
+    state.cards[key] = state.cards[key] || { streak: 0, total: 0, got: 0 };
+    state.cards[key].total += 1;
+    state.allTime += 1;
+    state.today.reviewed += 1;
+    if (verdict === 'got') {
+      state.cards[key].streak += 1;
+      state.cards[key].got += 1;
+      state.today.got += 1;
+      sessionStats.got += 1;
+    } else {
+      state.cards[key].streak = 0;
+      sessionStats.miss += 1;
+      retryQueue.push(card);
+    }
+    saveState(state);
+    next();
+  }
+
+  function next() {
+    deckIndex += 1;
+    if (deckIndex >= deck.length) {
+      if (retryQueue.length > 0) {
+        deck = deck.concat(shuffle(retryQueue));
+        retryQueue = [];
+        document.getElementById('sb-total').textContent = deck.length;
+      } else {
+        endSession(true);
+        return;
+      }
+    }
+    renderCard();
+  }
+
+  /* INTERACTIONS */
+  document.getElementById('start-btn').addEventListener('click', startSession);
+  document.getElementById('sb-end').addEventListener('click', function() { endSession(false); });
+  document.getElementById('comp-again').addEventListener('click', startSession);
+  document.getElementById('comp-home').addEventListener('click', function() {
+    document.getElementById('completion').style.display = 'none';
+    document.getElementById('setup-panel').style.display = '';
+  });
+  document.getElementById('card').addEventListener('click', function() {
+    if (!revealed) reveal();
+  });
+  document.getElementById('reveal-btn').addEventListener('click', reveal);
+  document.querySelectorAll('#judge-row button').forEach(function(btn) {
+    btn.addEventListener('click', function() { judge(btn.dataset.judge); });
+  });
+
+  /* KEYBOARD SHORTCUTS */
+  document.addEventListener('keydown', function(e) {
+    if (document.getElementById('session').style.display === 'none') return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (!revealed) reveal();
+    } else if (revealed && (e.key === '1' || e.key === 'x')) {
+      e.preventDefault(); judge('miss');
+    } else if (revealed && (e.key === '2' || e.key === 'c')) {
+      e.preventDefault(); judge('got');
+    } else if (e.key === 'Escape') {
+      endSession(false);
+    }
+  });
+
+  /* RESET */
+  document.getElementById('reset-btn').addEventListener('click', function() {
+    if (confirm('Reset all flashcard progress on this device? This cannot be undone.')) {
+      state = { cards: {}, today: { date: new Date().toDateString(), reviewed: 0, got: 0 }, allTime: 0 };
+      saveState(state);
+      updateStats();
+      updateTotalCount();
+    }
+  });
+
+  /* INIT */
+  renderThemeChips();
+  updateTotalCount();
+  updateStats();
+
+})();
+</script>
+<script src="/js/atelier.js"></script>
+</body>
+</html>

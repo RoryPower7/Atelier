@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Atelier — Leaving Cert French HL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/atelier.css">
+<style>
+  /* HOME — page-specific styles */
+
+  .greeting {
+    color: var(--sage);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 19px;
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .greeting::before { content: ''; width: 28px; height: 1px; background: var(--sage); }
+
+  /* HERO */
+  .hero {
+    padding: 60px 0 50px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 50px;
+    align-items: stretch;
+  }
+  .hero-text { display: flex; flex-direction: column; justify-content: center; }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(48px, 6.5vw, 84px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  .hero h1 .italic { font-style: italic; font-weight: 300; color: var(--sage); }
+  .hero h1 .underline {
+    background: linear-gradient(transparent 68%, var(--butter) 68%, var(--butter) 92%, transparent 92%);
+  }
+
+  .hero p { margin-top: 24px; font-size: 18px; color: var(--ink-soft); max-width: 520px; }
+  .hero-actions { margin-top: 36px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+  .hero-stats { margin-top: 44px; display: flex; gap: 36px; }
+  .stat { border-left: 2px solid var(--sage-soft); padding-left: 14px; }
+  .stat .num { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 500; }
+  .stat .lbl { font-size: 13px; color: var(--ink-soft); }
+
+  /* Hero card */
+  .hero-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    padding: 28px;
+    display: flex; flex-direction: column; gap: 16px;
+    position: relative;
+  }
+  .hero-card .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--sage); font-size: 13px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .hero-card .tag::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--sage); }
+  .hero-card h3 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 24px; line-height: 1.2; }
+  .progress { background: var(--bg-2); height: 8px; border-radius: 100px; overflow: hidden; }
+  .progress > div {
+    height: 100%; width: 62%;
+    background: linear-gradient(90deg, var(--sage), var(--sage-soft));
+    border-radius: 100px;
+  }
+  .hero-card .row { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-soft); }
+  .hero-card .continue {
+    background: var(--sage-tint); color: var(--ink);
+    border-radius: 16px; padding: 14px 18px;
+    display: flex; justify-content: space-between; align-items: center;
+    text-decoration: none; font-weight: 500; transition: all 0.2s;
+  }
+  .hero-card .continue:hover { background: var(--sage); color: white; }
+  .hero-card .continue .arr { font-size: 18px; }
+  .mini-card { background: var(--bg-2); border-radius: 16px; padding: 18px; }
+  .mini-card .h { font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; margin-bottom: 4px; }
+  .mini-card .p { font-size: 13px; color: var(--ink-soft); }
+
+  /* DAILY STRIP */
+  .strip { margin-top: 20px; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 16px; }
+  .strip .box { border-radius: 24px; padding: 26px 28px; position: relative; overflow: hidden; }
+  .strip .box.count { background: var(--butter-soft); border: 1px solid var(--butter); display: flex; align-items: center; gap: 24px; }
+  .strip .count .big { font-family: 'Fraunces', serif; font-size: 72px; font-weight: 400; line-height: 0.9; letter-spacing: -0.03em; }
+  .strip .count .lbl { font-family: 'Fraunces', serif; font-style: italic; font-size: 18px; line-height: 1.3; }
+  .strip .count .lbl span { display: block; color: var(--ink-soft); font-style: normal; font-size: 13px; margin-top: 4px; }
+  .strip .box.phrase { background: var(--sky-soft); border: 1px solid var(--sky); }
+  .strip .phrase .tag, .strip .word .tag { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin-bottom: 8px; }
+  .strip .phrase .fr { font-family: 'Fraunces', serif; font-style: italic; font-size: 22px; line-height: 1.25; }
+  .strip .phrase .en { font-size: 13px; color: var(--ink-soft); margin-top: 6px; }
+  .strip .box.word { background: var(--rose-soft); border: 1px solid var(--rose); }
+  .strip .word .fr { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 500; }
+  .strip .word .ipa { font-style: italic; color: var(--ink-soft); font-size: 14px; margin-top: 2px; }
+  .strip .word .en { font-size: 14px; margin-top: 6px; }
+
+  /* SECTIONS */
+  .section-h { margin: 90px 0 28px; display: flex; align-items: end; justify-content: space-between; }
+  .section-h h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 44px; letter-spacing: -0.02em; }
+  .section-h h2 em { color: var(--sage); font-weight: 300; }
+  .section-h .sub { color: var(--ink-soft); font-size: 15px; }
+
+  .sections { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; }
+  .s-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 26px;
+    text-decoration: none; color: var(--ink); position: relative;
+    transition: all 0.25s cubic-bezier(.2,.7,.2,1);
+    display: flex; flex-direction: column; min-height: 230px;
+  }
+  .s-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -20px rgba(0,0,0,0.15); border-color: transparent; }
+  .s-card .blob {
+    width: 52px; height: 52px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px;
+    font-family: 'Fraunces', serif; font-size: 24px; font-style: italic;
+  }
+  .s-card .blob.sage   { background: var(--sage-tint);   color: var(--sage); }
+  .s-card .blob.butter { background: var(--butter-soft);  color: #8a6a0c; }
+  .s-card .blob.rose   { background: var(--rose-soft);    color: #8b3a2e; }
+  .s-card .blob.sky    { background: var(--sky-soft);     color: #3a5b76; }
+  .s-card .blob.dark   { background: var(--ink);          color: var(--bg); }
+  .s-card .blob.cream  { background: var(--bg-2);         color: var(--ink); }
+  .s-card h4 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 22px; margin-bottom: 6px; }
+  .s-card p { font-size: 13px; color: var(--ink-soft); flex: 1; line-height: 1.5; }
+  .s-card .meta { margin-top: 16px; font-size: 12px; color: var(--ink-soft); display: flex; justify-content: space-between; align-items: center; }
+  .s-card .meta .arr { width: 28px; height: 28px; border-radius: 50%; background: var(--bg-2); display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; }
+  .s-card:hover .meta .arr { background: var(--ink); color: var(--bg); transform: rotate(-45deg); }
+  .s-card.wide { grid-column: span 2; }
+
+  /* TIPS + PAPERS */
+  .two-col { margin-top: 60px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 28px; padding: 36px; }
+  .panel.tips { background: linear-gradient(135deg, var(--sage-tint), var(--bg)); border-color: var(--sage-soft); }
+  .panel h3 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 30px; margin-bottom: 4px; letter-spacing: -0.02em; }
+  .panel h3 em { color: var(--sage); font-weight: 300; }
+  .panel .lead { color: var(--ink-soft); margin-bottom: 24px; }
+  .tip-row { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--sage-soft); }
+  .tip-row:last-child { border-bottom: none; }
+  .tip-row .n { background: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-style: italic; font-size: 15px; color: var(--sage); flex-shrink: 0; }
+  .tip-row .t { font-weight: 500; margin-bottom: 2px; font-size: 15px; }
+  .tip-row .d { font-size: 14px; color: var(--ink-soft); }
+  .papers-panel { background: var(--ink); color: var(--bg); border: none; }
+  .papers-panel h3 { color: var(--bg); }
+  .papers-panel h3 em { color: var(--butter); }
+  .papers-panel .lead { color: rgba(255,255,255,0.6); }
+  .papers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .papers-grid a { padding: 12px 8px; text-align: center; text-decoration: none; color: var(--bg); background: rgba(255,255,255,0.07); border-radius: 12px; font-family: 'Fraunces', serif; font-size: 15px; transition: all 0.2s; }
+  .papers-grid a:hover { background: var(--butter); color: var(--ink); transform: translateY(-2px); }
+  .papers-grid a.featured { background: var(--butter); color: var(--ink); }
+  .papers-foot { margin-top: 16px; font-size: 13px; color: rgba(255,255,255,0.6); }
+
+  @media (max-width: 900px) {
+    .hero, .strip, .sections, .two-col { grid-template-columns: 1fr; }
+    .s-card.wide { grid-column: span 1; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <div class="logo">
+        <div class="logo-mark">a</div>
+        <span>atelier<em>.fr</em></span>
+      </div>
+      <div class="nav-pill">
+        <a href="/index.html" class="active">Home</a>
+        <a href="/comprehensions.html">Comprehensions</a>
+        <a href="/composing.html">Composing</a>
+        <a href="/aural.html">Aural</a>
+        <a href="/verbs.html">Verbs</a>
+        <a href="/vocab.html">Vocab</a>
+        <a href="/tips.html">Tips</a>
+      </div>
+      <div class="nav-cta">
+        <div class="streak">7-day streak</div>
+        <div class="avatar">m</div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-text">
+        <div class="greeting">Bonjour — Friday, 15 May</div>
+        <h1>
+          Your <span class="italic">French</span><br>
+          revision, <span class="underline">organised</span>.
+        </h1>
+        <p>Everything you need for the Leaving Cert Higher paper — comprehensions, opinion pieces, verbs, vocab and the kind of exam advice that actually moves marks.</p>
+        <div class="hero-actions">
+          <a href="/comprehensions.html" class="btn">Continue studying →</a>
+          <a href="#sections" class="btn btn-2">Browse all sections</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="num">16</div><div class="lbl">past papers</div></div>
+          <div class="stat"><div class="num">1,800</div><div class="lbl">vocab words</div></div>
+          <div class="stat"><div class="num">62%</div><div class="lbl">your progress</div></div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="tag">Pick up where you left off</div>
+        <h3>Opinion piece — <em style="font-family:'Fraunces',serif; font-style:italic; color:var(--sage);">L'environnement et les jeunes</em></h3>
+        <div class="progress"><div></div></div>
+        <div class="row"><span>3 of 5 paragraphs drafted</span><span>~12 min left</span></div>
+        <a href="#" class="continue">
+          <span>Resume writing</span>
+          <span class="arr">→</span>
+        </a>
+        <div class="mini-card">
+          <div class="h">Next up: Comprehension 2025 Q1</div>
+          <div class="p">Journalistic text on scouting. 40 min estimated.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAILY STRIP -->
+    <div class="strip">
+      <div class="box count">
+        <div class="big" id="days-countdown">—</div>
+        <div class="lbl">days until your French paper<span>Wednesday 10 June · 9.30 a.m.</span></div>
+      </div>
+      <div class="box phrase">
+        <div class="tag">Expression of the day</div>
+        <div class="fr">« Mieux vaut tard que jamais. »</div>
+        <div class="en">Better late than never.</div>
+      </div>
+      <div class="box word">
+        <div class="tag">Mot du jour</div>
+        <div class="fr">épanouissant</div>
+        <div class="ipa">/e.pa.nwi.sɑ̃/</div>
+        <div class="en">(adj.) fulfilling, rewarding — perfect for opinion pieces about work or studies.</div>
+      </div>
+    </div>
+
+    <!-- SECTIONS -->
+    <div class="section-h" id="sections">
+      <h2>Your <em>sections</em></h2>
+      <div class="sub">tap any card to jump in</div>
+    </div>
+
+    <div class="sections">
+      <a href="/comprehensions.html" class="s-card wide">
+        <div class="blob sage">C</div>
+        <h4>Comprehensions</h4>
+        <p>Worked solutions for every Leaving Cert higher paper since 2010. Filter by theme, difficulty, or year.</p>
+        <div class="meta"><span>16 papers · 32 texts</span><span class="arr">→</span></div>
+      </a>
+      <a href="/composing.html" class="s-card wide">
+        <div class="blob butter">C</div>
+        <h4>Composing</h4>
+        <p>Opinion pieces, diaries and formal letters — structure, step-by-step phrase banks, and 2026 theme predictions.</p>
+        <div class="meta"><span>3 formats · phrase banks</span><span class="arr">→</span></div>
+      </a>
+      <a href="/verbs.html" class="s-card wide">
+        <div class="blob rose">V</div>
+        <h4>Verbs</h4>
+        <p>Conjugation tables across all tenses with audio. The 50 verbs you'll actually use on the day.</p>
+        <div class="meta"><span>All tenses · audio</span><span class="arr">→</span></div>
+      </a>
+      <a href="/vocab.html" class="s-card">
+        <div class="blob sky">M</div>
+        <h4>Vocabulary</h4>
+        <p>Themed lists you can drill into a quiz with one tap.</p>
+        <div class="meta"><span>1,800 words</span><span class="arr">→</span></div>
+      </a>
+      <a href="/tips.html" class="s-card">
+        <div class="blob cream">T</div>
+        <h4>Exam tips</h4>
+        <p>Timing, layout, marking schemes decoded.</p>
+        <div class="meta"><span>Updated 2026</span><span class="arr">→</span></div>
+      </a>
+      <a href="/aural.html" class="s-card">
+        <div class="blob butter">A</div>
+        <h4>Aural</h4>
+        <p>Audio drills from past aural papers, with adjustable playback and full transcripts.</p>
+        <div class="meta"><span>11 papers · 4 with audio</span><span class="arr">→</span></div>
+      </a>
+      <a href="/grammar.html" class="s-card">
+        <div class="blob rose">G</div>
+        <h4>Grammar</h4>
+        <p>Q3 Langue guide — tenses, pronouns, reflexives, agreements with worked examples.</p>
+        <div class="meta"><span>30+ items · 6 groups</span><span class="arr">→</span></div>
+      </a>
+      <a href="/flashcards.html" class="s-card">
+        <div class="blob sky">F</div>
+        <h4>Flashcards</h4>
+        <p>Drill your vocab list with spaced-repetition. Wrong cards come back until you nail them.</p>
+        <div class="meta"><span>340+ cards · 13 themes</span><span class="arr">→</span></div>
+      </a>
+    </div>
+
+    <!-- TIPS + PAPERS -->
+    <div class="two-col">
+      <div class="panel tips">
+        <h3>This week's <em>five tips</em></h3>
+        <p class="lead">From the chief examiner's reports — small things that consistently move marks on the higher paper.</p>
+        <div class="tip-row">
+          <div class="n">1</div>
+          <div><div class="t">Anchor opinion pieces in the stimulus.</div><div class="d">Quote or paraphrase it explicitly in your opening sentence.</div></div>
+        </div>
+        <div class="tip-row">
+          <div class="n">2</div>
+          <div><div class="t">Use three tenses, minimum.</div><div class="d">Present + passé composé + imparfait shows control even in short pieces.</div></div>
+        </div>
+        <div class="tip-row">
+          <div class="n">3</div>
+          <div><div class="t">Learn three sophisticated connectors.</div><div class="d">"Néanmoins, en revanche, par ailleurs" — drop them naturally.</div></div>
+        </div>
+        <div class="tip-row">
+          <div class="n">4</div>
+          <div><div class="t">Section II is half the written paper.</div><div class="d">Budget 90 minutes for it. Most students under-allocate.</div></div>
+        </div>
+        <div class="tip-row">
+          <div class="n">5</div>
+          <div><div class="t">Final 8 minutes: verb endings and accents.</div><div class="d">The cheapest marks on the whole paper.</div></div>
+        </div>
+      </div>
+
+      <div class="panel papers-panel">
+        <h3>Past <em>papers</em></h3>
+        <p class="lead">Every higher paper from 2010 to 2025, with solutions and marking schemes.</p>
+        <div class="papers-grid">
+          <a href="/texts/2025-q1.html" class="featured">2025</a>
+          <a href="/texts/2024-q1.html">2024</a>
+          <a href="/texts/2023-q1.html">2023</a>
+          <a href="/texts/2022-q1.html">2022</a>
+          <a href="/texts/2021-q1.html">2021</a>
+          <a href="/texts/2020-q1.html">2020</a>
+          <a href="/texts/2019-q1.html">2019</a>
+          <a href="/texts/2018-q1.html">2018</a>
+          <a href="/texts/2017-q1.html">2017</a>
+          <a href="/texts/2016-q1.html">2016</a>
+          <a href="/texts/2015-q1.html">2015</a>
+          <a href="/texts/2014-q1.html">2014</a>
+          <a href="/texts/2013-q1.html">2013</a>
+          <a href="/texts/2012-q1.html">2012</a>
+          <a href="/texts/2011-q1.html">2011</a>
+          <a href="/texts/2010-q1.html">2010</a>
+        </div>
+        <div class="papers-foot">Includes the 2025 marking scheme — yellow tabs indicate full worked solutions.</div>
+      </div>
+    </div>
+
+    <footer>
+      <div>Atelier · <em>built for Leaving Cert HL French</em></div>
+      <div>Bonne chance pour les examens 🍀</div>
+    </footer>
+
+  </div>
+
+<script src="/js/atelier.js"></script>
+</body>
+</html>

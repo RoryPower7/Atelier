@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Q3 Langue Guide — Atelier · LC French HL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/atelier.css">
+<style>
+  /* GRAMMAR — page-specific styles */
+
+  /* CATEGORY NAV (sticky tabs) */
+  .cat-nav {
+    position: sticky; top: 12px; z-index: 40;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 100px; padding: 8px;
+    display: flex; gap: 4px; flex-wrap: wrap;
+    margin-bottom: 36px;
+    box-shadow: 0 10px 30px -18px rgba(0,0,0,0.12);
+  }
+  .cat-nav a {
+    background: transparent; color: var(--ink-soft);
+    padding: 8px 14px; border-radius: 100px;
+    font-family: inherit; font-size: 13px; font-weight: 600; text-decoration: none;
+    transition: all 0.15s; cursor: pointer;
+  }
+  .cat-nav a:hover { background: var(--bg-2); color: var(--ink); }
+  .cat-nav a.active { background: var(--ink); color: var(--bg); }
+
+  /* SECTION HEADERS */
+  .gr-section { margin-bottom: 60px; scroll-margin-top: 100px; }
+  .gr-section-head {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 14px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--line);
+  }
+  .gr-section-head .ic {
+    width: 44px; height: 44px; border-radius: 14px;
+    background: var(--sage-tint); color: var(--sage);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 22px;
+    flex-shrink: 0;
+  }
+  .gr-section-head .ic.rose   { background: var(--rose-soft);   color: #8b3a2e; }
+  .gr-section-head .ic.sky    { background: var(--sky-soft);    color: #3a5b76; }
+  .gr-section-head .ic.butter { background: var(--butter-soft); color: #8a6a0c; }
+  .gr-section-head .ic.lilac  { background: var(--lilac-soft);  color: #5a4a76; }
+  .gr-section-head .ic.dark   { background: var(--ink);         color: var(--bg); }
+  .gr-section-head h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 30px; letter-spacing: -0.02em; }
+  .gr-section-head h2 em { font-style: italic; color: var(--sage); font-weight: 300; }
+  .gr-section-head .count { margin-left: auto; font-family: 'Geist Mono', monospace; font-size: 13px; color: var(--ink-soft); }
+  .gr-section-lead { color: var(--ink-soft); font-size: 15px; max-width: 740px; margin-bottom: 24px; line-height: 1.6; }
+
+  /* GRAMMAR CARDS */
+  .gr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .gr-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 22px; padding: 24px 26px;
+    transition: all 0.18s;
+  }
+  .gr-card:hover { border-color: var(--sage-soft); box-shadow: 0 12px 30px -18px rgba(0,0,0,0.08); }
+  .gr-card .gc-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .gr-card h3 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 20px; letter-spacing: -0.01em; }
+  .gr-card h3 em { font-style: italic; color: var(--sage); font-weight: 400; }
+  .gr-card .badge {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 3px 9px; border-radius: 100px;
+    background: var(--bg-2); color: var(--ink-soft);
+  }
+  .gr-card .badge.hot { background: var(--rose-soft); color: #8b3a2e; }
+  .gr-card .badge.common { background: var(--butter-soft); color: #8a6a0c; }
+  .gr-card .french-name {
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; color: var(--ink-soft);
+    margin-bottom: 14px;
+  }
+  .gr-card .rule {
+    font-size: 14px; line-height: 1.55; margin-bottom: 14px;
+  }
+  .gr-card .rule strong { font-weight: 600; }
+  .gr-card .spot {
+    background: var(--sage-tint); border-radius: 12px; padding: 12px 14px;
+    margin-bottom: 12px; font-size: 13px; line-height: 1.5;
+  }
+  .gr-card .spot::before {
+    content: 'How to spot it'; display: block;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--sage); margin-bottom: 5px;
+  }
+  .gr-card .example {
+    background: var(--bg-2); border-radius: 12px; padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .gr-card .example::before {
+    content: 'Example'; display: block;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--ink-soft); margin-bottom: 6px;
+  }
+  .gr-card .example .ex-fr {
+    font-family: 'Fraunces', serif; font-size: 15px; line-height: 1.5;
+  }
+  .gr-card .example .ex-fr mark {
+    background: var(--butter); color: var(--ink); padding: 1px 4px; border-radius: 4px; font-weight: 500;
+  }
+  .gr-card .example .ex-en {
+    font-size: 12px; color: var(--ink-soft); margin-top: 4px; font-style: italic;
+  }
+  .gr-card .pitfall {
+    border-left: 3px solid var(--rose); background: var(--rose-soft);
+    padding: 10px 14px; border-radius: 0 10px 10px 0; font-size: 13px;
+    color: #7c2e25;
+  }
+  .gr-card .pitfall::before {
+    content: '⚠ Trap'; display: block;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    color: #7c2e25; margin-bottom: 4px;
+  }
+
+  /* ENDINGS TABLE (used inside some cards) */
+  .endings {
+    background: var(--bg); border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 14px;
+    font-family: 'Geist Mono', monospace; font-size: 12px;
+    margin-bottom: 12px;
+  }
+  .endings .row { display: flex; justify-content: space-between; padding: 3px 0; }
+  .endings .row + .row { border-top: 1px solid var(--line); }
+  .endings .row .who { color: var(--ink-soft); }
+  .endings .row .end { color: var(--sage); font-weight: 600; }
+
+  /* MARKING NOTE (final box) */
+  .marking-note {
+    background: var(--ink); color: var(--bg);
+    border-radius: 24px; padding: 32px 36px; margin-bottom: 48px;
+  }
+  .marking-note h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 26px; letter-spacing: -0.01em; margin-bottom: 6px; }
+  .marking-note h2 em { font-style: italic; color: var(--butter); font-weight: 300; }
+  .marking-note p { color: rgba(255,255,255,0.75); font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+  .marking-note p:last-child { margin-bottom: 0; }
+  .marking-note strong { color: var(--butter); font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .gr-grid { grid-template-columns: 1fr; }
+    .cat-nav { padding: 6px; }
+    .cat-nav a { padding: 6px 10px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <div class="logo">
+        <div class="logo-mark">a</div>
+        <span>atelier<em>.fr</em></span>
+      </div>
+      <div class="nav-pill">
+        <a href="/index.html">Home</a>
+        <a href="/comprehensions.html">Comprehensions</a>
+        <a href="/composing.html">Composing</a>
+        <a href="/aural.html">Aural</a>
+        <a href="/verbs.html">Verbs</a>
+        <a href="/vocab.html">Vocab</a>
+        <a href="/tips.html">Tips</a>
+      </div>
+      <div class="nav-cta">
+        <div class="streak">7-day streak</div>
+        <div class="avatar">m</div>
+      </div>
+    </nav>
+
+    <div class="crumb">
+      <a href="/index.html">Home</a>
+      <span class="sep">/</span>
+      <a href="/comprehensions.html">Comprehensions</a>
+      <span class="sep">/</span>
+      <span class="here">Q3 Langue · The grammar guide</span>
+    </div>
+
+    <header class="page-head">
+      <div>
+        <div class="greeting">Bonjour — own the small stuff</div>
+        <h1>Q3 Langue <span class="italic">guide.</span></h1>
+        <p class="lead">Section I, Q3 is 30 marks for spotting and identifying grammatical features in the text. Every category that has appeared since 2010 — what it looks like, how to spot it, and the traps that lose marks.</p>
+      </div>
+      <div class="meta-cards">
+        <div class="meta-card featured">
+          <div class="lbl">Q3 worth</div>
+          <div class="val">30 <em>marks</em></div>
+          <div class="sub">10% of written paper</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Recommended time</div>
+          <div class="val">10–15 <em>mins</em></div>
+          <div class="sub">don't over-invest</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Categories covered</div>
+          <div class="val">30+ <em>items</em></div>
+          <div class="sub">across 6 groups</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">Most common ask</div>
+          <div class="val">Verb <em>tenses</em></div>
+          <div class="sub">~50% of Q3 questions</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CATEGORY NAV -->
+    <div class="cat-nav" id="cat-nav">
+      <a href="#verbs" class="active">Verbs &amp; tenses</a>
+      <a href="#pronouns">Pronouns</a>
+      <a href="#reflexive">Reflexive verbs</a>
+      <a href="#adjectives">Adjectives</a>
+      <a href="#negation">Negation</a>
+      <a href="#other">Adverbs &amp; more</a>
+      <a href="#marking">Marking</a>
+    </div>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- VERBS & TENSES -->
+    <section class="gr-section" id="verbs">
+      <div class="gr-section-head">
+        <div class="ic">V</div>
+        <h2>Verbs &amp; <em>tenses</em></h2>
+        <span class="count">11 forms</span>
+      </div>
+      <p class="gr-section-lead">The single most common Q3 question type. You'll be asked to find one verb in a specific tense or form. Memorise the ending pattern for each — that's how you spot them at a glance. <strong>One example is enough</strong> for full marks; extra material loses marks.</p>
+
+      <div class="gr-grid">
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Présent <em>de l'indicatif</em></h3><span class="badge">Standard</span></div>
+          <div class="french-name">Present tense</div>
+          <div class="rule">The default tense for habits, general truths, and ongoing actions. Rarely asked for directly — but watch for it as a contrast in manipulation questions.</div>
+          <div class="endings">
+            <div class="row"><span class="who">-er verbs</span><span class="end">-e -es -e -ons -ez -ent</span></div>
+            <div class="row"><span class="who">-ir verbs</span><span class="end">-is -is -it -issons -issez -issent</span></div>
+            <div class="row"><span class="who">-re verbs</span><span class="end">-s -s -∅ -ons -ez -ent</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr">Elle <mark>habite</mark> à Paris depuis cinq ans.</div>
+            <div class="ex-en">She has lived in Paris for five years.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Passé composé</h3><span class="badge hot">Very common</span></div>
+          <div class="french-name">Perfect tense (past)</div>
+          <div class="rule"><strong>Two words:</strong> auxiliary verb (<em>avoir</em> or <em>être</em>) in the present tense + past participle. Used for completed actions in the past.</div>
+          <div class="spot">Look for <strong>a / as / ai / avons / avez / ont</strong> or <strong>est / sont / suis / es / sommes / êtes</strong>, immediately followed by a past participle (-é, -i, -u, -is, -it).</div>
+          <div class="example">
+            <div class="ex-fr">Billie <mark>a découvert</mark> le film <em>Swagger</em>.</div>
+            <div class="ex-en">Billie discovered the film Swagger.</div>
+          </div>
+          <div class="pitfall">Always quote <strong>both</strong> words (<em>a découvert</em>). Quoting just the past participle (<em>découvert</em>) loses marks — it's the participle alone, not the tense.</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Imparfait</h3><span class="badge hot">Very common</span></div>
+          <div class="french-name">Imperfect tense</div>
+          <div class="rule">Used for ongoing or repeated past actions ("was doing", "used to do"). Always one word.</div>
+          <div class="endings">
+            <div class="row"><span class="who">All verbs</span><span class="end">-ais -ais -ait -ions -iez -aient</span></div>
+          </div>
+          <div class="spot">Look at the verb's ending. If it ends in <strong>-ais, -ait, -ions, -iez, -aient</strong> AND there's no auxiliary, it's imparfait.</div>
+          <div class="example">
+            <div class="ex-fr">Quand j'<mark>étais</mark> petit, je <mark>jouais</mark> au foot.</div>
+            <div class="ex-en">When I was small, I used to play football.</div>
+          </div>
+          <div class="pitfall"><em>-ions / -iez</em> endings also appear in présent (nous/vous) and conditionnel. Check the stem: imparfait keeps the same stem as the <em>nous</em> present form.</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Plus-que-parfait</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">Pluperfect tense</div>
+          <div class="rule">"Had done" — an action completed before another past action. <strong>Avoir/être in the imparfait</strong> + past participle.</div>
+          <div class="spot">Look for <strong>avait / avaient / avais / avions / aviez</strong> or <strong>était / étaient / étais / étions / étiez</strong> followed by a past participle.</div>
+          <div class="example">
+            <div class="ex-fr">Il <mark>avait fini</mark> ses devoirs avant le dîner.</div>
+            <div class="ex-en">He had finished his homework before dinner.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Futur simple</h3><span class="badge common">Common</span></div>
+          <div class="french-name">Simple future tense</div>
+          <div class="rule">One word. Built from the <strong>infinitive + ending</strong>. Used for predictions and definite future actions.</div>
+          <div class="endings">
+            <div class="row"><span class="who">All verbs</span><span class="end">-ai -as -a -ons -ez -ont</span></div>
+          </div>
+          <div class="spot">Find a verb where the infinitive is still visible (you can see the -r-) followed by the future ending: <em>parler<strong>a</strong>, finir<strong>ai</strong>, prendr<strong>ont</strong></em>.</div>
+          <div class="example">
+            <div class="ex-fr">Demain, nous <mark>partirons</mark> à six heures.</div>
+            <div class="ex-en">Tomorrow we will leave at six.</div>
+          </div>
+          <div class="pitfall">Don't confuse with conditionnel. Futur stem + <em>-ai/-as/-a/-ons/-ez/-ont</em>. Conditionnel = same stem + <em>-ais/-ait/-ions/-iez/-aient</em>.</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Futur proche</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">Near future</div>
+          <div class="rule"><strong>aller (present) + infinitive</strong>. Translates as "going to do".</div>
+          <div class="spot">Look for <strong>vais / vas / va / allons / allez / vont</strong> immediately followed by a verb in the infinitive.</div>
+          <div class="example">
+            <div class="ex-fr">Je <mark>vais voir</mark> mes grands-parents ce week-end.</div>
+            <div class="ex-en">I am going to see my grandparents this weekend.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Conditionnel</h3><span class="badge common">Common</span></div>
+          <div class="french-name">Conditional mood</div>
+          <div class="rule">"Would do". Built from the <strong>future stem + imparfait endings</strong>. Common after <em>si + imparfait</em> clauses.</div>
+          <div class="endings">
+            <div class="row"><span class="who">All verbs</span><span class="end">-rais -rais -rait -rions -riez -raient</span></div>
+          </div>
+          <div class="spot">Verb has the infinitive (still ends in -r) followed by <em>-ais, -ait, -ions, -iez, -aient</em>. The <strong>-r-</strong> right before the ending is the giveaway.</div>
+          <div class="example">
+            <div class="ex-fr">Si j'étais riche, j'<mark>achèterais</mark> une maison.</div>
+            <div class="ex-en">If I were rich, I would buy a house.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Subjonctif présent</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">Present subjunctive</div>
+          <div class="rule">Used after expressions of doubt, emotion, necessity, or will — most often after <em>il faut que</em>, <em>je veux que</em>, <em>bien que</em>, <em>pour que</em>, <em>avant que</em>.</div>
+          <div class="endings">
+            <div class="row"><span class="who">All verbs</span><span class="end">-e -es -e -ions -iez -ent</span></div>
+          </div>
+          <div class="spot">Find a verb after <strong>que</strong> in one of these triggers: <em>il faut que, je veux que, bien que, à condition que, avant que, pour que</em>.</div>
+          <div class="example">
+            <div class="ex-fr">Il faut que tu <mark>fasses</mark> tes devoirs.</div>
+            <div class="ex-en">You must do your homework.</div>
+          </div>
+          <div class="pitfall">Subjunctive forms of irregular verbs (être → <em>sois, soit, soyons</em>; avoir → <em>aie, ait, ayons</em>; faire → <em>fasse</em>; aller → <em>aille</em>; pouvoir → <em>puisse</em>) are common in exam texts.</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Impératif</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">Imperative (command form)</div>
+          <div class="rule">Used for orders, advice, and instructions. <strong>No subject pronoun.</strong> Only 3 persons: <em>tu, nous, vous</em>.</div>
+          <div class="spot">A verb at the <strong>start of a sentence or clause with no subject</strong>, often followed by an exclamation mark or punctuated as advice.</div>
+          <div class="example">
+            <div class="ex-fr"><mark>Écoutez</mark> attentivement ! <mark>Prends</mark> ton manteau.</div>
+            <div class="ex-en">Listen carefully! Take your coat.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Participe présent</h3><span class="badge hot">Very common</span></div>
+          <div class="french-name">Present participle (-ant)</div>
+          <div class="rule">Ends in <strong>-ant</strong>. Often preceded by <em>en</em> (= gérondif: "by doing / while doing"). Built from the <em>nous</em> form of the present, replacing -ons with -ant.</div>
+          <div class="spot">Any single word ending in <strong>-ant</strong> that comes from a verb. Watch out for adjectives that also end in -ant (intéressant) — those are NOT participe présent.</div>
+          <div class="example">
+            <div class="ex-fr">Il a réagi <mark>en criant</mark> sur les élèves.</div>
+            <div class="ex-en">He reacted by shouting at the students.</div>
+          </div>
+          <div class="pitfall">Exclude pure adjectives: <em>intéressant, charmant, fatigant</em>. These describe a noun, not an action. The participle is always a verb form.</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Infinitif</h3><span class="badge">Standard</span></div>
+          <div class="french-name">Infinitive</div>
+          <div class="rule">The dictionary form of the verb. Ends in <strong>-er, -ir, -re,</strong> or <strong>-oir</strong>. Often follows a preposition (à, de, pour, sans) or a modal verb (pouvoir, devoir, vouloir, savoir).</div>
+          <div class="spot">Look <strong>after a preposition</strong> (à manger, de partir, pour finir, sans dire) or <strong>after a modal verb</strong> (je veux aller, il peut faire, on doit étudier).</div>
+          <div class="example">
+            <div class="ex-fr">Elle veut <mark>devenir</mark> infirmière.</div>
+            <div class="ex-en">She wants to become a nurse.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- PRONOUNS -->
+    <section class="gr-section" id="pronouns">
+      <div class="gr-section-head">
+        <div class="ic sky">P</div>
+        <h2>Pronouns — <em>les pronoms</em></h2>
+        <span class="count">7 types</span>
+      </div>
+      <p class="gr-section-lead">Pronouns replace nouns. Q3 will often ask you to find a specific type or to <em>replace</em> a phrase with the appropriate pronoun. Position matters: most object pronouns go <strong>before the verb</strong>, not after.</p>
+
+      <div class="gr-grid">
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Subject pronouns</h3><span class="badge">Standard</span></div>
+          <div class="french-name">Les pronoms sujets</div>
+          <div class="rule"><strong>je, tu, il, elle, on, nous, vous, ils, elles</strong>. Always come <strong>before the verb</strong>. The verb conjugates to match.</div>
+          <div class="example">
+            <div class="ex-fr"><mark>On</mark> ne sait jamais. <mark>Elles</mark> sont parties hier.</div>
+            <div class="ex-en">You never know. They (f) left yesterday.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Direct object pronouns</h3><span class="badge common">Common</span></div>
+          <div class="french-name">COD — pronoms compléments d'objet direct</div>
+          <div class="rule">Replace a noun directly affected by the verb (no preposition). <strong>me, te, le, la, nous, vous, les</strong>. Go <strong>before</strong> the conjugated verb.</div>
+          <div class="spot">Find a verb where the action passes directly to its target — and a small pronoun (le, la, les, me, te) sitting just <strong>before</strong> that verb.</div>
+          <div class="example">
+            <div class="ex-fr">Je <mark>les</mark> ai vus au cinéma. Tu <mark>le</mark> connais ?</div>
+            <div class="ex-en">I saw them at the cinema. Do you know him?</div>
+          </div>
+          <div class="pitfall">In the passé composé, the past participle agrees with a <strong>direct object that comes before</strong> (<em>les livres que j'ai lus</em>, not <em>lu</em>).</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Indirect object pronouns</h3><span class="badge common">Common</span></div>
+          <div class="french-name">COI — pronoms compléments d'objet indirect</div>
+          <div class="rule">Replace nouns introduced by <strong>à</strong> (à quelqu'un). Forms: <strong>me, te, lui, nous, vous, leur</strong>. <em>Lui</em> = to him OR to her; <em>leur</em> = to them.</div>
+          <div class="spot">The verb usually takes <em>à</em> (parler à, dire à, donner à, répondre à, téléphoner à). The pronoun replaces <em>à + person</em>.</div>
+          <div class="example">
+            <div class="ex-fr">Je <mark>lui</mark> ai parlé hier. On <mark>leur</mark> donne des cadeaux.</div>
+            <div class="ex-en">I spoke to him/her yesterday. We give them gifts.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Relative pronouns</h3><span class="badge hot">Very common</span></div>
+          <div class="french-name">qui · que · dont · où</div>
+          <div class="rule">Link a noun to a relative clause. Pick the right one based on what the noun does in the clause:</div>
+          <div class="endings">
+            <div class="row"><span class="who">qui</span><span class="end">subject (= who/which does)</span></div>
+            <div class="row"><span class="who">que</span><span class="end">direct object (= whom/which gets)</span></div>
+            <div class="row"><span class="who">dont</span><span class="end">replaces <em>de + noun</em></span></div>
+            <div class="row"><span class="who">où</span><span class="end">place or time</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr">Le livre <mark>que</mark> j'ai lu, l'auteur <mark>dont</mark> on parle, la ville <mark>où</mark> j'habite.</div>
+            <div class="ex-en">The book that I read, the author we are talking about, the city where I live.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>The pronoun <em>en</em></h3><span class="badge">Periodic</span></div>
+          <div class="french-name">en</div>
+          <div class="rule">Replaces <strong>de + noun</strong> (a thing). Also replaces nouns introduced by <em>du, de la, des</em>. Translates loosely as "some / of it / of them".</div>
+          <div class="spot">A small word <em>en</em> sitting just before the verb, where the verb's structure uses <em>de</em> (parler de, avoir besoin de, venir de).</div>
+          <div class="example">
+            <div class="ex-fr">Tu as des frères ? — Oui, j'<mark>en</mark> ai deux. Il <mark>en</mark> parle souvent.</div>
+            <div class="ex-en">Do you have brothers? — Yes, I have two (of them). He talks about it often.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>The pronoun <em>y</em></h3><span class="badge">Periodic</span></div>
+          <div class="french-name">y</div>
+          <div class="rule">Replaces <strong>à + place</strong> (where to) or <strong>à + thing</strong> (about something). Means "there" or "to it / about it".</div>
+          <div class="spot">Single letter <em>y</em> before the verb, where the verb either uses <em>à</em> (penser à, réfléchir à) or refers to a place.</div>
+          <div class="example">
+            <div class="ex-fr">Je vais à Paris ? — Non, j'<mark>y</mark> suis déjà.</div>
+            <div class="ex-en">Am I going to Paris? — No, I'm already there.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Demonstrative pronouns</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">celui · celle · ceux · celles</div>
+          <div class="rule">"This one / that one / the one(s)". Replace a noun without naming it again. Agree in gender and number.</div>
+          <div class="endings">
+            <div class="row"><span class="who">m.s.</span><span class="end">celui</span></div>
+            <div class="row"><span class="who">f.s.</span><span class="end">celle</span></div>
+            <div class="row"><span class="who">m.pl.</span><span class="end">ceux</span></div>
+            <div class="row"><span class="who">f.pl.</span><span class="end">celles</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr">Ce livre n'est pas <mark>celui</mark> que j'ai acheté.</div>
+            <div class="ex-en">This book is not the one I bought.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- REFLEXIVE VERBS -->
+    <section class="gr-section" id="reflexive">
+      <div class="gr-section-head">
+        <div class="ic rose">R</div>
+        <h2>Reflexive — <em>verbes pronominaux</em></h2>
+        <span class="count">Spot guide</span>
+      </div>
+      <p class="gr-section-lead">A reflexive verb has a pronoun that <strong>refers back to the subject</strong>. Common ask in Q3: <em>"Find an example of a reflexive verb in the second section."</em> One of the easiest 5 marks on the paper once you know what to look for.</p>
+
+      <div class="gr-grid">
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>What they look like</h3><span class="badge hot">Very common</span></div>
+          <div class="french-name">se + verb</div>
+          <div class="rule">In the infinitive, every reflexive verb starts with <strong>se</strong> (or <em>s'</em> before a vowel): <em>se laver, s'habiller, se réveiller, s'amuser</em>. The <em>se</em> changes to match the subject when conjugated.</div>
+          <div class="endings">
+            <div class="row"><span class="who">je</span><span class="end">me lave</span></div>
+            <div class="row"><span class="who">tu</span><span class="end">te laves</span></div>
+            <div class="row"><span class="who">il / elle / on</span><span class="end">se lave</span></div>
+            <div class="row"><span class="who">nous</span><span class="end">nous lavons</span></div>
+            <div class="row"><span class="who">vous</span><span class="end">vous lavez</span></div>
+            <div class="row"><span class="who">ils / elles</span><span class="end">se lavent</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr">Elle <mark>se réveille</mark> à sept heures. Nous <mark>nous habillons</mark> rapidement.</div>
+            <div class="ex-en">She wakes up at seven. We get dressed quickly.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>How to spot one in a text</h3><span class="badge">Method</span></div>
+          <div class="french-name">Le test rapide</div>
+          <div class="rule">Scan for <strong>me, te, se, nous, vous</strong> sitting <strong>just before a verb</strong>, where that pronoun is the <strong>same person</strong> as the subject.</div>
+          <div class="spot">If the subject is <em>il</em> and you see <strong>se</strong> + verb → reflexive. If the subject is <em>je</em> and you see <strong>me</strong> + verb → reflexive. The pronoun "mirrors" the subject.</div>
+          <div class="example">
+            <div class="ex-fr">Billie <mark>s'intéresse</mark> au cinéma. Il <mark>se sent</mark> bien.</div>
+            <div class="ex-en">Billie is interested in cinema. He feels good.</div>
+          </div>
+          <div class="pitfall">Don't confuse with object pronouns. <em>Je le vois</em> = <em>le</em> refers to someone else (object). <em>Je me lave</em> = <em>me</em> refers to the same person as <em>je</em> (reflexive).</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Common reflexive verbs in past papers</h3><span class="badge common">Useful list</span></div>
+          <div class="french-name">À mémoriser</div>
+          <div class="rule">These show up repeatedly in exam texts. If you can recognise these, you'll spot the reflexive in seconds:</div>
+          <div class="endings">
+            <div class="row"><span class="who">se sentir</span><span class="end">to feel</span></div>
+            <div class="row"><span class="who">s'intéresser à</span><span class="end">to be interested in</span></div>
+            <div class="row"><span class="who">se rendre compte</span><span class="end">to realise</span></div>
+            <div class="row"><span class="who">se débrouiller</span><span class="end">to manage</span></div>
+            <div class="row"><span class="who">s'occuper de</span><span class="end">to look after</span></div>
+            <div class="row"><span class="who">s'habituer à</span><span class="end">to get used to</span></div>
+            <div class="row"><span class="who">se passer</span><span class="end">to happen</span></div>
+            <div class="row"><span class="who">se trouver</span><span class="end">to be located</span></div>
+            <div class="row"><span class="who">se demander</span><span class="end">to wonder</span></div>
+            <div class="row"><span class="who">s'adapter</span><span class="end">to adapt</span></div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Reflexive in the past tense</h3><span class="badge">Watch out</span></div>
+          <div class="french-name">Passé composé pronominal</div>
+          <div class="rule">All reflexive verbs use <strong>être</strong> (never avoir) in the perfect tense. The past participle <strong>usually agrees</strong> with the subject.</div>
+          <div class="example">
+            <div class="ex-fr">Elle <mark>s'est levée</mark> tôt. Ils <mark>se sont disputés</mark>.</div>
+            <div class="ex-en">She got up early. They argued.</div>
+          </div>
+          <div class="pitfall">When asked to quote in past tense, include <strong>all three words</strong>: pronoun + auxiliary + participle (<em>s'est levée</em>, not just <em>levée</em>).</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- ADJECTIVES -->
+    <section class="gr-section" id="adjectives">
+      <div class="gr-section-head">
+        <div class="ic butter">A</div>
+        <h2>Adjectives — <em>les adjectifs</em></h2>
+        <span class="count">6 types</span>
+      </div>
+      <p class="gr-section-lead">Adjectives modify nouns and <strong>agree in gender and number</strong>. Q3 often asks you to find a specific type or identify what an adjective agrees with. Watch the endings: <em>-e</em> for feminine, <em>-s</em> for plural, <em>-es</em> for both.</p>
+
+      <div class="gr-grid">
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Possessive adjectives</h3><span class="badge hot">Very common</span></div>
+          <div class="french-name">Adjectifs possessifs</div>
+          <div class="rule">Show ownership. Agree with the <strong>thing owned</strong>, not the owner.</div>
+          <div class="endings">
+            <div class="row"><span class="who">my</span><span class="end">mon · ma · mes</span></div>
+            <div class="row"><span class="who">your (tu)</span><span class="end">ton · ta · tes</span></div>
+            <div class="row"><span class="who">his/her/its</span><span class="end">son · sa · ses</span></div>
+            <div class="row"><span class="who">our</span><span class="end">notre · notre · nos</span></div>
+            <div class="row"><span class="who">your (vous)</span><span class="end">votre · votre · vos</span></div>
+            <div class="row"><span class="who">their</span><span class="end">leur · leur · leurs</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr"><mark>Son</mark> père, <mark>sa</mark> mère et <mark>ses</mark> frères vivent à Paris.</div>
+            <div class="ex-en">His/her father, mother and brothers live in Paris.</div>
+          </div>
+          <div class="pitfall">Use <em>mon, ton, son</em> (not ma/ta/sa) before a feminine noun starting with a vowel: <em>mon amie, son école</em>.</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Demonstrative adjectives</h3><span class="badge common">Common</span></div>
+          <div class="french-name">Adjectifs démonstratifs</div>
+          <div class="rule">"This / that / these / those". Always followed by a noun.</div>
+          <div class="endings">
+            <div class="row"><span class="who">m.s.</span><span class="end">ce (cet before vowel)</span></div>
+            <div class="row"><span class="who">f.s.</span><span class="end">cette</span></div>
+            <div class="row"><span class="who">m./f. pl.</span><span class="end">ces</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr"><mark>Ce</mark> livre, <mark>cet</mark> appartement, <mark>cette</mark> idée, <mark>ces</mark> enfants.</div>
+            <div class="ex-en">This book, this apartment, this idea, these children.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Indefinite adjectives</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">Adjectifs indéfinis</div>
+          <div class="rule">Refer to unspecified quantity or identity. The most common ones are easy to recognise once you know the list.</div>
+          <div class="endings">
+            <div class="row"><span class="who">chaque</span><span class="end">each / every</span></div>
+            <div class="row"><span class="who">plusieurs</span><span class="end">several</span></div>
+            <div class="row"><span class="who">quelques</span><span class="end">a few</span></div>
+            <div class="row"><span class="who">certains</span><span class="end">certain / some</span></div>
+            <div class="row"><span class="who">tous · toute · toutes</span><span class="end">all</span></div>
+            <div class="row"><span class="who">même</span><span class="end">same</span></div>
+            <div class="row"><span class="who">autre</span><span class="end">other</span></div>
+            <div class="row"><span class="who">aucun(e)</span><span class="end">no / not any</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr"><mark>Chaque</mark> élève reçoit <mark>plusieurs</mark> livres.</div>
+            <div class="ex-en">Each student receives several books.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Interrogative <em>quel</em></h3><span class="badge">Periodic</span></div>
+          <div class="french-name">Adjectif interrogatif</div>
+          <div class="rule">"Which / what". Agrees with the noun it modifies. Used in questions.</div>
+          <div class="endings">
+            <div class="row"><span class="who">m.s.</span><span class="end">quel</span></div>
+            <div class="row"><span class="who">f.s.</span><span class="end">quelle</span></div>
+            <div class="row"><span class="who">m.pl.</span><span class="end">quels</span></div>
+            <div class="row"><span class="who">f.pl.</span><span class="end">quelles</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr"><mark>Quelle</mark> heure est-il ? <mark>Quels</mark> sont vos projets ?</div>
+            <div class="ex-en">What time is it? What are your plans?</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Comparative</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">Le comparatif</div>
+          <div class="rule">Compare two things. Pattern: <strong>plus / moins / aussi + adjective + que</strong>.</div>
+          <div class="endings">
+            <div class="row"><span class="who">plus … que</span><span class="end">more … than</span></div>
+            <div class="row"><span class="who">moins … que</span><span class="end">less … than</span></div>
+            <div class="row"><span class="who">aussi … que</span><span class="end">as … as</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr">Paris est <mark>plus grande que</mark> Dublin.</div>
+            <div class="ex-en">Paris is bigger than Dublin.</div>
+          </div>
+          <div class="pitfall">Irregular: <em>bon → meilleur</em>, <em>bien → mieux</em>, <em>mauvais → pire</em>.</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Superlative</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">Le superlatif</div>
+          <div class="rule">"The most / the least". Pattern: <strong>le / la / les + plus / moins + adjective</strong>. Adjective agrees with the noun.</div>
+          <div class="example">
+            <div class="ex-fr">C'est <mark>la plus belle</mark> ville du monde.</div>
+            <div class="ex-en">It is the most beautiful city in the world.</div>
+          </div>
+          <div class="pitfall">After a superlative, use <strong>de</strong> (not <em>dans</em>): <em>la plus belle ville <strong>de</strong> France</em>.</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- NEGATION -->
+    <section class="gr-section" id="negation">
+      <div class="gr-section-head">
+        <div class="ic lilac">N</div>
+        <h2>Negation — <em>la négation</em></h2>
+        <span class="count">8 forms</span>
+      </div>
+      <p class="gr-section-lead">Q3 may ask you to put a phrase into the negative, or to find an example of a specific negation. Every French negation has <strong>two parts</strong> (ne …  X) that sandwich the verb.</p>
+
+      <div class="gr-grid">
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>ne … pas</h3><span class="badge">Standard</span></div>
+          <div class="french-name">not</div>
+          <div class="rule">The basic negation. <em>Ne</em> goes before the verb; <em>pas</em> goes after. Drops to <em>n'</em> before a vowel.</div>
+          <div class="example">
+            <div class="ex-fr">Je <mark>ne</mark> sais <mark>pas</mark>. Il <mark>n'</mark>aime <mark>pas</mark> les épinards.</div>
+            <div class="ex-en">I don't know. He doesn't like spinach.</div>
+          </div>
+          <div class="pitfall">In the passé composé, both parts sandwich the <strong>auxiliary</strong>, not the participle: <em>Je <strong>n'</strong>ai <strong>pas</strong> mangé</em>.</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>ne … plus</h3><span class="badge common">Common</span></div>
+          <div class="french-name">no longer / not any more</div>
+          <div class="example">
+            <div class="ex-fr">Elle <mark>ne</mark> fume <mark>plus</mark>.</div>
+            <div class="ex-en">She doesn't smoke any more.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>ne … jamais</h3><span class="badge common">Common</span></div>
+          <div class="french-name">never</div>
+          <div class="example">
+            <div class="ex-fr">Il <mark>ne</mark> m'a <mark>jamais</mark> parlé.</div>
+            <div class="ex-en">He has never spoken to me.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>ne … rien</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">nothing</div>
+          <div class="example">
+            <div class="ex-fr">Je <mark>ne</mark> vois <mark>rien</mark>.</div>
+            <div class="ex-en">I see nothing.</div>
+          </div>
+          <div class="pitfall"><em>Rien</em> can be the subject — then it comes before <em>ne</em>: <em>Rien ne va !</em></div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>ne … personne</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">nobody / no one</div>
+          <div class="example">
+            <div class="ex-fr">Je <mark>n'</mark>ai vu <mark>personne</mark>.</div>
+            <div class="ex-en">I saw nobody.</div>
+          </div>
+          <div class="pitfall">In passé composé, <em>personne</em> goes <strong>after</strong> the past participle (unlike <em>pas/plus/jamais/rien</em> which go between auxiliary and participle).</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>ne … que</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">only</div>
+          <div class="rule">"Only" — restrictive, not strictly a negation. <em>Que</em> goes right before the thing being restricted.</div>
+          <div class="example">
+            <div class="ex-fr">Je <mark>n'</mark>ai <mark>que</mark> dix euros.</div>
+            <div class="ex-en">I only have ten euros.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>ne … aucun(e)</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">no / not any</div>
+          <div class="rule"><em>Aucun</em> agrees with the noun (aucun / aucune). Always singular.</div>
+          <div class="example">
+            <div class="ex-fr">Il <mark>n'</mark>a <mark>aucune</mark> idée.</div>
+            <div class="ex-en">He has no idea.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>ni … ni</h3><span class="badge">Rare</span></div>
+          <div class="french-name">neither … nor</div>
+          <div class="rule">Used with <em>ne</em>. Articles (un, une, des, du) usually drop after <em>ni</em>.</div>
+          <div class="example">
+            <div class="ex-fr">Il <mark>ne</mark> boit <mark>ni</mark> café <mark>ni</mark> thé.</div>
+            <div class="ex-en">He drinks neither coffee nor tea.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- OTHER -->
+    <section class="gr-section" id="other">
+      <div class="gr-section-head">
+        <div class="ic dark">+</div>
+        <h2>Adverbs, prepositions &amp; <em>more</em></h2>
+        <span class="count">5 categories</span>
+      </div>
+      <p class="gr-section-lead">The smaller-frequency Q3 categories. Less common than tenses but still worth 5 marks each when they appear. Focus on the patterns that make them easy to spot at a glance.</p>
+
+      <div class="gr-grid">
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Adverbs in <em>-ment</em></h3><span class="badge common">Common</span></div>
+          <div class="french-name">Les adverbes en -ment</div>
+          <div class="rule">Most French adverbs end in <strong>-ment</strong> (≈ English -ly). Built by adding -ment to the <strong>feminine</strong> form of the adjective.</div>
+          <div class="endings">
+            <div class="row"><span class="who">heureux → heureuse</span><span class="end">heureusement</span></div>
+            <div class="row"><span class="who">lent → lente</span><span class="end">lentement</span></div>
+            <div class="row"><span class="who">vrai → vraie</span><span class="end">vraiment</span></div>
+            <div class="row"><span class="who">-ant adj.</span><span class="end">-amment (constamment)</span></div>
+            <div class="row"><span class="who">-ent adj.</span><span class="end">-emment (récemment)</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr">Elle parle <mark>doucement</mark> et <mark>clairement</mark>.</div>
+            <div class="ex-en">She speaks softly and clearly.</div>
+          </div>
+          <div class="pitfall">Common irregulars don't end in -ment: <em>bien, mal, vite, ici, là, ainsi, déjà, encore</em>. Still adverbs.</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Prepositions</h3><span class="badge">Standard</span></div>
+          <div class="french-name">Les prépositions</div>
+          <div class="rule">Small words linking a noun to the rest of the sentence. The most common ones to spot:</div>
+          <div class="endings">
+            <div class="row"><span class="who">à</span><span class="end">to / at</span></div>
+            <div class="row"><span class="who">de</span><span class="end">of / from</span></div>
+            <div class="row"><span class="who">dans · sur · sous</span><span class="end">in · on · under</span></div>
+            <div class="row"><span class="who">avec · sans</span><span class="end">with · without</span></div>
+            <div class="row"><span class="who">pour · par</span><span class="end">for · by</span></div>
+            <div class="row"><span class="who">chez</span><span class="end">at the house of</span></div>
+            <div class="row"><span class="who">entre · parmi</span><span class="end">between · among</span></div>
+            <div class="row"><span class="who">avant · après</span><span class="end">before · after</span></div>
+            <div class="row"><span class="who">pendant · depuis</span><span class="end">during · since/for</span></div>
+          </div>
+          <div class="pitfall">Contractions: <em>à + le = au · à + les = aux · de + le = du · de + les = des</em>. These hide the preposition — but they still count.</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Conjunctions</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">Les conjonctions</div>
+          <div class="rule">Words that join clauses or words. Two main types:</div>
+          <div class="endings">
+            <div class="row"><span class="who">Coordinating</span><span class="end">et · ou · mais · donc · car · ni · or</span></div>
+            <div class="row"><span class="who">Subordinating</span><span class="end">que · parce que · quand · si · puisque</span></div>
+            <div class="row"><span class="who">+ subjunctive</span><span class="end">bien que · pour que · avant que</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr">Il est tard <mark>donc</mark> je rentre. Je sais <mark>que</mark> tu viens.</div>
+            <div class="ex-en">It's late so I'm going home. I know that you're coming.</div>
+          </div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Passive voice</h3><span class="badge">Rare</span></div>
+          <div class="french-name">La voix passive</div>
+          <div class="rule">Formed with <strong>être + past participle</strong>, often with <em>par</em> (by). The past participle agrees with the subject.</div>
+          <div class="spot">Find <em>est / sont / était / sera</em> followed by a past participle, where the action is done <em>to</em> the subject, not <em>by</em> it. Often followed by <em>par</em>.</div>
+          <div class="example">
+            <div class="ex-fr">La pharmacie <mark>a été cambriolée</mark> par les malfaiteurs.</div>
+            <div class="ex-en">The pharmacy was burgled by the criminals.</div>
+          </div>
+          <div class="pitfall">Don't confuse with the passé composé of <em>être</em>-verbs (<em>elle est partie</em>) — those are active. Passive is always <em>être + past participle of a different verb</em>.</div>
+        </div>
+
+        <div class="gr-card">
+          <div class="gc-head"><h3>Interrogatives</h3><span class="badge">Periodic</span></div>
+          <div class="french-name">Les mots interrogatifs</div>
+          <div class="rule">Question words. Q3 sometimes asks for a question in a specific form.</div>
+          <div class="endings">
+            <div class="row"><span class="who">qui</span><span class="end">who</span></div>
+            <div class="row"><span class="who">que / qu'</span><span class="end">what</span></div>
+            <div class="row"><span class="who">quoi</span><span class="end">what (after prep.)</span></div>
+            <div class="row"><span class="who">où</span><span class="end">where</span></div>
+            <div class="row"><span class="who">quand</span><span class="end">when</span></div>
+            <div class="row"><span class="who">comment</span><span class="end">how</span></div>
+            <div class="row"><span class="who">pourquoi</span><span class="end">why</span></div>
+            <div class="row"><span class="who">combien (de)</span><span class="end">how much / many</span></div>
+          </div>
+          <div class="example">
+            <div class="ex-fr"><mark>Pourquoi</mark> est-elle partie ? <mark>Combien de</mark> frères as-tu ?</div>
+            <div class="ex-en">Why has she left? How many brothers do you have?</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- MARKING -->
+    <section class="gr-section" id="marking">
+      <div class="gr-section-head">
+        <div class="ic">M</div>
+        <h2>How Q3 is <em>marked</em></h2>
+        <span class="count">Examiner notes</span>
+      </div>
+
+      <div class="marking-note">
+        <h2>The <em>cheapest marks</em> on the paper.</h2>
+        <p>Q3 is worth <strong>30 marks</strong> (15% of Section I) for what is essentially a spot-the-word exercise. The chief examiner's report flags this section every year as the place where students systematically <strong>under-perform relative to effort required</strong>.</p>
+        <p>The marking is mechanical. There is a specific item that the examiner is looking for. <strong>If you find it and quote it cleanly, you get full marks.</strong> If you quote too much or quote the wrong form, you lose marks. There is no partial credit for "nearly right" in the same way there is for comprehension answers.</p>
+
+        <h2 style="margin-top:24px;">Three rules that <em>save marks</em>.</h2>
+        <p><strong>1. Quote only the item asked for.</strong> If asked for a verb in the conditional, quote <em>just</em> the verb (<em>achèterais</em>) — not the surrounding clause. Each extraneous word can cost a mark.</p>
+        <p><strong>2. Quote the full form when the form has multiple words.</strong> Passé composé = <em>a découvert</em> (two words). Reflexive in the past = <em>s'est levée</em> (three words). Quoting only the participle = partial marks.</p>
+        <p><strong>3. Copy spelling and accents exactly.</strong> Q3 answers are quotation, not your own writing. Missing accents (é vs e) or wrong spellings can lose marks even when you've identified the right word.</p>
+      </div>
+    </section>
+
+    <footer>
+      <div>Atelier · <em>built for Leaving Cert HL French</em></div>
+      <div>Bonne chance pour les examens 🍀</div>
+    </footer>
+
+  </div>
+
+<script>
+(function() {
+  /* CATEGORY NAV — highlight active section on scroll */
+  var navLinks = document.getElementById('cat-nav').querySelectorAll('a');
+  var sections = Array.from(document.querySelectorAll('.gr-section'));
+
+  function setActive() {
+    var pos = window.scrollY + 120;
+    var current = sections[0];
+    sections.forEach(function(s) {
+      if (s.offsetTop <= pos) current = s;
+    });
+    navLinks.forEach(function(a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current.id);
+    });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+
+  /* Smooth scroll on nav click */
+  navLinks.forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+      }
+    });
+  });
+})();
+</script>
+<script src="/js/atelier.js"></script>
+</body>
+</html>
