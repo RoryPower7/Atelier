@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2025 Aural — Atelier · LC French HL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/atelier.css">
+<link rel="stylesheet" href="/css/text.css">
+<style>
+  /* AURAL DETAIL — page-specific styles */
+
+  /* AUDIO PLAYER — sticky at top */
+  .audio-player {
+    position: sticky; top: 12px; z-index: 50;
+    background: var(--ink); color: var(--bg);
+    border-radius: 22px; padding: 18px 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 18px 40px -20px rgba(0,0,0,0.4);
+    display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center;
+  }
+  .audio-player .ap-label {
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 18px; color: var(--butter);
+    flex-shrink: 0;
+  }
+  .audio-player audio {
+    width: 100%; height: 38px; filter: invert(0.92) hue-rotate(180deg);
+  }
+  .audio-player .speed-group {
+    display: flex; gap: 4px; background: rgba(255,255,255,0.1); border-radius: 100px; padding: 3px;
+  }
+  .audio-player .speed-btn {
+    background: transparent; border: none; color: rgba(255,255,255,0.7);
+    padding: 5px 11px; border-radius: 100px;
+    font-family: 'Geist Mono', monospace; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+  }
+  .audio-player .speed-btn:hover { color: white; }
+  .audio-player .speed-btn.on { background: var(--butter); color: var(--ink); }
+
+  /* SECTION BLOCKS */
+  .aural-section {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 26px; padding: 30px 34px; margin-bottom: 22px;
+  }
+  .aural-section .sec-head {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--line);
+  }
+  .aural-section .sec-letter {
+    width: 46px; height: 46px; border-radius: 14px;
+    background: var(--sky-soft); color: #3a5b76;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 24px; font-weight: 500;
+    flex-shrink: 0;
+  }
+  .aural-section .sec-title-block { flex: 1; }
+  .aural-section h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 22px; letter-spacing: -0.01em; }
+  .aural-section h2 em { font-style: italic; color: var(--sage); font-weight: 300; }
+  .aural-section .sec-meta { font-size: 12px; color: var(--ink-soft); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 3px; }
+  .aural-section .sec-meta strong { color: #3a5b76; }
+  .aural-section .sec-intro {
+    background: var(--bg-2); border-radius: 12px; padding: 12px 16px; font-size: 14px; color: var(--ink-soft);
+    margin-bottom: 18px; line-height: 1.5;
+  }
+  .aural-section .sec-intro strong { color: var(--ink); font-weight: 600; }
+
+  /* TRANSCRIPT REVEAL */
+  .transcript-toggle {
+    margin: 18px 0 10px;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; border: 1px solid var(--sky-soft); color: #3a5b76;
+    padding: 8px 16px; border-radius: 100px;
+    font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+  }
+  .transcript-toggle:hover { background: var(--sky-soft); }
+  .transcript-toggle::before { content: '◉'; font-size: 11px; }
+  .transcript-toggle.open::before { content: '◎'; }
+  .transcript-block {
+    display: none;
+    background: linear-gradient(180deg, var(--sky-soft) 0%, var(--bg) 100%);
+    border-radius: 16px; padding: 22px 26px; margin-top: 4px;
+    border-left: 4px solid #3a5b76;
+  }
+  .transcript-block.open { display: block; }
+  .transcript-block .tr-lbl {
+    font-size: 11px; color: #3a5b76; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
+  }
+  .transcript-block p { font-family: 'Fraunces', serif; font-size: 16px; line-height: 1.7; color: var(--ink); margin-bottom: 12px; }
+  .transcript-block p:last-child { margin-bottom: 0; }
+  .transcript-block p .speaker {
+    font-style: italic; color: #3a5b76; font-weight: 600; font-family: 'Fraunces', serif;
+  }
+  .transcript-block p .seg {
+    display: inline-block; font-family: 'Geist Mono', monospace; font-size: 11px;
+    color: #3a5b76; background: rgba(58,91,118,0.15); padding: 1px 7px; border-radius: 6px; margin-right: 6px; font-weight: 600;
+  }
+
+  /* QUESTIONS — inherit most styling from text.css; minor tweaks */
+  .questions-block { margin-top: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .questions-block .q-card { padding: 18px 22px; }
+
+  @media (max-width: 800px) {
+    .audio-player { grid-template-columns: 1fr; gap: 12px; }
+    .audio-player .ap-label { font-size: 16px; }
+    .aural-section { padding: 22px 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top">
+    <div class="logo"><div class="logo-mark">a</div><span>atelier<em>.fr</em></span></div>
+    <div class="nav-pill">
+      <a href="/index.html">Home</a>
+      <a href="/comprehensions.html">Comprehensions</a>
+      <a href="/composing.html">Composing</a>
+      <a href="/aural.html" class="active">Aural</a>
+      <a href="/verbs.html">Verbs</a>
+      <a href="/vocab.html">Vocab</a>
+      <a href="/tips.html">Tips</a>
+    </div>
+    <div class="nav-cta"><div class="streak">7-day streak</div><div class="avatar">m</div></div>
+  </nav>
+  <div class="crumb">
+    <a href="/index.html">Home</a><span class="sep">/</span>
+    <a href="/aural.html">Aural</a><span class="sep">/</span>
+    <span class="here">2025</span>
+  </div>
+
+  <header class="text-header">
+    <div class="meta-tags">
+      <span class="badge year">2025 · Aural</span>
+      <span class="badge theme">Higher Level</span>
+      <span class="badge points">80 marks</span>
+    </div>
+    <h1>2025 · <em>Triail Chluastuisceana</em></h1>
+    <div class="source">Wednesday 11 June 2025 · 12:10 – 12:50 · 40 minutes</div>
+    <div class="header-stats">
+      <span><strong>5 sections</strong></span><span><strong>15 questions</strong></span><span>80 marks</span><span>≈ 40 mins</span>
+    </div>
+  </header>
+
+  <!-- STICKY AUDIO PLAYER -->
+  <div class="audio-player">
+    <div class="ap-label">▶ 2025 audio</div>
+    <audio controls preload="metadata" src="/aural/2025%20sound.mp3">
+      Your browser does not support the audio element. <a href="/aural/2025%20sound.mp3" style="color:var(--butter);">Download MP3</a>.
+    </audio>
+    <div class="speed-group">
+      <button class="speed-btn" data-speed="0.75">0.75×</button>
+      <button class="speed-btn on" data-speed="1">1×</button>
+      <button class="speed-btn" data-speed="1.25">1.25×</button>
+    </div>
+  </div>
+
+  <!-- CONTROL BAR (mode toggle) -->
+  <div class="control-bar">
+    <span class="label">Mode</span>
+    <div class="toggle-row" id="mode-toggle">
+      <button class="on" data-mode="attempt">Attempt</button><button data-mode="review">Review</button>
+    </div>
+    <div class="progress-mini">
+      <span class="label-mini">Progress</span>
+      <div class="prog-track"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+      <span class="prog-pct" id="prog-pct">0%</span>
+    </div>
+  </div>
+
+  <!-- SECTION A -->
+  <div class="aural-section" id="section-a">
+    <div class="sec-head">
+      <div class="sec-letter">A</div>
+      <div class="sec-title-block">
+        <h2>3 monologues — <em>Childhood holidays</em></h2>
+        <div class="sec-meta">3 speakers · <strong>12 marks</strong> · played 3×</div>
+      </div>
+    </div>
+    <div class="sec-intro">Three young people — <strong>Yves, Zoé and Luc</strong> — talk about their favourite childhood holidays. The audio is played first right through, then in three segments with pauses, then right through again.</div>
+
+    <div class="questions-block">
+      <div class="q-card" id="qa1">
+        <div class="q-head"><span class="q-num">A · Yves</span><span class="q-marks">3 marks</span></div>
+        <div class="q-text">Why was Yves sad at the end of the holidays?</div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">Listen for where he had to go back to after the holidays.</div>
+        <div class="answer-block">
+          <div class="answer-text">He had to go back to their apartment in Paris (after idyllic holidays at his grandparents).</div>
+          <div class="marks-line"><strong>Full 3 marks:</strong> "go home / back to apartment in Paris" · or "the holidays were idyllic" · or "he felt so good at his grandparents". <em>"Had to go home"</em> alone = 2 marks.</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">2</button><button class="mark-btn">3</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qa2">
+        <div class="q-head"><span class="q-num">A · Zoé</span><span class="q-marks">3 marks</span></div>
+        <div class="q-text">Identify two activities that Zoé did on her holidays.</div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">Three water sports are mentioned — name any two.</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>Any two of:</strong> Surfing · Windsurfing · Scuba / deep-sea diving</div>
+          <div class="marks-line"><strong>Full 3 marks:</strong> two distinct activities. One activity only = partial credit per the segment rule.</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">3</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qa3">
+        <div class="q-head"><span class="q-num">A · Luc</span><span class="q-marks">3 marks</span></div>
+        <div class="q-text">What did Luc learn to do on his holiday?</div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">He was on a school trip to the Alps.</div>
+        <div class="answer-block">
+          <div class="answer-text">Skiing / to ski.</div>
+          <div class="marks-line"><strong>Full 3 marks:</strong> skiing. He learned this on his school trip to the Alps when he was 15.</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">3</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="transcript-toggle" data-target="tr-a">Show transcript</button>
+    <div class="transcript-block" id="tr-a">
+      <div class="tr-lbl">Section A · transcript</div>
+      <p><span class="seg">1.</span><span class="speaker">Yves :</span> Quand j'étais petit, les vacances en famille, c'était toujours chez mes grands-parents. Je m'y sentais tellement bien. Le paradis pour les enfants. Les champs verts, les beaux arbres et l'air frais. J'étais toujours triste parce qu'on devait rentrer à notre appartement à Paris après des vacances idylliques.</p>
+      <p><span class="seg">2.</span><span class="speaker">Zoé :</span> Pour moi, c'était un séjour en colonie de vacances. D'abord, je me sentais abandonnée par mes parents. Mais, peu à peu, je m'y suis habituée. Il y avait un tas d'activités merveilleuses. J'ai pu faire du surf, de la planche à voile et de la plongée sous-marine.</p>
+      <p><span class="seg">3.</span><span class="speaker">Luc :</span> Mon plus beau souvenir de vacances ? C'était quand j'avais 15 ans, j'étais en troisième et je suis parti aux Alpes en voyage scolaire avec ma classe. C'était mon début sur les pistes. J'ai appris à faire du ski et je me suis fait de nouveaux amis. Un séjour à ne pas oublier.</p>
+    </div>
+  </div>
+
+  <!-- SECTION B -->
+  <div class="aural-section" id="section-b">
+    <div class="sec-head">
+      <div class="sec-letter">B</div>
+      <div class="sec-title-block">
+        <h2>Single speaker — <em>Elsa, the postwoman</em></h2>
+        <div class="sec-meta">1 speaker · <strong>21 marks</strong> · played 3× (4 segments)</div>
+      </div>
+    </div>
+    <div class="sec-intro"><strong>Elsa</strong>, a postwoman, talks about her work — what she likes about the job, who she works with, and why she stops to chat with people living alone.</div>
+
+    <div class="questions-block">
+      <div class="q-card" id="qb1">
+        <div class="q-head"><span class="q-num">B · 1</span><span class="q-marks">6 marks</span></div>
+        <div class="q-text">Why does Elsa like working in the Post Office? <strong>(Two details)</strong></div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">She contrasts her job with office work — and describes the pace and the people.</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>Any two of:</strong><br>• Not stuck indoors / not confined<br>• Not in an office / in front of a computer all day<br>• The job is fast-moving / lively<br>• She gets to meet a lot of people<br>• The job suits her perfectly</div>
+          <div class="marks-line"><strong>Full 6 marks:</strong> two distinct details (3 each). Repeating the same point in different words = one detail only.</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">3</button><button class="mark-btn">6</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qb2">
+        <div class="q-head"><span class="q-num">B · 2</span><span class="q-marks">3 marks</span></div>
+        <div class="q-text">Apart from children, with whom did Elsa work?</div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">A specific group — not just "people".</div>
+        <div class="answer-block">
+          <div class="answer-text">People with disabilities / people with special needs.</div>
+          <div class="marks-line"><strong>Full 3 marks:</strong> specific group must be named. Just "people" = 0 marks.</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">3</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qb3">
+        <div class="q-head"><span class="q-num">B · 3</span><span class="q-marks">6 marks</span></div>
+        <div class="q-text">Why does Elsa stop to talk to people who are living alone? <strong>(Two details)</strong></div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">Think about social isolation — and what she physically does when she stops.</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>Any two of:</strong><br>• For some, she/the postman is the only person they meet all day<br>• It's important for them to see/meet the postman each day<br>• She stops to say hello<br>• She stops to ask if they are okay</div>
+          <div class="marks-line"><strong>Full 6 marks:</strong> two distinct details (3 each).</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">3</button><button class="mark-btn">6</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qb4">
+        <div class="q-head"><span class="q-num">B · 4</span><span class="q-marks">6 marks</span></div>
+        <div class="q-text"><strong>(a)</strong> How long does Elsa work in the morning?<br><strong>(b)</strong> What example does Elsa give of her afternoon activities?</div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">(a) A specific time period. (b) Volunteering somewhere specific.</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>(a)</strong> Three and a half hours / 3 hrs 30 mins.<br><strong>(b)</strong> Volunteering / charity work at a homeless shelter.</div>
+          <div class="marks-line"><strong>Full 6 marks:</strong> 3 marks each part. ⚠ <em>Incorrect amount of time = 0 marks</em>. "Shelter" alone = 2 marks. "Has lunch" = 0 marks (wrong activity).</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">3</button><button class="mark-btn">5</button><button class="mark-btn">6</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="transcript-toggle" data-target="tr-b">Show transcript</button>
+    <div class="transcript-block" id="tr-b">
+      <div class="tr-lbl">Section B · transcript</div>
+      <p><span class="seg">1.</span><span class="speaker">— Est-ce que vous aimez votre travail ?</span><br>J'adore travailler à la Poste. Je ne peux pas être enfermée toute la journée dans un bureau derrière un ordinateur. Il faut que j'aie un métier qui bouge et que je rencontre beaucoup de monde. Du coup, mon métier me correspond parfaitement.</p>
+      <p><span class="seg">2.</span><span class="speaker">— Qu'avez-vous fait après avoir quitté l'école ?</span><br>Après l'école, j'ai commencé à faire de petits boulots et j'ai fini par travailler avec des enfants et des personnes en situation de handicap. Enfin, j'ai réussi à avoir un emploi à la Poste. Ça fait un an et demi que j'y suis maintenant. Je suis bien contente d'avoir changé de travail.</p>
+      <p><span class="seg">3.</span><span class="speaker">— Est-ce que vous croyez que vous jouez un rôle important, en tant que factrice ?</span><br>J'en suis sûre. Pour certains, la seule personne qu'ils rencontrent toute la journée est le facteur ou la factrice. Donc, voir le facteur chaque jour, c'est important. Même si je n'ai pas de courrier pour des personnes qui habitent toutes seules, je m'arrête pour leur dire bonjour et pour leur demander si ça va.</p>
+      <p><span class="seg">4.</span><span class="speaker">— Quel est le grand avantage de votre travail ?</span><br>L'avantage principal de ce métier est les horaires. En général, après trois heures et demie de travail le matin, je rentre chez moi. Je peux déjeuner tranquillement et j'ai le temps de faire plein de choses pendant l'après-midi. Par exemple, je suis bénévole dans un foyer pour les sans-abris.</p>
+    </div>
+  </div>
+
+  <!-- SECTION C -->
+  <div class="aural-section" id="section-c">
+    <div class="sec-head">
+      <div class="sec-letter">C</div>
+      <div class="sec-title-block">
+        <h2>Conversation — <em>Vincent &amp; Laure on pets</em></h2>
+        <div class="sec-meta">2 friends · <strong>18 marks</strong> · played 3× (3 segments)</div>
+      </div>
+    </div>
+    <div class="sec-intro">A casual conversation between two friends, <strong>Vincent and Laure</strong>. Laure has a new dog called Jazz; Vincent has a fish collection. They discuss their pets and arrange to meet.</div>
+
+    <div class="questions-block">
+      <div class="q-card" id="qc1">
+        <div class="q-head"><span class="q-num">C · 1</span><span class="q-marks">6 marks</span></div>
+        <div class="q-text"><strong>(a)</strong> How does Laure describe the pet dog she got for her birthday?<br><strong>(b)</strong> Why is Vincent not surprised at the choice of name for the dog?</div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">(a) Affectionate descriptor. (b) Laure's musical taste.</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>(a)</strong> Cute / sweet / adorable / lovely.<br><strong>(b)</strong> Laure is obsessed with / loves jazz music.</div>
+          <div class="marks-line"><strong>Full 6 marks:</strong> 3 each. (a) "Its name is Jazz" = 2 marks (not a description). (b) "She loves music" only = 2 marks (needs jazz specifically). "Music / jazz" alone = 0.</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">2</button><button class="mark-btn">3</button><button class="mark-btn">5</button><button class="mark-btn">6</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qc2">
+        <div class="q-head"><span class="q-num">C · 2</span><span class="q-marks">6 marks</span></div>
+        <div class="q-text">What does Vincent say about his fish collection? <strong>(Two details)</strong></div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">Where they come from, what they look like, and what owning them requires.</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>Any two of:</strong><br>• They come from all over the world<br>• Their varied colours are magnificent<br>• It requires a lot of work</div>
+          <div class="marks-line"><strong>Full 6 marks:</strong> two distinct details (3 each). "Lots of colours" alone = 2. "Family loves keeping fish" = 2 (background, not about the collection). "Magnificent" alone = 1.</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">3</button><button class="mark-btn">6</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qc3">
+        <div class="q-head"><span class="q-num">C · 3</span><span class="q-marks">6 marks</span></div>
+        <div class="q-text"><strong>(a)</strong> What does Vincent find relaxing?<br><strong>(b)</strong> Why does Vincent suggest that Laure should pay him a visit? <em>(One detail)</em></div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">(a) An activity involving his fish. (b) A swap — they each see the other's pet.</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>(a)</strong> Looking after / observing / watching the fish.<br><strong>(b)</strong> So he can meet her dog / Jazz · or · so she can admire his fish collection.</div>
+          <div class="marks-line"><strong>Full 6 marks:</strong> 3 each. (a) "Fish" alone = 1 mark (needs the activity verb).</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">3</button><button class="mark-btn">4</button><button class="mark-btn">6</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="transcript-toggle" data-target="tr-c">Show transcript</button>
+    <div class="transcript-block" id="tr-c">
+      <div class="tr-lbl">Section C · transcript</div>
+      <p><span class="seg">1.</span><span class="speaker">Vincent :</span> Bonjour Laure. J'ai l'impression que je t'ai vue hier en train de promener un chien. Je ne savais pas que tu avais un animal domestique.<br><span class="speaker">Laure :</span> En effet. Mes parents m'ont offert un chien pour mon anniversaire. Il est trop mignon. On a choisi le nom « Jazz » pour lui.<br><span class="speaker">Vincent :</span> Ça ne m'étonne pas. Je sais que tu es obsédée par la musique, surtout le jazz.</p>
+      <p><span class="seg">2.</span><span class="speaker">Laure :</span> Et toi, tu dois trouver ce choix d'animal un peu trop normal. As-tu toujours ton aquarium ?<br><span class="speaker">Vincent :</span> Bien sûr. Dans ma famille, on a toujours aimé avoir des poissons chez nous. Moi-même, j'ai une collection de poissons venus de partout dans le monde. Les couleurs variées sont magnifiques. J'adore, mais ça demande pas mal de travail !<br><span class="speaker">Laure :</span> C'est vrai pour moi aussi. Je dois promener mon chien tous les jours, mais ça me convient bien. Je n'ai pas le choix - je dois prendre l'air et me tenir en forme.</p>
+      <p><span class="seg">3.</span><span class="speaker">Vincent :</span> C'est parfait alors. Pour moi, ça me détend tellement de m'occuper des poissons et de les observer.<br><span class="speaker">Laure :</span> Sans doute. J'aimerais voir tes poissons un jour.<br><span class="speaker">Vincent :</span> Avec plaisir Laure. J'ai une idée, un jour, quand tu promènes ton chien, viens chez moi. Comme ça, je peux faire la connaissance de ton chien et tu peux admirer mes poissons.<br><span class="speaker">Laure :</span> Formidable. On organise ça très bientôt. J'ai ton numéro et je t'appellerai la semaine prochaine.</p>
+    </div>
+  </div>
+
+  <!-- SECTION D -->
+  <div class="aural-section" id="section-d">
+    <div class="sec-head">
+      <div class="sec-letter">D</div>
+      <div class="sec-title-block">
+        <h2>Interview — <em>School uniforms in France</em></h2>
+        <div class="sec-meta">Journalist + student · <strong>21 marks</strong> · played 3× (4 segments)</div>
+      </div>
+    </div>
+    <div class="sec-intro"><strong>Djibril</strong>, a journalist, and <strong>Clara</strong>, a school student, talk about the idea of introducing school uniforms into French schools. France piloted uniforms in 100 schools from 2024.</div>
+
+    <div class="questions-block">
+      <div class="q-card" id="qd1">
+        <div class="q-head"><span class="q-num">D · 1</span><span class="q-marks">6 marks</span></div>
+        <div class="q-text">What does Djibril say about the cost of the school uniform? <strong>(Two points)</strong></div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">A specific price — and who actually pays.</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>Any two of:</strong><br>• The uniform costs 300 euros<br>• Families don't have to pay anything<br>• It's paid for by the state / town hall / local authority</div>
+          <div class="marks-line"><strong>Full 6 marks:</strong> two distinct points (3 each). ⚠ <em>Incorrect amount = 0 marks for that point</em>. Uniform paid for by "incorrect source" = 1 mark. "Paid for / free" alone = 2 marks.</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">2</button><button class="mark-btn">3</button><button class="mark-btn">5</button><button class="mark-btn">6</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qd2">
+        <div class="q-head"><span class="q-num">D · 2</span><span class="q-marks">3 marks</span></div>
+        <div class="q-text">How do school uniforms help in the fight against bullying?</div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">Think about uniformity, discipline, and what students notice in others.</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>Any one of:</strong><br>• Helps with discipline<br>• Reduces jealousy among students<br>• Reduces teasing / mocking between pupils<br>• Everyone looks / is dressed the same</div>
+          <div class="marks-line"><strong>Full 3 marks:</strong> one specific reason. "It reduces bullying" = 2 marks (the question literally asks this, so a more specific answer is needed).</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">2</button><button class="mark-btn">3</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qd3">
+        <div class="q-head"><span class="q-num">D · 3</span><span class="q-marks">6 marks</span></div>
+        <div class="q-text">At first, how did Clara find the school uniform? <strong>(Two points)</strong></div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">"Au début" — her first impressions. Two reactions.</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>Both:</strong><br>• A bit strange<br>• Not very comfortable / uncomfortable</div>
+          <div class="marks-line"><strong>Full 6 marks:</strong> two distinct points (3 each). "She adapted quickly" = 2 marks (that's what happened later, not how she found it at first).</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">3</button><button class="mark-btn">6</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qd4">
+        <div class="q-head"><span class="q-num">D · 4</span><span class="q-marks">6 marks</span></div>
+        <div class="q-text"><strong>(a)</strong> Wearing a school uniform allows Clara to distinguish between what two things?<br><strong>(b)</strong> When were school uniforms introduced into Ireland?</div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">(a) Two contrasting parts of life. (b) A round number — "au moins".</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>(a)</strong> Study and leisure / school and free time.<br><strong>(b)</strong> At least a century ago / at least 100 years ago.</div>
+          <div class="marks-line"><strong>Full 6 marks:</strong> 3 each. (a) "School and home" = 2 marks. One thing correct + one wrong = 1 mark. (b) "A century" without "at least" = 2 marks.</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">2</button><button class="mark-btn">3</button><button class="mark-btn">5</button><button class="mark-btn">6</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="transcript-toggle" data-target="tr-d">Show transcript</button>
+    <div class="transcript-block" id="tr-d">
+      <div class="tr-lbl">Section D · transcript</div>
+      <p><span class="seg">1.</span><span class="speaker">Djibril :</span> La France vise l'introduction d'un uniforme dans les écoles publiques à partir de 2026. Depuis la rentrée 2024, une centaine d'écoles ont expérimenté le port de l'uniforme. Dans ces écoles, chaque élève a droit à cinq chemises, deux pulls et deux pantalons. Ça coûte 300 euros, mais les familles n'ont rien à payer. C'est payé par l'État et par la mairie.</p>
+      <p><span class="seg">2.</span>Ceux qui aiment cette démarche disent que ça aide la discipline et que l'uniforme diminue les occasions de jalousie ou de moquerie entre élèves. D'après eux, c'est une bonne façon de lutter contre le harcèlement scolaire parce que tout le monde est pareil. Écoutons Clara, qui va nous parler de son expérience.</p>
+      <p><span class="seg">3.</span><span class="speaker">Clara :</span> Moi-même, je passe une année scolaire en Irlande. Je suis obligée de porter un uniforme à l'école. Au début, j'ai trouvé ça un peu bizarre et l'uniforme n'était pas très confortable. Mais, je me suis adaptée assez vite. Je n'ai pas besoin de choisir ce que je vais porter tous les jours.</p>
+      <p><span class="seg">4.</span>Maintenant, l'avantage de porter un uniforme à l'école est que ça me permet de marquer la distinction entre les études et les loisirs. On a introduit l'uniforme en Irlande il y a au moins un siècle et ça marche toujours bien. Je crois que ça pourrait bien marcher en France aussi.</p>
+    </div>
+  </div>
+
+  <!-- SECTION E -->
+  <div class="aural-section" id="section-e">
+    <div class="sec-head">
+      <div class="sec-letter">E</div>
+      <div class="sec-title-block">
+        <h2>News items — <em>Three flashes</em></h2>
+        <div class="sec-meta">3 items · <strong>8 marks</strong> · played 2× only</div>
+      </div>
+    </div>
+    <div class="sec-intro"><strong>Three short news items</strong> — a pharmacy break-in in Nantes, a speeding driver near Geneva, and a tennis player disqualified in Brussels. ⚠ Each item is played <strong>twice only</strong> — no third pass.</div>
+
+    <div class="questions-block">
+      <div class="q-card" id="qe1">
+        <div class="q-head"><span class="q-num">E · 1</span><span class="q-marks">2 marks</span></div>
+        <div class="q-text">How did the criminals get access to the pharmacy?</div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">A specific entry point at the back of the building.</div>
+        <div class="answer-block">
+          <div class="answer-text">They broke / smashed the (rear) door.</div>
+          <div class="marks-line"><strong>Full 2 marks:</strong> mention either "broke the door" or "rear door".</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">2</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qe2">
+        <div class="q-head"><span class="q-num">E · 2</span><span class="q-marks">4 marks</span></div>
+        <div class="q-text">What two on-the-spot penalties were imposed on the driver?</div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">One licence-related, one monetary. Watch the exact amount.</div>
+        <div class="answer-block">
+          <div class="answer-text"><strong>Both:</strong><br>• Disqualified from driving / driving ban / lost his licence<br>• A €1,000 fine</div>
+          <div class="marks-line"><strong>Full 4 marks:</strong> two penalties (2 each). ⚠ <em>Incorrect amount of fine = −1 mark</em>.</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">1</button><button class="mark-btn">2</button><button class="mark-btn">3</button><button class="mark-btn">4</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" id="qe3">
+        <div class="q-head"><span class="q-num">E · 3</span><span class="q-marks">2 marks</span></div>
+        <div class="q-text">Why was this tennis player disqualified?</div>
+        <div class="q-actions">
+          <button class="btn-mini" data-action="hint">Hint</button>
+          <button class="btn-mini" data-action="show-answer">Show answer</button>
+        </div>
+        <div class="hint-block">An act of violence — and who he targeted matters.</div>
+        <div class="answer-block">
+          <div class="answer-text">He hit / assaulted the umpire / referee.</div>
+          <div class="marks-line"><strong>Full 2 marks:</strong> "hit umpire" or "assault / violence". ⚠ <em>Wrong person (e.g. opponent, fan) = −1 mark</em>.</div>
+          <div class="self-mark">
+            <span class="lbl">Self-mark:</span>
+            <button class="mark-btn">0</button><button class="mark-btn">1</button><button class="mark-btn">2</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="transcript-toggle" data-target="tr-e">Show transcript</button>
+    <div class="transcript-block" id="tr-e">
+      <div class="tr-lbl">Section E · transcript</div>
+      <p><span class="seg">1.</span>Jeudi matin, en plein centre-ville de Nantes, une pharmacie a été la cible d'un vol. Les malfaiteurs sont entrés en brisant la porte arrière. La police n'a pas encore trouvé les responsables.</p>
+      <p><span class="seg">2.</span>Le chauffeur d'une Porsche a été enregistré à 180 km/h hier sur une autoroute près de Genève. Il a été sanctionné sur place d'une rétention de permis de conduire et d'une amende de mille euros.</p>
+      <p><span class="seg">3.</span>Tournoi international à Bruxelles. Tout proche de la victoire, un joueur de tennis, frustré par une décision, a frappé l'arbitre. Le joueur s'est fait disqualifier. C'est la première fois qu'une telle situation s'est produite en Belgique.</p>
+    </div>
+  </div>
+
+  <div class="text-nav">
+    <a href="/aural.html" class="nav-card prev">
+      <div class="ic">←</div><div><div class="lbl">All papers</div><div class="ttl">Aural archive</div></div>
+    </a>
+    <a href="/aural/2024.html" class="nav-card next">
+      <div class="ic">→</div><div><div class="lbl">Previous year</div><div class="ttl">2024 · Aural</div></div>
+    </a>
+  </div>
+
+  <footer>
+    <div>Atelier · <em>built for Leaving Cert HL French</em></div>
+    <div>Bonne chance pour les examens 🍀</div>
+  </footer>
+</div>
+
+<script>
+(function() {
+  /* PLAYBACK SPEED */
+  document.querySelectorAll('.speed-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var audio = document.querySelector('.audio-player audio');
+      if (audio) audio.playbackRate = parseFloat(btn.dataset.speed);
+      document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('on'); });
+      btn.classList.add('on');
+    });
+  });
+
+  /* TRANSCRIPT TOGGLES */
+  document.querySelectorAll('.transcript-toggle').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = document.getElementById(btn.dataset.target);
+      if (!target) return;
+      var open = target.classList.toggle('open');
+      btn.classList.toggle('open', open);
+      btn.textContent = (open ? 'Hide transcript' : 'Show transcript');
+    });
+  });
+
+  /* MODE TOGGLE (attempt / review) */
+  document.querySelectorAll('#mode-toggle button').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#mode-toggle button').forEach(function(b) { b.classList.remove('on'); });
+      btn.classList.add('on');
+      var mode = btn.dataset.mode;
+      document.querySelectorAll('.answer-block').forEach(function(ab) {
+        ab.style.display = mode === 'review' ? 'block' : 'none';
+      });
+      document.querySelectorAll('.hint-block').forEach(function(hb) { hb.style.display = 'none'; });
+    });
+  });
+
+  /* Q-CARD: show-answer / hint */
+  document.querySelectorAll('.q-actions .btn-mini').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var card = btn.closest('.q-card');
+      if (btn.dataset.action === 'show-answer') {
+        var ab = card.querySelector('.answer-block');
+        if (ab) { ab.style.display = ab.style.display === 'block' ? 'none' : 'block'; }
+        card.classList.add('complete');
+        updateProgress();
+      } else if (btn.dataset.action === 'hint') {
+        var hb = card.querySelector('.hint-block');
+        if (hb) { hb.style.display = hb.style.display === 'block' ? 'none' : 'block'; }
+      }
+    });
+  });
+
+  /* SELF-MARK */
+  document.querySelectorAll('.mark-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var group = btn.closest('.self-mark');
+      group.querySelectorAll('.mark-btn').forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      btn.closest('.q-card').classList.add('complete');
+      updateProgress();
+    });
+  });
+
+  function updateProgress() {
+    var cards = document.querySelectorAll('.q-card');
+    var done = document.querySelectorAll('.q-card.complete').length;
+    var pct = Math.round((done / cards.length) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-pct').textContent = pct + '%';
+  }
+})();
+</script>
+<script src="/js/atelier.js"></script>
+</body>
+</html>
